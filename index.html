@@ -1,0 +1,951 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Praxis-Check RHEINDERMA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+
+<style id="css">
+:root{
+  --ground:#FBFBFA; --surface:#FFFFFF; --surface-2:#F3F6F5;
+  --ink:#1A2027; --ink-muted:#5C6672; --ink-faint:#8B949B;
+  --line:#E2E5E3; --line-strong:#CBD2CF;
+  --accent:#2F6F6B; --accent-soft:#E8F0EF; --accent-ink:#1F4F4C;
+  --attention:#9A5A18; --attention-soft:#FAF2E7;
+  --good:#3D7A4E; --hot:#A8462F;
+  --shadow:0 1px 2px rgba(26,32,39,.05), 0 4px 16px rgba(26,32,39,.04);
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#14181B; --surface:#1B2124; --surface-2:#222A2E;
+    --ink:#E8EBE9; --ink-muted:#9AA5A3; --ink-faint:#6F7B79;
+    --line:#2C3438; --line-strong:#3D4650;
+    --accent:#63ADA6; --accent-soft:#1E2E2D; --accent-ink:#8FC9C3;
+    --attention:#C88B4A; --attention-soft:#2A2118;
+    --good:#6BA87C; --hot:#D07A5F;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.2);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#14181B; --surface:#1B2124; --surface-2:#222A2E;
+  --ink:#E8EBE9; --ink-muted:#9AA5A3; --ink-faint:#6F7B79;
+  --line:#2C3438; --line-strong:#3D4650;
+  --accent:#63ADA6; --accent-soft:#1E2E2D; --accent-ink:#8FC9C3;
+  --attention:#C88B4A; --attention-soft:#2A2118;
+  --good:#6BA87C; --hot:#D07A5F;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.2);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:var(--sans); font-size:16px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:720px; margin:0 auto; padding:0 20px 96px}
+
+/* ---------- Kopf ---------- */
+.masthead{padding:44px 0 26px}
+.eyebrow{
+  font-size:12px; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--accent); font-weight:600; margin:0 0 12px
+}
+h1{
+  font-family:var(--serif); font-weight:600; font-size:clamp(30px,5.2vw,42px);
+  line-height:1.15; margin:0 0 14px; text-wrap:balance; letter-spacing:-.01em
+}
+.lede{font-size:17px; color:var(--ink-muted); margin:0; max-width:60ch}
+.lede strong{color:var(--ink); font-weight:600}
+
+/* ---------- Ablauf in drei Schritten ---------- */
+.howto{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+  background:var(--line); border:1px solid var(--line); border-radius:10px;
+  overflow:hidden; margin-top:24px
+}
+.howto div{background:var(--surface); padding:13px 15px}
+.howto b{
+  display:block; font-family:var(--mono); font-size:11px; color:var(--accent);
+  letter-spacing:.05em; margin-bottom:3px; font-weight:500
+}
+.howto span{font-size:13.5px; color:var(--ink-muted); line-height:1.4}
+@media (max-width:560px){ .howto{grid-template-columns:1fr} }
+
+/* ---------- Fortschritt ---------- */
+.bar{
+  position:sticky; top:0; z-index:20; background:var(--ground);
+  border-bottom:1px solid var(--line); margin:0 -20px; padding:10px 20px;
+  display:flex; align-items:center; gap:14px
+}
+.bar-track{flex:1; height:5px; border-radius:99px; background:var(--line); overflow:hidden}
+.bar-fill{height:100%; background:var(--accent); border-radius:99px; transition:width .35s cubic-bezier(.4,0,.2,1)}
+.bar-num{
+  font-family:var(--mono); font-size:12.5px; color:var(--ink-muted);
+  font-variant-numeric:tabular-nums; white-space:nowrap
+}
+.btn{
+  font-family:var(--sans); font-size:14px; font-weight:500;
+  border:1px solid var(--accent); background:var(--accent); color:#fff;
+  padding:9px 17px; border-radius:7px; cursor:pointer; white-space:nowrap;
+  transition:opacity .15s, transform .1s; text-decoration:none; display:inline-block
+}
+.btn:hover{opacity:.88}
+.btn:active{transform:translateY(1px)}
+.btn[disabled]{opacity:.4; cursor:default; transform:none}
+.btn-ghost{background:transparent; color:var(--ink-muted); border-color:var(--line-strong)}
+.btn-ghost:hover{color:var(--ink); border-color:var(--ink-faint); opacity:1}
+.btn-sm{font-size:13px; padding:6px 12px}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px}
+
+/* ---------- Auswertung / Eingang ---------- */
+.summary{
+  background:var(--accent-soft); border:1px solid color-mix(in srgb,var(--accent) 22%,transparent);
+  border-radius:12px; padding:20px 22px; margin:24px 0 4px
+}
+.summary h2{
+  font-family:var(--sans); font-size:12px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--accent-ink); margin:0 0 16px; font-weight:600
+}
+.stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(118px,1fr)); gap:18px}
+.stat-v{
+  font-family:var(--mono); font-size:25px; font-weight:500; color:var(--accent-ink);
+  font-variant-numeric:tabular-nums; line-height:1.1
+}
+.stat-l{font-size:12.5px; color:var(--ink-muted); margin-top:4px}
+
+/* ---------- Abschnitte ---------- */
+.sec{
+  background:var(--surface); border:1px solid var(--line); border-radius:12px;
+  margin-top:14px; overflow:hidden; box-shadow:var(--shadow)
+}
+.sec-head{
+  display:flex; align-items:center; gap:14px; width:100%;
+  padding:17px 20px; background:none; border:0; cursor:pointer; text-align:left;
+  font-family:inherit; color:inherit
+}
+.sec-head:hover{background:var(--surface-2)}
+.sec-dot{
+  width:24px; height:24px; border-radius:50%; flex:none;
+  border:1.5px solid var(--line-strong); display:grid; place-items:center;
+  font-family:var(--mono); font-size:11px; color:var(--ink-faint)
+}
+.sec-dot.done{background:var(--accent); border-color:var(--accent); color:#fff}
+.sec-t{flex:1; min-width:0}
+.sec-t h3{font-family:var(--serif); font-size:19px; font-weight:600; margin:0; letter-spacing:-.005em}
+.sec-t p{font-size:13.5px; color:var(--ink-muted); margin:3px 0 0}
+.sec-n{
+  font-family:var(--mono); font-size:12px; color:var(--ink-faint);
+  font-variant-numeric:tabular-nums; flex:none
+}
+.chev{flex:none; color:var(--ink-faint); transition:transform .2s}
+.sec.open .chev{transform:rotate(90deg)}
+.sec-body{display:none; padding:4px 20px 22px; border-top:1px solid var(--line)}
+.sec.open .sec-body{display:block}
+
+/* ---------- Fragen ---------- */
+.q{padding:18px 0; border-bottom:1px solid var(--line)}
+.q:last-child{border-bottom:0; padding-bottom:0}
+.q-l{font-size:15.5px; font-weight:500; margin:0 0 4px; display:block}
+.q-h{font-size:13px; color:var(--ink-muted); margin:0 0 12px}
+.opts{display:flex; flex-wrap:wrap; gap:8px}
+.opt{
+  font-family:inherit; font-size:14px; padding:8px 14px; border-radius:7px;
+  border:1px solid var(--line-strong); background:var(--surface); color:var(--ink-muted);
+  cursor:pointer; transition:all .12s
+}
+.opt:hover{border-color:var(--accent); color:var(--ink)}
+.opt.on{background:var(--accent); border-color:var(--accent); color:#fff; font-weight:500}
+.opt.dunno.on{background:var(--ink-faint); border-color:var(--ink-faint)}
+input[type=text],input[type=number],textarea{
+  font-family:inherit; font-size:15px; width:100%; padding:10px 13px;
+  border:1px solid var(--line-strong); border-radius:7px;
+  background:var(--surface); color:var(--ink)
+}
+input[type=number]{max-width:150px; font-family:var(--mono)}
+textarea{min-height:78px; resize:vertical; line-height:1.5}
+input::placeholder,textarea::placeholder{color:var(--ink-faint)}
+
+/* ---------- Papierlandkarte ---------- */
+.pgroup{margin:22px 0 6px}
+.pgroup:first-child{margin-top:8px}
+.pgroup-t{
+  font-size:11.5px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ink-faint); font-weight:600; margin:0 0 10px
+}
+.prow{display:flex; align-items:center; gap:12px; padding:9px 0; border-bottom:1px solid var(--line)}
+.prow:last-child{border-bottom:0}
+.prow-n{flex:1; min-width:0; font-size:14.5px}
+.prow-n small{display:block; color:var(--ink-faint); font-size:12px; margin-top:1px}
+.pseg{display:flex; gap:4px; flex:none}
+.pseg button{
+  font-family:inherit; font-size:12.5px; padding:5px 9px; border-radius:6px;
+  border:1px solid var(--line); background:var(--surface); color:var(--ink-faint);
+  cursor:pointer; transition:all .12s; min-width:38px
+}
+.pseg button:hover{border-color:var(--line-strong); color:var(--ink-muted)}
+.pseg button.on{color:#fff; font-weight:500; border-color:transparent}
+.pseg button[data-v="1"].on{background:var(--good)}
+.pseg button[data-v="2"].on{background:var(--attention)}
+.pseg button[data-v="3"].on{background:var(--hot)}
+.pseg button[data-v="4"].on{background:var(--ink-faint)}
+@media (max-width:560px){
+  .prow{flex-wrap:wrap}
+  .prow-n{flex-basis:100%}
+}
+
+/* ---------- Systemhaus ---------- */
+.relay{
+  background:var(--attention-soft);
+  border:1px solid color-mix(in srgb,var(--attention) 26%,transparent);
+  border-radius:10px; padding:16px 18px; margin:6px 0 18px
+}
+.relay p{margin:0 0 10px; font-size:14px; color:var(--ink-muted)}
+.relay p:last-child{margin-bottom:0}
+.relay strong{color:var(--ink)}
+pre.mail{
+  font-family:var(--mono); font-size:12.5px; line-height:1.6; white-space:pre-wrap;
+  background:var(--surface); border:1px solid var(--line); border-radius:8px;
+  padding:14px; margin:12px 0; max-height:280px; overflow:auto; color:var(--ink-muted)
+}
+
+/* ---------- Abschluss ---------- */
+.finish{
+  background:var(--surface); border:2px solid var(--accent); border-radius:12px;
+  padding:22px 24px; margin-top:26px; box-shadow:var(--shadow)
+}
+.finish h2{font-family:var(--serif); font-size:22px; margin:0 0 8px; font-weight:600}
+.finish p{margin:0 0 16px; color:var(--ink-muted); font-size:15px}
+.finish .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+.linkbox{
+  font-family:var(--mono); font-size:12px; word-break:break-all; line-height:1.5;
+  background:var(--surface-2); border:1px solid var(--line); border-radius:8px;
+  padding:12px 14px; margin:14px 0 0; max-height:110px; overflow:auto; color:var(--ink-muted)
+}
+.step-l{
+  font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; font-weight:600;
+  color:var(--ink-faint); margin:18px 0 8px
+}
+.importer{margin-top:22px; padding-top:18px; border-top:1px solid var(--line)}
+.importer summary{
+  font-size:13.5px; color:var(--ink-faint); cursor:pointer; list-style:none;
+  padding:4px 0
+}
+.importer summary::-webkit-details-marker{display:none}
+.importer summary::before{content:"› "; color:var(--accent)}
+.importer[open] summary::before{content:"⌄ "}
+.importer summary:hover{color:var(--ink-muted)}
+.importer textarea{margin-top:12px; min-height:88px; font-family:var(--mono); font-size:12px}
+.note{font-size:13px; color:var(--ink-faint); margin:0}
+.note.ok{color:var(--good)}
+.note.warn{color:var(--attention)}
+.received{
+  background:var(--accent); color:#fff; border-radius:10px;
+  padding:14px 18px; margin:22px 0 0; font-size:14.5px
+}
+.received b{font-weight:600}
+.foot{margin-top:40px; font-size:12.5px; color:var(--ink-faint); line-height:1.6}
+@media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
+</style>
+
+</head>
+<body>
+<div class="wrap"><div id="root"></div></div>
+
+<script id="app">
+(function(){
+"use strict";
+
+/* ============================================================
+   Diese Seite braucht keinen Zugang und keinen Server.
+   Die Antworten stehen im Link — der Kunde erzeugt ihn am Ende
+   und schickt ihn zurück. Wer den Link öffnet, sieht alles.
+   ============================================================ */
+
+// Empfängeradresse für den "Per E-Mail senden"-Knopf. Hier ggf. die
+// geschäftliche Adresse eintragen.
+// Zusammengesetzt, damit die Adresse nicht aus dem oeffentlichen Quelltext
+// abgegriffen wird. Zum Aendern einfach die drei Teile anpassen.
+var EMPFAENGER = ["serko.parlak","@","gmail.com"].join("");
+
+var PAPER = [
+  {g:"Vor der Behandlung", items:[
+    ["anam","Anamnesebogen für neue Patienten"],
+    ["dsgvo","Datenschutzerklärung"],
+    ["vertrag","Behandlungsvertrag / Privatvereinbarung"],
+    ["igel","IGeL-Vereinbarung","bei Kassenpatienten vor Selbstzahlerleistungen"],
+    ["kv","Kostenvoranschlag für Selbstzahler"]
+  ]},
+  {g:"Aufklärung", items:[
+    ["a_op","Aufklärung Operation / Exzision"],
+    ["a_laser","Aufklärung Laserbehandlung"],
+    ["a_botox","Aufklärung Botulinumtoxin"],
+    ["a_filler","Aufklärung Hyaluron / Filler"],
+    ["a_sonst","Aufklärung PRP, Microneedling, Peeling"],
+    ["a_foto","Einwilligung Fotodokumentation"]
+  ]},
+  {g:"Behandlung und Dokumentation", items:[
+    ["op","OP-Bericht"],
+    ["charge","Chargendokumentation Botox und Filler","welches Präparat, welche Charge"],
+    ["uv","Protokoll Lichttherapie / UV-Dosis"],
+    ["hygiene","Hygiene- und Sterilisationsprotokoll"]
+  ]},
+  {g:"Nach der Behandlung", items:[
+    ["rezept","Privatrezept oder grünes Rezept"],
+    ["ueberw","Überweisung"],
+    ["au","AU-Bescheinigung"],
+    ["brief","Arztbrief an Kollegen oder Hausarzt"],
+    ["histo_a","Histologie-Anforderungsschein"],
+    ["histo_b","Histologie-Befund, der bei Ihnen ankommt"],
+    ["labor","Laborschein oder Laborbefund"],
+    ["pflege","Nachsorge- und Pflegehinweise für Patienten"],
+    ["termin","Terminzettel"],
+    ["recall","Recall-Karte für die nächste Vorsorge"]
+  ]},
+  {g:"Abrechnung", items:[
+    ["rechn","Privatrechnung"],
+    ["mahn","Mahnung"]
+  ]}
+];
+
+var PKEYS = [];
+PAPER.forEach(function(g){ g.items.forEach(function(i){ PKEYS.push(i[0]); }); });
+var PAPER_COUNT = PKEYS.length;
+
+var SECTIONS = [
+  {id:"praxis", t:"Praxis und Team", h:"Damit wir Lizenzkosten und Geräteanzahl realistisch rechnen.", qs:[
+    {id:"aerzte", l:"Wie viele Ärztinnen und Ärzte arbeiten in der Praxis?", type:"num", ph:"z. B. 1"},
+    {id:"mfa", l:"Wie viele MFA und Kosmetikkräfte?", type:"num", ph:"z. B. 4"},
+    {id:"raeume", l:"Wie viele Behandlungsräume gibt es?", type:"num", ph:"z. B. 3"},
+    {id:"pat", l:"Wie viele Patientenkontakte haben Sie an einem normalen Tag?",
+      type:"opt", o:["unter 40","40 bis 70","70 bis 100","über 100"]},
+    {id:"privat", l:"Wie hoch ist der Anteil von Privatpatienten und Selbstzahlern am Umsatz?",
+      h:"Eine grobe Schätzung genügt.", type:"opt", o:["unter 25 %","25 bis 50 %","50 bis 75 %","über 75 %"]}
+  ]},
+
+  {id:"papier", t:"Was wird bei Ihnen gedruckt?", h:"Der wichtigste Abschnitt — hier entsteht der Plan zum papierlosen Arbeiten.", paper:true},
+
+  {id:"drucker", t:"Drucker und Aufwand", h:"Zwei Minuten, dafür wird der Nutzen später messbar.", qs:[
+    {id:"drucker", l:"Wie viele Drucker stehen in der Praxis?", type:"num", ph:"z. B. 5"},
+    {id:"scanzeit", l:"Wie viel Zeit geht am Tag fürs Einscannen und Einsortieren drauf?",
+      type:"opt", o:["fast keine","bis 30 Minuten","30 bis 60 Minuten","über eine Stunde","weiß ich nicht"]},
+    {id:"pkosten", l:"Was geben Sie im Monat ungefähr für Papier und Toner aus?",
+      type:"opt", o:["unter 100 €","100 bis 300 €","300 bis 600 €","über 600 €","weiß ich nicht"]}
+  ]},
+
+  {id:"termine", t:"Termine und Telefon", h:"Hier steckt der größte Zeitfresser an der Anmeldung.", qs:[
+    {id:"kalender", l:"Welcher Kalender ist bei Ihnen der maßgebliche?",
+      h:"Der, auf den sich das Team im Zweifel verlässt.",
+      type:"opt", o:["Duria","Doctolib","samedi","Papierkalender","weiß ich nicht"]},
+    {id:"sync", l:"Landen Doctolib-Termine automatisch in Duria?",
+      h:"Oder überträgt sie jemand von Hand?",
+      type:"opt", o:["automatisch","wird abgetippt","teils, teils","weiß ich nicht"]},
+    {id:"samedi", l:"Nutzen Sie samedi noch aktiv?",
+      h:"Auf Ihrer Website sind beide Buchungssysteme verlinkt.",
+      type:"opt", o:["ja, aktiv","nur noch verlinkt","nein","weiß ich nicht"]},
+    {id:"anrufe", l:"Wie viele Anrufe kommen an einem normalen Tag?",
+      type:"opt", o:["unter 30","30 bis 60","60 bis 100","über 100","weiß ich nicht"]},
+    {id:"verpasst", l:"Wie viele Anrufe bleiben davon unbeantwortet?",
+      type:"opt", o:["so gut wie keine","einige","viele","weiß ich nicht"]},
+    {id:"anlass", l:"Was ist der häufigste Grund, warum Patienten anrufen?", type:"text",
+      ph:"z. B. Termin verschieben, Rezept nachbestellen, Befund erfragen"},
+    {id:"anlage", l:"Was für eine Telefonanlage haben Sie?",
+      h:"Wichtig: Ohne moderne Anlage funktioniert kein Telefonassistent.",
+      type:"opt", o:["klassisch analog","ISDN","modern über Internet","weiß ich nicht"]}
+  ]},
+
+  {id:"abrechnung", t:"Privatabrechnung", h:"Sie rechnen privat selbst ab — hier liegt der schnellste Geldeffekt.", qs:[
+    {id:"r_womit", l:"Womit erstellen Sie Ihre Privatrechnungen?",
+      type:"opt", o:["direkt in Duria","eigene Abrechnungssoftware","Word oder Excel","weiß ich nicht"]},
+    {id:"r_versand", l:"Wie gehen die Rechnungen raus?", type:"opt", o:["per Post","per E-Mail","beides"]},
+    {id:"r_anz", l:"Wie viele Privatrechnungen schreiben Sie im Monat?",
+      type:"opt", o:["unter 50","50 bis 150","150 bis 300","über 300","weiß ich nicht"]},
+    {id:"r_zahl", l:"Wie behalten Sie offene Rechnungen im Blick?",
+      type:"opt", o:["Kontoauszug von Hand","eine Software zeigt es an","gar nicht systematisch","weiß ich nicht"]},
+    {id:"r_ausfall", l:"Wie viele Rechnungen bleiben am Ende unbezahlt?",
+      type:"opt", o:["fast keine","vereinzelt","spürbar viele","weiß ich nicht"]}
+  ]},
+
+  {id:"geraete", t:"Geräte und Fotos", h:"In der Dermatologie ist das Bild der eigentliche Befund.", qs:[
+    {id:"derma", l:"Haben Sie ein digitales Dermatoskop?",
+      type:"opt", o:["ja","nein, nur optisch","weiß ich nicht"]},
+    {id:"ganzk", l:"Nutzen Sie Ganzkörperfotografie, etwa FotoFinder?",
+      type:"opt", o:["ja, vorhanden","geplant","nein"]},
+    {id:"f_womit", l:"Womit machen Sie Vorher-/Nachher-Fotos bei ästhetischen Behandlungen?",
+      type:"opt", o:["Praxiskamera","Praxis-Handy","privates Handy","machen wir nicht"]},
+    {id:"f_wohin", l:"Wo landen diese Fotos am Ende?",
+      h:"Die ehrliche Antwort hilft uns mehr als die richtige.",
+      type:"opt", o:["in der Duria-Akte","auf der Kamera","im Handy","in einem PC-Ordner","weiß ich nicht"]}
+  ]},
+
+  {id:"schmerz", t:"Was Sie am meisten stört", h:"Zwei freie Fragen. Antworten Sie so knapp oder so ausführlich Sie mögen.", qs:[
+    {id:"zeit", l:"Was kostet Sie und Ihr Team im Alltag am meisten Zeit — und was geht am häufigsten schief?", type:"area"},
+    {id:"ziel", l:"Was soll in zwölf Monaten spürbar anders sein?", type:"area"}
+  ]},
+
+  {id:"systemhaus", t:"Eine Bitte an Ihr Systemhaus", h:"Drei Fragen, die nur Ihr DURIA-Betreuer beantworten kann.", relay:true, qs:[
+    {id:"dsc", l:"Wie heißt Ihr DURIA-Support-Center und wer ist dort Ihr Ansprechpartner?",
+      type:"text", ph:"Firma, Name, Telefon oder E-Mail"}
+  ]}
+];
+
+var RELAY_MAIL =
+"Betreff: Drei technische Fragen zu unserer DURIA-Installation\n\n" +
+"Guten Tag,\n\n" +
+"wir bereiten in unserer Praxis ein Digitalisierungsprojekt vor. DURIA bleibt\n" +
+"dabei ausdrücklich unser führendes System. Damit unser Dienstleister den\n" +
+"Aufwand einschätzen kann, brauchen wir von Ihnen drei Auskünfte:\n\n" +
+"1. Welche GDT-Version ist bei uns aktiv (2.0 oder 2.1)?\n\n" +
+"2. Ist bei uns ein PDF-Importverzeichnis eingerichtet, das DURIA überwacht\n" +
+"   und automatisch in die Karteikarte übernimmt? Falls ja: welcher Pfad?\n" +
+"   Falls nein: ließe es sich einrichten, und mit welchem Aufwand?\n\n" +
+"3. Wann läuft das Gerätezertifikat unseres TI-Konnektors ab, und ist ein\n" +
+"   Wechsel auf ein TI-Gateway geplant?\n\n" +
+"Ergänzend: Werden unsere Doctolib-Termine heute technisch nach DURIA\n" +
+"übertragen, oder trägt sie jemand von Hand ein?\n\n" +
+"Vielen Dank und freundliche Grüße";
+
+/* ============================================================
+   Zustand: Antworten und Papierlandkarte
+   ============================================================ */
+
+var answers = {};   // {frageId: Wert}  — bei Auswahlfragen der Index
+var paper   = {};   // {dokumentKey: "1".."4"}
+var received = null; // Zeitpunkt, falls über einen Ergebnis-Link geöffnet
+var openSec = null;
+var codeOut = null;  // erzeugter Ergebnis-Code
+
+var DRAFT = "praxischeck-entwurf-v2";
+
+/* ---------- Kodierung: Antworten in den Link ---------- */
+
+function b64urlEncode(str){
+  var bytes = new TextEncoder().encode(str);
+  var bin = "";
+  for(var i=0; i<bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+}
+function b64urlDecode(s){
+  s = String(s).replace(/-/g,"+").replace(/_/g,"/");
+  while(s.length % 4) s += "=";
+  var bin = atob(s);
+  var bytes = new Uint8Array(bin.length);
+  for(var i=0; i<bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+
+// Die Papierlandkarte wird als eine Zeichenkette abgelegt: eine Ziffer je
+// Dokument, in fester Reihenfolge. Das hält den Link kurz.
+function packPaper(){
+  return PKEYS.map(function(k){ return paper[k] || "0"; }).join("");
+}
+function unpackPaper(s){
+  var out = {};
+  String(s || "").split("").forEach(function(c,i){
+    if(c !== "0" && PKEYS[i]) out[PKEYS[i]] = c;
+  });
+  return out;
+}
+
+function encodePayload(){
+  var slim = {};
+  Object.keys(answers).forEach(function(k){
+    var v = answers[k];
+    if(v !== undefined && v !== null && String(v).trim() !== "") slim[k] = v;
+  });
+  return b64urlEncode(JSON.stringify({v:1, a:slim, p:packPaper(), t:new Date().toISOString()}));
+}
+
+function decodePayload(raw){
+  try{
+    var o = JSON.parse(b64urlDecode(raw));
+    if(!o || o.v !== 1) return null;
+    return o;
+  }catch(e){ return null; }
+}
+
+/* ---------- Entwurf im Browser ---------- */
+
+function saveDraft(){
+  try{ localStorage.setItem(DRAFT, JSON.stringify({a:answers, p:paper})); }catch(e){}
+}
+function loadDraft(){
+  try{
+    var d = JSON.parse(localStorage.getItem(DRAFT) || "null");
+    if(d && d.a){ answers = d.a; paper = d.p || {}; return true; }
+  }catch(e){}
+  return false;
+}
+
+/* ---------- Zählung ---------- */
+
+function totalQuestions(){
+  return SECTIONS.reduce(function(n,s){
+    return n + (s.paper ? PAPER_COUNT : 0) + (s.qs ? s.qs.length : 0);
+  },0);
+}
+function sectionSize(s){ return (s.paper ? PAPER_COUNT : 0) + (s.qs ? s.qs.length : 0); }
+function answeredIn(s){
+  var n = 0;
+  if(s.paper) n += Object.keys(paper).length;
+  if(s.qs) s.qs.forEach(function(q){
+    var v = answers[q.id];
+    if(v !== undefined && v !== null && String(v).trim() !== "") n++;
+  });
+  return n;
+}
+function answeredTotal(){ return SECTIONS.reduce(function(n,s){ return n + answeredIn(s); },0); }
+function paperStats(){
+  var g=0, t=0;
+  Object.keys(paper).forEach(function(k){
+    if(paper[k] === "2" || paper[k] === "3") g++;
+    if(paper[k] === "3") t++;
+  });
+  return {gedruckt:g, taeglich:t};
+}
+
+/* ============================================================
+   Aufbau
+   ============================================================ */
+
+function el(tag, cls, txt){
+  var e = document.createElement(tag);
+  if(cls) e.className = cls;
+  if(txt != null) e.textContent = txt;
+  return e;
+}
+
+function render(){
+  var root = document.getElementById("root");
+  root.textContent = "";
+
+  var head = el("header","masthead");
+  head.appendChild(el("p","eyebrow","Praxis-Check"));
+  head.appendChild(el("h1","","Wo steht Ihre Praxis heute?"));
+  var lede = el("p","lede");
+  lede.innerHTML = "Damit wir für RHEINDERMA einen belastbaren Plan zum papierlosen Arbeiten bauen können, brauchen wir ein genaues Bild vom Ist-Zustand. <strong>Rund 12 Minuten</strong>, das meiste mit einem Fingertipp.";
+  head.appendChild(lede);
+
+  if(!received){
+    var how = el("div","howto");
+    [["Schritt 1","Fragen beantworten — Sie können jederzeit unterbrechen"],
+     ["Schritt 2","Am Ende auf „Antworten abschließen“ tippen"],
+     ["Schritt 3","Den erzeugten Code an uns zurückschicken"]].forEach(function(s){
+      var d = el("div");
+      d.appendChild(el("b","",s[0]));
+      d.appendChild(el("span","",s[1]));
+      how.appendChild(d);
+    });
+    head.appendChild(how);
+  }
+  root.appendChild(head);
+
+  if(received){
+    var r = el("div","received");
+    r.innerHTML = "<b>Ausgefüllte Antworten</b> — übermittelt am " + received +
+      ". Sie können hier weiter ergänzen und einen neuen Code erzeugen.";
+    root.appendChild(r);
+  }
+
+  var total = totalQuestions(), done = answeredTotal();
+  var bar = el("div","bar");
+  var track = el("div","bar-track");
+  var fill = el("div","bar-fill");
+  fill.style.width = (total ? Math.round(done/total*100) : 0) + "%";
+  track.appendChild(fill);
+  bar.appendChild(track);
+  bar.appendChild(el("span","bar-num", done + " von " + total));
+  var jump = el("button","btn btn-sm","Zum Abschluss");
+  jump.type = "button";
+  jump.addEventListener("click", function(){
+    var f = document.getElementById("finish");
+    if(f) f.scrollIntoView({behavior:"smooth", block:"center"});
+  });
+  bar.appendChild(jump);
+  root.appendChild(bar);
+
+  if(done > 0){
+    var ps = paperStats();
+    var sum = el("section","summary");
+    sum.appendChild(el("h2","","Ihr Zwischenstand"));
+    var stats = el("div","stats");
+    function stat(v,l){
+      var d = el("div");
+      d.appendChild(el("div","stat-v",String(v)));
+      d.appendChild(el("div","stat-l",l));
+      return d;
+    }
+    stats.appendChild(stat(Math.round(done/total*100) + " %","der Fragen beantwortet"));
+    stats.appendChild(stat(ps.gedruckt + " von " + PAPER_COUNT,"Dokumente werden gedruckt"));
+    stats.appendChild(stat(ps.taeglich,"davon jeden Tag"));
+    sum.appendChild(stats);
+    root.appendChild(sum);
+  }
+
+  SECTIONS.forEach(function(s){
+    var size = sectionSize(s), got = answeredIn(s);
+    var sec = el("section","sec" + (openSec === s.id ? " open" : ""));
+    sec.dataset.sec = s.id;
+
+    var h = el("button","sec-head");
+    h.type = "button";
+    h.setAttribute("aria-expanded", openSec === s.id ? "true" : "false");
+    h.appendChild(el("div","sec-dot" + (got >= size ? " done" : ""), got >= size ? "✓" : ""));
+    var t = el("div","sec-t");
+    t.appendChild(el("h3","",s.t));
+    t.appendChild(el("p","",s.h));
+    h.appendChild(t);
+    h.appendChild(el("span","sec-n", got + "/" + size));
+    var chev = el("span","chev","›");
+    chev.setAttribute("aria-hidden","true");
+    h.appendChild(chev);
+    h.addEventListener("click", function(){
+      openSec = (openSec === s.id) ? null : s.id;
+      render();
+      if(openSec === s.id){
+        var n = document.querySelector('[data-sec="' + s.id + '"]');
+        if(n) n.scrollIntoView({behavior:"smooth", block:"start"});
+      }
+    });
+    sec.appendChild(h);
+
+    var body = el("div","sec-body");
+    if(s.relay) body.appendChild(relayBlock());
+    if(s.paper) body.appendChild(paperBlock());
+    if(s.qs) s.qs.forEach(function(q){ body.appendChild(questionBlock(q)); });
+    sec.appendChild(body);
+    root.appendChild(sec);
+  });
+
+  root.appendChild(finishBlock());
+
+  var foot = el("p","foot");
+  foot.innerHTML = "Ihre Angaben werden ausschließlich für die Planung dieses Projekts verwendet und liegen nur in Ihrem Browser und in dem Code, den Sie erzeugen. Sie enthalten <strong>keine Patientendaten</strong> — bitte tragen Sie auch keine ein.";
+  root.appendChild(foot);
+}
+
+function questionBlock(q){
+  var w = el("div","q");
+  var lab;
+  if(q.type === "opt"){
+    lab = el("div","q-l",q.l);
+    w.setAttribute("role","group");
+    w.setAttribute("aria-label",q.l);
+  } else {
+    lab = el("label","q-l",q.l);
+    lab.setAttribute("for","f-"+q.id);
+  }
+  w.appendChild(lab);
+  if(q.h) w.appendChild(el("p","q-h",q.h));
+
+  if(q.type === "opt"){
+    var opts = el("div","opts");
+    q.o.forEach(function(o, idx){
+      var on = String(answers[q.id]) === String(idx);
+      var b = el("button","opt" + (on ? " on" : "") + (/weiß ich nicht/i.test(o) ? " dunno" : ""), o);
+      b.type = "button";
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+      b.addEventListener("click", function(){
+        if(String(answers[q.id]) === String(idx)) delete answers[q.id];
+        else answers[q.id] = idx;
+        touch();
+      });
+      opts.appendChild(b);
+    });
+    w.appendChild(opts);
+  } else if(q.type === "area"){
+    var ta = el("textarea");
+    ta.id = "f-"+q.id;
+    ta.value = answers[q.id] || "";
+    ta.addEventListener("input", function(){ answers[q.id] = ta.value; touchQuiet(); });
+    w.appendChild(ta);
+  } else {
+    var inp = document.createElement("input");
+    inp.type = (q.type === "num") ? "number" : "text";
+    inp.id = "f-"+q.id;
+    if(q.ph) inp.placeholder = q.ph;
+    if(q.type === "num") inp.min = "0";
+    inp.value = answers[q.id] || "";
+    inp.addEventListener("input", function(){ answers[q.id] = inp.value; touchQuiet(); });
+    w.appendChild(inp);
+  }
+  return w;
+}
+
+function paperBlock(){
+  var frag = document.createDocumentFragment();
+  var intro = el("p","q-h","Für jedes Dokument ein Tipp: Drucken Sie es aus? Wenn ja, wie oft? Daraus wird die Liste, die wir Stück für Stück abarbeiten.");
+  intro.style.margin = "14px 0 0";
+  frag.appendChild(intro);
+
+  PAPER.forEach(function(group){
+    var g = el("div","pgroup");
+    g.appendChild(el("p","pgroup-t",group.g));
+    group.items.forEach(function(it){
+      var key = it[0], name = it[1], hint = it[2];
+      var row = el("div","prow");
+      var n = el("div","prow-n");
+      n.appendChild(document.createTextNode(name));
+      if(hint) n.appendChild(el("small","",hint));
+      row.appendChild(n);
+
+      var seg = el("div","pseg");
+      seg.setAttribute("role","group");
+      seg.setAttribute("aria-label",name);
+      [["1","Nein","Drucken wir nicht"],["2","Selten","Drucken wir selten"],
+       ["3","Täglich","Drucken wir täglich"],["4","?","Weiß ich nicht"]].forEach(function(o){
+        var on = paper[key] === o[0];
+        var b = el("button", on ? "on" : "", o[1]);
+        b.type = "button";
+        b.dataset.v = o[0];
+        b.title = o[2];
+        b.setAttribute("aria-label", name + ": " + o[2]);
+        b.setAttribute("aria-pressed", on ? "true" : "false");
+        b.addEventListener("click", function(){
+          if(paper[key] === o[0]) delete paper[key];
+          else paper[key] = o[0];
+          touch();
+        });
+        seg.appendChild(b);
+      });
+      row.appendChild(seg);
+      g.appendChild(row);
+    });
+    frag.appendChild(g);
+  });
+  return frag;
+}
+
+function relayBlock(){
+  var w = el("div","relay");
+  var p1 = el("p");
+  p1.innerHTML = "Diese drei Fragen kann nur Ihr <strong>DURIA-Support-Center</strong> beantworten. Sie entscheiden darüber, wie viel Automatisierung technisch überhaupt möglich ist.";
+  w.appendChild(p1);
+  w.appendChild(el("p","","Kopieren Sie den Text und schicken Sie ihn an Ihren Betreuer. Eine Anfrage von Ihnen als Kunde wird schneller beantwortet als eine von uns."));
+  w.appendChild(el("pre","mail",RELAY_MAIL));
+  var b = el("button","btn btn-sm","Text kopieren");
+  b.type = "button";
+  b.addEventListener("click", function(){ copyText(RELAY_MAIL, b, "Kopiert ✓", "Text kopieren"); });
+  w.appendChild(b);
+  return w;
+}
+
+function isFile(){ return location.protocol === "file:"; }
+
+function finishBlock(){
+  var w = el("section","finish");
+  w.id = "finish";
+  w.appendChild(el("h2","","Fertig? So kommen die Antworten zu uns"));
+  w.appendChild(el("p","","Ihre Antworten werden zu einem Code zusammengefasst. Diesen Code schicken Sie uns per E-Mail oder Nachricht — wir setzen ihn wieder ein und sehen genau das, was Sie eingetragen haben. Es wird nichts an Dritte gesendet."));
+
+  var row = el("div","row");
+  var gen = el("button","btn","Antworten abschließen");
+  gen.type = "button";
+  gen.addEventListener("click", function(){
+    codeOut = encodePayload();
+    render();
+    setTimeout(function(){
+      var f = document.getElementById("finish");
+      if(f) f.scrollIntoView({behavior:"smooth", block:"center"});
+    }, 30);
+  });
+  row.appendChild(gen);
+  w.appendChild(row);
+
+  if(codeOut){
+    w.appendChild(el("p","step-l","Ihr Ergebnis-Code"));
+    w.appendChild(el("div","linkbox",codeOut));
+
+    var r2 = el("div","row");
+    r2.style.marginTop = "12px";
+
+    var cp = el("button","btn","Code kopieren");
+    cp.type = "button";
+    cp.addEventListener("click", function(){ copyText(codeOut, cp, "Kopiert ✓", "Code kopieren"); });
+    r2.appendChild(cp);
+
+    var mail = el("a","btn btn-ghost","Per E-Mail senden");
+    mail.href = "mailto:" + EMPFAENGER +
+      "?subject=" + encodeURIComponent("Praxis-Check RHEINDERMA — ausgefüllt") +
+      "&body=" + encodeURIComponent("Guten Tag,\n\nanbei unser Ergebnis-Code aus dem Praxis-Check:\n\n" + codeOut + "\n\nFreundliche Grüße");
+    r2.appendChild(mail);
+
+    var txt = el("button","btn btn-ghost","Lieber als lesbaren Text");
+    txt.type = "button";
+    txt.addEventListener("click", function(){ copyText(asText(), txt, "Kopiert ✓", "Lieber als lesbaren Text"); });
+    r2.appendChild(txt);
+    w.appendChild(r2);
+
+    // Ein Link ist nur sinnvoll, wenn die Seite auch von einem Server kommt.
+    if(!isFile()){
+      var link = location.origin + location.pathname + "#e=" + codeOut;
+      w.appendChild(el("p","step-l","Oder als fertiger Link"));
+      w.appendChild(el("div","linkbox",link));
+      var r3 = el("div","row");
+      r3.style.marginTop = "12px";
+      var cl = el("button","btn btn-ghost","Link kopieren");
+      cl.type = "button";
+      cl.addEventListener("click", function(){ copyText(link, cl, "Kopiert ✓", "Link kopieren"); });
+      r3.appendChild(cl);
+      w.appendChild(r3);
+    }
+
+    var n = el("p","note ok","Fertig. Bitte schicken Sie uns den Code — danach können Sie dieses Fenster schließen.");
+    n.style.marginTop = "14px";
+    w.appendChild(n);
+  }
+
+  // Einlese-Bereich: unauffällig, richtet sich an den Empfänger.
+  var det = document.createElement("details");
+  det.className = "importer";
+  var sm = document.createElement("summary");
+  sm.textContent = "Sie haben einen Ergebnis-Code erhalten? Hier einsetzen";
+  det.appendChild(sm);
+  var ta = el("textarea");
+  ta.placeholder = "Code hier einfügen …";
+  ta.setAttribute("aria-label","Ergebnis-Code einfügen");
+  det.appendChild(ta);
+  var ib = el("button","btn btn-sm","Antworten anzeigen");
+  ib.type = "button";
+  ib.style.marginTop = "10px";
+  ib.addEventListener("click", function(){
+    var raw = (ta.value || "").trim().replace(/^.*#e=/, "");
+    var p = decodePayload(raw);
+    if(!p){
+      var bad = det.querySelector(".note");
+      if(!bad){ bad = el("p","note warn"); det.appendChild(bad); }
+      bad.textContent = "Der Code konnte nicht gelesen werden. Bitte vollständig und ohne Zeilenumbrüche einfügen.";
+      return;
+    }
+    answers = p.a || {};
+    paper = unpackPaper(p.p);
+    codeOut = null;
+    try{
+      received = new Date(p.t).toLocaleString("de-DE",
+        {day:"2-digit", month:"2-digit", year:"numeric", hour:"2-digit", minute:"2-digit"});
+    }catch(e){ received = "unbekanntem Datum"; }
+    saveDraft();
+    window.scrollTo(0,0);
+    render();
+  });
+  det.appendChild(ib);
+  w.appendChild(det);
+
+  return w;
+}
+
+/* ============================================================
+   Änderungen
+   ============================================================ */
+
+function touch(){ codeOut = null; saveDraft(); render(); }
+
+// Bei Texteingaben nicht neu zeichnen — der Cursor würde springen.
+function touchQuiet(){ codeOut = null; saveDraft(); updateBar(); }
+
+function updateBar(){
+  var total = totalQuestions(), done = answeredTotal();
+  var fill = document.querySelector(".bar-fill");
+  var num = document.querySelector(".bar-num");
+  if(fill) fill.style.width = (total ? Math.round(done/total*100) : 0) + "%";
+  if(num) num.textContent = done + " von " + total;
+}
+
+/* ============================================================
+   Textfassung
+   ============================================================ */
+
+function labelFor(q){
+  var v = answers[q.id];
+  if(v === undefined || v === null || String(v).trim() === "") return "— keine Angabe";
+  if(q.type === "opt") return q.o[Number(v)] || String(v);
+  return String(v);
+}
+
+function asText(){
+  var L = [];
+  L.push("PRAXIS-CHECK RHEINDERMA");
+  L.push("Ausgefüllt am " + new Date().toLocaleString("de-DE"));
+  var ps = paperStats();
+  L.push("");
+  L.push("PAPIER: " + ps.gedruckt + " von " + PAPER_COUNT + " Dokumenten werden gedruckt, davon " + ps.taeglich + " täglich.");
+
+  SECTIONS.forEach(function(s){
+    L.push("");
+    L.push("== " + s.t.toUpperCase() + " ==");
+    if(s.paper){
+      PAPER.forEach(function(g){
+        L.push("");
+        L.push("  " + g.g + ":");
+        g.items.forEach(function(it){
+          var v = paper[it[0]];
+          var lab = v === "1" ? "wird nicht gedruckt"
+                  : v === "2" ? "GEDRUCKT (selten)"
+                  : v === "3" ? "GEDRUCKT (täglich)"
+                  : v === "4" ? "weiß nicht"
+                  : "— keine Angabe";
+          L.push("    " + pad(it[1], 48) + lab);
+        });
+      });
+    }
+    if(s.qs) s.qs.forEach(function(q){
+      L.push("");
+      L.push("  " + q.l);
+      L.push("    " + labelFor(q));
+    });
+  });
+  return L.join("\n");
+}
+
+function pad(s, n){ while(s.length < n) s += " "; return s; }
+
+function copyText(txt, btn, okLabel, backLabel){
+  function done(){
+    btn.textContent = okLabel;
+    setTimeout(function(){ btn.textContent = backLabel; }, 1800);
+  }
+  function fallback(){
+    var ta = document.createElement("textarea");
+    ta.value = txt;
+    ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try{ document.execCommand("copy"); done(); }catch(e){}
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done).catch(fallback);
+  } else fallback();
+}
+
+/* ============================================================
+   Start
+   ============================================================ */
+
+var hash = location.hash || "";
+var m = hash.match(/[#&]e=([A-Za-z0-9\-_]+)/);
+if(m){
+  var payload = decodePayload(m[1]);
+  if(payload){
+    answers = payload.a || {};
+    paper = unpackPaper(payload.p);
+    try{
+      received = new Date(payload.t).toLocaleString("de-DE",
+        {day:"2-digit", month:"2-digit", year:"numeric", hour:"2-digit", minute:"2-digit"});
+    }catch(e){ received = "unbekanntem Datum"; }
+  }
+}
+if(!received) loadDraft();
+
+render();
+
+})();
+</script>
+</body>
+</html>
