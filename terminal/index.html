@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Praxis-Terminal RHEINDERMA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+:root{
+  --grund:#FBFBFA; --flaeche:#FFFFFF; --flaeche2:#F3F6F5;
+  --schrift:#1A2027; --gedaempft:#5C6672; --blass:#8B949B;
+  --linie:#E2E5E3; --linie2:#CBD2CF;
+  --akzent:#2F6F6B; --akzent-weich:#E8F0EF; --akzent-dunkel:#1F4F4C;
+  --achtung:#9A5A18; --achtung-weich:#FAF2E7;
+  --gut:#3D7A4E; --gut-weich:#EAF2EC;
+  --serif:"Source Serif 4",Georgia,serif;
+  --sans:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root{
+  --grund:#14181B; --flaeche:#1B2124; --flaeche2:#222A2E;
+  --schrift:#E8EBE9; --gedaempft:#9AA5A3; --blass:#6F7B79;
+  --linie:#2C3438; --linie2:#3D4650;
+  --akzent:#63ADA6; --akzent-weich:#1E2E2D; --akzent-dunkel:#8FC9C3;
+  --achtung:#C88B4A; --achtung-weich:#2A2118;
+  --gut:#6BA87C; --gut-weich:#1B2A1F;
+}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  margin:0;background:var(--grund);color:var(--schrift);
+  font-family:var(--sans);font-size:19px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+
+/* ---------- Gerüst ---------- */
+.geraet{min-height:100%;display:flex;flex-direction:column}
+.bildschirm{
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+  max-width:760px;width:100%;margin:0 auto;padding:36px 28px 24px;
+}
+.schritt{
+  font-family:var(--mono);font-size:13px;letter-spacing:.06em;
+  color:var(--blass);margin:0 0 14px;text-transform:uppercase;
+}
+h1{
+  font-family:var(--serif);font-weight:600;
+  font-size:clamp(30px,5.4vw,46px);line-height:1.12;
+  margin:0 0 16px;letter-spacing:-.015em;text-wrap:balance;
+}
+.lead{font-size:clamp(18px,2.4vw,22px);color:var(--gedaempft);margin:0 0 30px;max-width:30em}
+.lead strong{color:var(--schrift);font-weight:600}
+
+/* ---------- Knöpfe ---------- */
+.knopf{
+  display:flex;align-items:center;gap:16px;width:100%;
+  font-family:inherit;font-size:21px;font-weight:500;text-align:left;
+  padding:22px 26px;min-height:74px;border-radius:14px;cursor:pointer;
+  border:1px solid var(--akzent);background:var(--akzent);color:#fff;
+  transition:transform .08s,opacity .15s;margin-bottom:14px;
+}
+.knopf:active{transform:scale(.985)}
+.knopf .pfeil{margin-left:auto;opacity:.7;font-size:24px}
+.knopf.leise{background:var(--flaeche);color:var(--schrift);border-color:var(--linie2)}
+.knopf.leise:hover{border-color:var(--akzent)}
+.knopf.gross{min-height:120px;font-size:24px;flex-direction:column;align-items:flex-start;gap:6px;justify-content:center}
+.knopf.gross .unter{font-size:16px;font-weight:400;opacity:.82}
+.knopf[disabled]{opacity:.45;cursor:default}
+.knopf-reihe{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
+.knopf-reihe .knopf{width:auto;flex:1;min-width:190px;justify-content:center;text-align:center}
+.zurueck{
+  background:none;border:0;color:var(--gedaempft);font-family:inherit;font-size:17px;
+  padding:14px 4px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+}
+.zurueck:hover{color:var(--schrift)}
+
+/* ---------- Karten und Listen ---------- */
+.karte{
+  background:var(--flaeche);border:1px solid var(--linie);border-radius:14px;
+  padding:24px 26px;margin-bottom:18px;
+}
+.karte.hell{background:var(--akzent-weich);border-color:color-mix(in srgb,var(--akzent) 22%,transparent)}
+.karte.gut{background:var(--gut-weich);border-color:color-mix(in srgb,var(--gut) 26%,transparent)}
+.zeile{display:flex;justify-content:space-between;gap:20px;padding:13px 0;border-bottom:1px solid var(--linie)}
+.zeile:last-child{border-bottom:0}
+.zeile .wert{font-weight:500;text-align:right}
+.zeile .bezeichnung{color:var(--gedaempft)}
+.zeile small{display:block;color:var(--blass);font-size:15px;font-weight:400;margin-top:3px}
+.betrag{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.summe{display:flex;justify-content:space-between;align-items:baseline;gap:20px;
+  padding-top:18px;margin-top:6px;border-top:2px solid var(--schrift)}
+.summe .zahl{font-family:var(--mono);font-size:32px;font-weight:500;font-variant-numeric:tabular-nums}
+.summe .text{font-size:20px;font-weight:600}
+
+/* ---------- Auswahl ---------- */
+.frage{margin-bottom:26px}
+.frage-text{font-size:20px;font-weight:500;margin:0 0 14px}
+.wahl{display:flex;gap:12px;flex-wrap:wrap}
+.wahl button{
+  font-family:inherit;font-size:18px;padding:16px 26px;min-height:60px;
+  border-radius:12px;border:1px solid var(--linie2);background:var(--flaeche);
+  color:var(--gedaempft);cursor:pointer;transition:all .12s;
+}
+.wahl button:active{transform:scale(.97)}
+.wahl button.an{background:var(--akzent);border-color:var(--akzent);color:#fff;font-weight:500}
+
+/* ---------- Unterschrift ---------- */
+.unterschrift{
+  border:2px dashed var(--linie2);border-radius:14px;background:var(--flaeche);
+  height:190px;position:relative;overflow:hidden;touch-action:none;margin-bottom:12px;
+}
+.unterschrift canvas{width:100%;height:100%;display:block}
+.unterschrift .hinweis{
+  position:absolute;inset:0;display:grid;place-items:center;
+  color:var(--blass);font-size:18px;pointer-events:none;
+}
+.unterschrift.beschrieben .hinweis{display:none}
+
+/* ---------- Fertig ---------- */
+.haken{
+  width:84px;height:84px;border-radius:50%;background:var(--gut);color:#fff;
+  display:grid;place-items:center;font-size:44px;margin-bottom:24px;
+}
+
+/* ---------- Technikblick ---------- */
+.technik{
+  border-top:1px solid var(--linie);background:var(--flaeche2);
+  padding:14px 28px;font-size:15px;color:var(--gedaempft);
+}
+.technik-kopf{
+  display:flex;align-items:center;gap:10px;font-family:var(--mono);
+  font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--akzent);
+  margin-bottom:8px;font-weight:500;
+}
+.technik ul{margin:0;padding-left:20px}
+.technik li{margin:5px 0}
+.technik code{font-family:var(--mono);font-size:13.5px;background:var(--flaeche);
+  padding:2px 6px;border-radius:5px;border:1px solid var(--linie)}
+
+/* ---------- Kopfleiste ---------- */
+.leiste{
+  display:flex;align-items:center;gap:14px;padding:12px 28px;
+  border-bottom:1px solid var(--linie);background:var(--flaeche);
+  font-size:14px;color:var(--gedaempft);
+}
+.leiste .marke{font-weight:600;color:var(--akzent);letter-spacing:.06em;
+  text-transform:uppercase;font-size:12px}
+.leiste .muster{
+  margin-left:auto;font-size:12px;padding:4px 10px;border-radius:99px;
+  background:var(--achtung-weich);color:var(--achtung);
+  border:1px solid color-mix(in srgb,var(--achtung) 30%,transparent);
+}
+.schalter{
+  font-family:inherit;font-size:13px;padding:6px 12px;border-radius:99px;
+  border:1px solid var(--linie2);background:var(--flaeche);color:var(--gedaempft);cursor:pointer;
+}
+.schalter.an{background:var(--akzent);border-color:var(--akzent);color:#fff}
+
+/* ---------- Praxisblick ---------- */
+.tabelle{width:100%;border-collapse:collapse;font-size:16px}
+.tabelle th{
+  text-align:left;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--blass);font-weight:600;padding:0 12px 10px 0;border-bottom:1px solid var(--linie);
+}
+.tabelle td{padding:12px 12px 12px 0;border-bottom:1px solid var(--linie)}
+.marke2{display:inline-block;font-size:13px;padding:3px 10px;border-radius:99px;
+  background:var(--flaeche2);color:var(--gedaempft);border:1px solid var(--linie)}
+.marke2.gut{background:var(--gut-weich);color:var(--gut);border-color:color-mix(in srgb,var(--gut) 30%,transparent)}
+.marke2.offen{background:var(--achtung-weich);color:var(--achtung);border-color:color-mix(in srgb,var(--achtung) 30%,transparent)}
+h2{font-family:var(--sans);font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--blass);font-weight:600;margin:32px 0 12px}
+.fuss{font-size:14px;color:var(--blass);margin-top:30px;line-height:1.55}
+:focus-visible{outline:3px solid var(--akzent);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="geraet">
+  <div class="leiste">
+    <span class="marke">RHEINDERMA</span>
+    <button class="schalter" id="technik-schalter" type="button">Technikblick</button>
+    <button class="schalter" id="praxis-schalter" type="button">Praxisblick</button>
+    <span class="muster">Klickmuster</span>
+  </div>
+  <div class="bildschirm" id="buehne"></div>
+  <div class="technik" id="technik" hidden></div>
+</div>
+
+<script id="app">
+(function(){
+"use strict";
+
+/* ===========================================================================
+   Klickmuster eines Praxis-Terminals.
+   Alle Daten sind erfunden. Es wird nichts gespeichert und nichts gesendet.
+   =========================================================================== */
+
+var PATIENT = {
+  nummer: "10234", anrede: "Herr",
+  name: "Müller-Lüdenscheidt", vorname: "Jörg", geburt: "24.08.1977",
+  strasse: "Kurfürstenstraße 12", ort: "47829 Krefeld",
+  telefon: "0151 2345678", email: "j.muellerl@beispiel.de",
+  kasse: "Privat — Debeka", termin: "heute, 10:40 Uhr bei Dr. Lodin"
+};
+
+var LEISTUNGEN = [
+  {text:"Erweiterte Hautkrebsvorsorge", unter:"Auflichtmikroskopie, Ganzkörperinspektion", betrag:79.00},
+  {text:"Entfernung von zwei Fibromen", unter:"einschließlich Material und Verband", betrag:96.00},
+  {text:"Beratung zur Nachsorge", unter:"", betrag:0.00}
+];
+
+var zustand = {
+  bildschirm: "start",
+  technik: false,
+  anamnese: {},
+  unterschrieben: false,
+  zahlweg: null,
+  zustellung: []
+};
+
+var el = document.getElementById("buehne");
+var technikFeld = document.getElementById("technik");
+
+/* --------------------------- Hilfsmittel --------------------------- */
+
+function euro(n){
+  return n.toLocaleString("de-DE",{minimumFractionDigits:2,maximumFractionDigits:2}) + " €";
+}
+function summe(){
+  return LEISTUNGEN.reduce(function(s,l){ return s + l.betrag; }, 0);
+}
+function h(html){ el.innerHTML = html; }
+function zu(name){
+  zustand.bildschirm = name;
+  zeichnen();
+  window.scrollTo(0,0);
+}
+function knopf(text, ziel, art, unter){
+  var k = '<button class="knopf ' + (art||"") + '" data-zu="' + ziel + '">';
+  if(unter){ k += '<span>' + text + '</span><span class="unter">' + unter + '</span>'; }
+  else { k += '<span>' + text + '</span><span class="pfeil">›</span>'; }
+  return k + '</button>';
+}
+function zurueck(ziel, text){
+  return '<button class="zurueck" data-zu="' + ziel + '">‹ ' + (text || "Zurück") + '</button>';
+}
+
+/* --------------------------- Bildschirme --------------------------- */
+
+var BILDSCHIRME = {
+
+start: function(){
+  h(
+    '<p class="schritt">Willkommen</p>' +
+    '<h1>Guten Tag bei RHEINDERMA</h1>' +
+    '<p class="lead">Bitte wählen Sie, was Sie tun möchten. Sie brauchen dafür nichts mitzubringen außer Ihrer Versichertenkarte.</p>' +
+    knopf("Ich bin zu meinem Termin da", "ein_karte", "gross", "Anmelden und Fragebogen ausfüllen") +
+    knopf("Ich möchte gehen", "aus_karte", "gross leise", "Leistungen bezahlen und Rechnung erhalten")
+  );
+  technik([
+    "Das Terminal steht an der Anmeldung oder im Eingangsbereich.",
+    "Es kennt keine Patientendaten, bis jemand sich anmeldet.",
+    "Alles läuft im Praxisnetz — es gibt keine Verbindung nach außen."
+  ]);
+},
+
+/* ---------------- Ankunft ---------------- */
+
+ein_karte: function(){
+  h(
+    '<p class="schritt">Anmeldung · Schritt 1 von 4</p>' +
+    '<h1>Bitte legen Sie Ihre Versichertenkarte auf</h1>' +
+    '<p class="lead">Das Lesegerät befindet sich unterhalb des Bildschirms. Die Karte muss nicht eingesteckt werden — Auflegen genügt.</p>' +
+    '<div class="karte hell" style="text-align:center;padding:42px 26px">' +
+      '<div style="font-size:52px;line-height:1">▭</div>' +
+      '<p style="margin:14px 0 0;color:var(--gedaempft)">Warte auf Karte …</p>' +
+    '</div>' +
+    knopf("Karte wurde erkannt", "ein_daten") +
+    knopf("Ich habe meine Karte nicht dabei", "ein_ohne", "leise") +
+    zurueck("start", "Abbrechen")
+  );
+  technik([
+    "Das Kartenlesegerät liest die Versichertenstammdaten von der eGK.",
+    "Ohne Karte: Anmeldung über Name und Geburtsdatum, Abgleich gegen den Stammdatenspiegel der Praxissoftware.",
+    "Ab hier ist bekannt, um welchen Patienten es geht — dieselbe Information, die später jedes Dokument richtig zuordnet."
+  ]);
+},
+
+ein_ohne: function(){
+  h(
+    '<p class="schritt">Anmeldung ohne Karte</p>' +
+    '<h1>Wir finden Sie auch so</h1>' +
+    '<p class="lead">Bitte nennen Sie Ihren Namen und Ihr Geburtsdatum. Eine Mitarbeiterin kommt gleich zu Ihnen und ergänzt die Karte später.</p>' +
+    '<div class="karte">' +
+      '<div class="zeile"><span class="bezeichnung">Nachname</span><span class="wert">Müller-Lüdenscheidt</span></div>' +
+      '<div class="zeile"><span class="bezeichnung">Geburtsdatum</span><span class="wert">24.08.1977</span></div>' +
+    '</div>' +
+    knopf("Das bin ich", "ein_daten") +
+    zurueck("ein_karte")
+  );
+  technik([
+    "Zuordnung über Name und Geburtsdatum gegen den Stammdatenspiegel.",
+    "Passen mehrere Patienten — etwa Zwillinge —, wird <b>nicht geraten</b>: Dann übernimmt die Anmeldung."
+  ]);
+},
+
+ein_daten: function(){
+  h(
+    '<p class="schritt">Anmeldung · Schritt 2 von 4</p>' +
+    '<h1>Stimmen diese Angaben noch?</h1>' +
+    '<p class="lead">Guten Tag, ' + PATIENT.anrede + ' ' + PATIENT.name + '. Ihr Termin: <strong>' + PATIENT.termin + '</strong></p>' +
+    '<div class="karte">' +
+      '<div class="zeile"><span class="bezeichnung">Anschrift</span><span class="wert">' + PATIENT.strasse + '<small>' + PATIENT.ort + '</small></span></div>' +
+      '<div class="zeile"><span class="bezeichnung">Telefon</span><span class="wert">' + PATIENT.telefon + '</span></div>' +
+      '<div class="zeile"><span class="bezeichnung">E-Mail</span><span class="wert">' + PATIENT.email + '</span></div>' +
+      '<div class="zeile"><span class="bezeichnung">Versicherung</span><span class="wert">' + PATIENT.kasse + '</span></div>' +
+    '</div>' +
+    knopf("Ja, alles richtig", "ein_anamnese") +
+    knopf("Etwas hat sich geändert", "ein_aendern", "leise") +
+    zurueck("ein_karte")
+  );
+  technik([
+    "Geänderte Stammdaten gehen als <code>GDT</code>-Satz zurück in die Karteikarte — niemand tippt sie ab.",
+    "Der Termin kommt aus dem Terminkalender der Praxis."
+  ]);
+},
+
+ein_aendern: function(){
+  h(
+    '<p class="schritt">Anmeldung</p>' +
+    '<h1>Was hat sich geändert?</h1>' +
+    '<p class="lead">Tippen Sie auf den Punkt, den Sie ändern möchten. Eine Mitarbeiterin prüft Ihre Angabe später.</p>' +
+    '<div class="wahl" style="flex-direction:column">' +
+      '<button style="width:100%;text-align:left">Anschrift</button>' +
+      '<button style="width:100%;text-align:left">Telefonnummer</button>' +
+      '<button style="width:100%;text-align:left">E-Mail-Adresse</button>' +
+      '<button style="width:100%;text-align:left">Versicherung</button>' +
+    '</div>' +
+    '<div style="height:20px"></div>' +
+    knopf("Weiter", "ein_anamnese") +
+    zurueck("ein_daten")
+  );
+  technik(["Änderungen werden der Anmeldung zur Bestätigung vorgelegt, bevor sie in die Akte gehen."]);
+},
+
+ein_anamnese: function(){
+  var fragen = [
+    {id:"medikamente", text:"Nehmen Sie zurzeit Medikamente ein?", optionen:["Nein","Ja","Wie beim letzten Mal"]},
+    {id:"allergien", text:"Haben Sie neue Allergien oder Unverträglichkeiten?", optionen:["Nein","Ja"]},
+    {id:"sonne", text:"Waren Sie in den letzten Wochen viel in der Sonne oder im Solarium?", optionen:["Nein","Etwas","Ja, viel"]},
+    {id:"neues", text:"Ist Ihnen ein neuer oder veränderter Leberfleck aufgefallen?", optionen:["Nein","Ja"]}
+  ];
+  var html =
+    '<p class="schritt">Anmeldung · Schritt 3 von 4</p>' +
+    '<h1>Vier kurze Fragen</h1>' +
+    '<p class="lead">Damit Dr. Lodin gleich weiß, worauf zu achten ist. Sie können alles im Gespräch noch ergänzen.</p>';
+  fragen.forEach(function(f){
+    html += '<div class="frage"><p class="frage-text">' + f.text + '</p><div class="wahl">';
+    f.optionen.forEach(function(o){
+      var an = zustand.anamnese[f.id] === o ? " an" : "";
+      html += '<button class="' + an.trim() + '" data-frage="' + f.id + '" data-wert="' + o + '">' + o + '</button>';
+    });
+    html += '</div></div>';
+  });
+  var vollstaendig = fragen.every(function(f){ return zustand.anamnese[f.id]; });
+  html += '<div style="height:10px"></div>' +
+    '<button class="knopf" data-zu="ein_einwilligung"' + (vollstaendig ? "" : " disabled") + '>' +
+    '<span>' + (vollstaendig ? "Weiter" : "Bitte alle vier Fragen beantworten") + '</span><span class="pfeil">›</span></button>' +
+    zurueck("ein_daten");
+  h(html);
+  technik([
+    "Die Antworten gehen als Befundtext über Feld <code>6220</code> in die Karteikarte — eine standardisierte Feldkennung, die in jeder Duria-Praxis ohne Vorabklärung funktioniert.",
+    "Der Fragebogen ist je Fachrichtung und Terminart austauschbar.",
+    "Wer lieber vorher zu Hause ausfüllt, bekommt denselben Bogen per Link aufs eigene Handy."
+  ]);
+},
+
+ein_einwilligung: function(){
+  h(
+    '<p class="schritt">Anmeldung · Schritt 4 von 4</p>' +
+    '<h1>Einwilligung</h1>' +
+    '<div class="karte">' +
+      '<p style="margin:0 0 12px">Ich bin damit einverstanden, dass meine Angaben zur Behandlung gespeichert und verarbeitet werden.</p>' +
+      '<p style="margin:0;color:var(--gedaempft);font-size:17px">Eine Abschrift erhalten Sie auf Wunsch per E-Mail. Sie können die Einwilligung jederzeit widerrufen.</p>' +
+    '</div>' +
+    '<p style="font-size:18px;font-weight:500;margin:0 0 10px">Bitte unterschreiben Sie mit dem Finger:</p>' +
+    '<div class="unterschrift" id="feld"><canvas id="leinwand"></canvas><div class="hinweis">Hier unterschreiben</div></div>' +
+    '<div class="knopf-reihe">' +
+      '<button class="knopf leise" id="loeschen"><span>Noch einmal</span></button>' +
+      '<button class="knopf" data-zu="ein_fertig" id="weiter" disabled><span>Bestätigen</span></button>' +
+    '</div>' +
+    zurueck("ein_anamnese")
+  );
+  unterschriftEinrichten();
+  technik([
+    "Das unterschriebene Dokument wird als PDF erzeugt und landet in der Karteikarte.",
+    "Aufklärung nach § 630e BGB ersetzt das <b>nicht</b> — die bleibt das Gespräch mit dem Arzt. Der Bogen bereitet es vor und dokumentiert es.",
+    "Einwilligung zur Fotodokumentation und Einwilligung zur Bildverwendung für Werbung werden getrennt geführt."
+  ]);
+},
+
+ein_fertig: function(){
+  h(
+    '<div class="haken">✓</div>' +
+    '<h1>Sie sind angemeldet</h1>' +
+    '<p class="lead">Bitte nehmen Sie im Wartezimmer Platz. Sie werden aufgerufen.</p>' +
+    '<div class="karte gut">' +
+      '<div class="zeile"><span class="bezeichnung">Ihr Termin</span><span class="wert">10:40 Uhr</span></div>' +
+      '<div class="zeile"><span class="bezeichnung">Voraussichtliche Wartezeit</span><span class="wert">etwa 10 Minuten</span></div>' +
+      '<div class="zeile"><span class="bezeichnung">Behandlungszimmer</span><span class="wert">wird aufgerufen</span></div>' +
+    '</div>' +
+    knopf("Fertig", "start", "leise")
+  );
+  technik([
+    "Die Anmeldung sieht sofort, dass der Patient da ist — ohne dass jemand etwas eingetippt hat.",
+    "Anamnesebogen und Einwilligung liegen bereits in der Karteikarte, bevor der Arzt das Zimmer betritt.",
+    "<b>Kein Blatt Papier</b> in diesem gesamten Ablauf."
+  ]);
+},
+
+/* ---------------- Abschluss ---------------- */
+
+aus_karte: function(){
+  h(
+    '<p class="schritt">Abschluss · Schritt 1 von 3</p>' +
+    '<h1>Bitte legen Sie Ihre Versichertenkarte auf</h1>' +
+    '<p class="lead">Damit wir Ihnen die richtigen Leistungen anzeigen.</p>' +
+    '<div class="karte hell" style="text-align:center;padding:42px 26px">' +
+      '<div style="font-size:52px;line-height:1">▭</div>' +
+      '<p style="margin:14px 0 0;color:var(--gedaempft)">Warte auf Karte …</p>' +
+    '</div>' +
+    knopf("Karte wurde erkannt", "aus_leistungen") +
+    zurueck("start", "Abbrechen")
+  );
+  technik([
+    "Alternativ genügt der Zahlencode vom Terminzettel oder ein QR-Code, den das Behandlungszimmer erzeugt hat."
+  ]);
+},
+
+aus_leistungen: function(){
+  var html =
+    '<p class="schritt">Abschluss · Schritt 2 von 3</p>' +
+    '<h1>Ihre Leistungen heute</h1>' +
+    '<p class="lead">' + PATIENT.anrede + ' ' + PATIENT.name + ', hier ist die Aufstellung von Dr. Lodin.</p>' +
+    '<div class="karte">';
+  LEISTUNGEN.forEach(function(l){
+    html += '<div class="zeile"><span class="bezeichnung">' + l.text +
+      (l.unter ? '<small>' + l.unter + '</small>' : '') + '</span>' +
+      '<span class="wert betrag">' + (l.betrag > 0 ? euro(l.betrag) : "ohne Berechnung") + '</span></div>';
+  });
+  html += '<div class="summe"><span class="text">Zu zahlen</span><span class="zahl">' + euro(summe()) + '</span></div>' +
+    '</div>' +
+    '<p style="color:var(--gedaempft);font-size:17px;margin:0 0 26px">' +
+    'Diese Leistungen sind nicht Bestandteil der gesetzlichen Krankenversicherung. ' +
+    'Sie haben der Erbringung vor der Behandlung schriftlich zugestimmt.</p>' +
+    knopf("Jetzt hier bezahlen", "aus_zahlung") +
+    knopf("Ich habe schon im Behandlungszimmer bezahlt", "aus_rechnung", "leise") +
+    zurueck("aus_karte");
+  h(html);
+  technik([
+    "Die Posten kommen aus der Karteikarte — der Arzt hat sie im Behandlungszimmer erfasst, niemand überträgt sie.",
+    "Bei IGeL-Leistungen wird vorher die schriftliche Vereinbarung erzeugt; ohne sie erscheint der Posten hier gar nicht.",
+    "Kassenleistungen tauchen in dieser Ansicht nie auf."
+  ]);
+},
+
+aus_zahlung: function(){
+  h(
+    '<p class="schritt">Abschluss · Zahlung</p>' +
+    '<h1>' + euro(summe()) + '</h1>' +
+    '<p class="lead">Bitte halten Sie Ihre Karte an das Lesegerät oder wählen Sie eine andere Zahlungsart.</p>' +
+    '<div class="karte hell" style="text-align:center;padding:38px 26px">' +
+      '<div style="font-size:48px;line-height:1">◎</div>' +
+      '<p style="margin:12px 0 0;color:var(--gedaempft)">Karte an das Lesegerät halten</p>' +
+    '</div>' +
+    knopf("Zahlung erfolgreich", "aus_rechnung") +
+    knopf("Lieber per Rechnung zahlen", "aus_rechnung", "leise") +
+    zurueck("aus_leistungen")
+  );
+  technik([
+    "Kartenzahlung über das vorhandene EC-Terminal der Praxis — wir bauen keine Zahlungsabwicklung.",
+    "Bei Barzahlung greifen die Anforderungen an elektronische Kassen (§ 146a AO, TSE).",
+    "Der Zahlungsstatus wird in der Akte vermerkt und speist die Überwachung offener Rechnungen."
+  ]);
+},
+
+aus_rechnung: function(){
+  function an(w){ return zustand.zustellung.indexOf(w) >= 0 ? " an" : ""; }
+  h(
+    '<p class="schritt">Abschluss · Schritt 3 von 3</p>' +
+    '<h1>Wie möchten Sie Ihre Rechnung?</h1>' +
+    '<p class="lead">Sie können auch beides wählen. Die Rechnung enthält alle Angaben für Ihre Erstattung.</p>' +
+    '<div class="wahl" style="flex-direction:column;gap:14px">' +
+      '<button class="' + an("email").trim() + '" data-zustellung="email" style="width:100%;text-align:left;min-height:74px">' +
+        'Per E-Mail an ' + PATIENT.email + '</button>' +
+      '<button class="' + an("druck").trim() + '" data-zustellung="druck" style="width:100%;text-align:left;min-height:74px">' +
+        'Ausdruck, bitte jetzt</button>' +
+      '<button class="' + an("post").trim() + '" data-zustellung="post" style="width:100%;text-align:left;min-height:74px">' +
+        'Per Post</button>' +
+    '</div>' +
+    '<div style="height:22px"></div>' +
+    '<button class="knopf" data-zu="aus_fertig"' + (zustand.zustellung.length ? "" : " disabled") + '>' +
+      '<span>' + (zustand.zustellung.length ? "Abschließen" : "Bitte eine Zustellart wählen") + '</span><span class="pfeil">›</span></button>' +
+    zurueck("aus_leistungen")
+  );
+  technik([
+    "Die Rechnung entsteht aus den erfassten Posten — kein zweites System, keine Nacharbeit am Abend.",
+    "Digitaler Versand mit Zustellnachweis; der Zahlungseingang wird überwacht und mahnt selbsttätig an.",
+    "Genau hier liegt der direkteste Geldeffekt: Die Zeit von der Behandlung bis zum Geldeingang schrumpft von Wochen auf Tage."
+  ]);
+},
+
+aus_fertig: function(){
+  var wege = {email:"per E-Mail", druck:"als Ausdruck", post:"per Post"};
+  var text = zustand.zustellung.map(function(w){ return wege[w]; }).join(" und ");
+  h(
+    '<div class="haken">✓</div>' +
+    '<h1>Erledigt</h1>' +
+    '<p class="lead">Ihre Rechnung geht ' + (text || "auf dem gewählten Weg") + ' an Sie heraus.</p>' +
+    '<div class="karte gut">' +
+      '<div class="zeile"><span class="bezeichnung">Betrag</span><span class="wert betrag">' + euro(summe()) + '</span></div>' +
+      '<div class="zeile"><span class="bezeichnung">Nächste Vorsorge</span><span class="wert">in 24 Monaten<small>Wir erinnern Sie rechtzeitig</small></span></div>' +
+    '</div>' +
+    '<p style="color:var(--gedaempft)">Gute Besserung — und einen schönen Tag.</p>' +
+    knopf("Fertig", "start", "leise")
+  );
+  technik([
+    "Der Besuch ist abgeschlossen, bevor der Patient die Tür erreicht. Die Anmeldung war daran nicht beteiligt.",
+    "Der Termin setzt zugleich die Wiedervorlage: In 24 Monaten steht die Vorsorge erneut an.",
+    "<b>Das ist der Unterschied zu einem Terminportal:</b> Das erinnert an gebuchte Termine — wir erinnern an Vorsorge, die noch niemand gebucht hat."
+  ]);
+},
+
+/* ---------------- Praxisblick ---------------- */
+
+praxis: function(){
+  h(
+    '<p class="schritt">Was das Team sieht</p>' +
+    '<h1>Heute in der Praxis</h1>' +
+    '<p class="lead">Diese Ansicht läuft an der Anmeldung — sie zeigt, was das Terminal im Hintergrund erledigt hat.</p>' +
+
+    '<h2>Angemeldet</h2>' +
+    '<table class="tabelle"><tbody>' +
+    '<tr><td>Müller-Lüdenscheidt, Jörg<br><span class="marke2">10:40 Uhr</span></td>' +
+      '<td><span class="marke2 gut">angemeldet 10:32</span></td>' +
+      '<td style="text-align:right">Bogen und Einwilligung in der Akte</td></tr>' +
+    '<tr><td>Schäfer, Anna<br><span class="marke2">11:00 Uhr</span></td>' +
+      '<td><span class="marke2 gut">angemeldet 10:51</span></td>' +
+      '<td style="text-align:right">Bogen in der Akte</td></tr>' +
+    '<tr><td>Brandt, Thomas<br><span class="marke2">11:20 Uhr</span></td>' +
+      '<td><span class="marke2">erwartet</span></td>' +
+      '<td style="text-align:right">—</td></tr>' +
+    '</tbody></table>' +
+
+    '<h2>Offene Zahlungen</h2>' +
+    '<table class="tabelle"><tbody>' +
+    '<tr><td>Özdemir, Mehmet</td><td><span class="marke2 offen">Rechnung offen</span></td>' +
+      '<td class="betrag" style="text-align:right">148,00 €</td></tr>' +
+    '<tr><td>Weiß, Claudia</td><td><span class="marke2 gut">am Terminal bezahlt</span></td>' +
+      '<td class="betrag" style="text-align:right">290,00 €</td></tr>' +
+    '</tbody></table>' +
+
+    '<h2>Fällige Wiedervorlage</h2>' +
+    '<table class="tabelle"><tbody>' +
+    '<tr><td>Müller-Lüdenscheidt, Jörg</td><td>Hautkrebsvorsorge</td>' +
+      '<td style="text-align:right"><span class="marke2 offen">überfällig seit 26.11.2025</span></td></tr>' +
+    '<tr><td>Brandt, Thomas</td><td>Hautkrebsvorsorge</td>' +
+      '<td style="text-align:right"><span class="marke2 offen">überfällig seit 04.02.2026</span></td></tr>' +
+    '<tr><td>Schäfer, Anna</td><td>Hautkrebsvorsorge</td>' +
+      '<td style="text-align:right"><span class="marke2">fällig seit 24.07.2026</span></td></tr>' +
+    '</tbody></table>' +
+
+    '<p class="fuss">Die Wiedervorlage rechnet der Agent in der Praxis aus. Die Namensliste bleibt vor Ort — ' +
+    'nach außen geht nur die Anzahl.</p>' +
+    '<div style="height:16px"></div>' +
+    knopf("Zurück zum Terminal", "start", "leise")
+  );
+  technik([
+    "Diese Ansicht entsteht aus denselben Daten, die ohnehin in der Karteikarte stehen — es gibt keine zweite Datenhaltung.",
+    "Die Wiedervorlage ist bereits gebaut und getestet: Regeln je Fachrichtung, Altersgrenzen, Fristen.",
+    "Was hier steht, sieht <b>nur die Praxis</b>. In der Anbieter-Zentrale erscheinen ausschließlich Zahlen."
+  ]);
+}
+
+};
+
+/* --------------------------- Technikblick --------------------------- */
+
+function technik(zeilen){
+  if(!zustand.technik){ technikFeld.hidden = true; return; }
+  technikFeld.hidden = false;
+  technikFeld.innerHTML =
+    '<div class="technik-kopf">Was im Hintergrund passiert</div><ul>' +
+    zeilen.map(function(z){ return "<li>" + z + "</li>"; }).join("") + "</ul>";
+}
+
+/* --------------------------- Unterschrift --------------------------- */
+
+function unterschriftEinrichten(){
+  var feld = document.getElementById("feld");
+  var leinwand = document.getElementById("leinwand");
+  var weiter = document.getElementById("weiter");
+  var loeschen = document.getElementById("loeschen");
+  if(!leinwand) return;
+
+  var dpr = window.devicePixelRatio || 1;
+  var b = leinwand.getBoundingClientRect();
+  leinwand.width = b.width * dpr;
+  leinwand.height = b.height * dpr;
+  var ctx = leinwand.getContext("2d");
+  ctx.scale(dpr, dpr);
+  ctx.lineWidth = 2.6;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.strokeStyle = getComputedStyle(document.body).color;
+
+  var malt = false;
+
+  function punkt(e){
+    var r = leinwand.getBoundingClientRect();
+    var q = e.touches ? e.touches[0] : e;
+    return {x: q.clientX - r.left, y: q.clientY - r.top};
+  }
+  function anfang(e){
+    e.preventDefault();
+    malt = true;
+    var p = punkt(e);
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+    feld.classList.add("beschrieben");
+    zustand.unterschrieben = true;
+    if(weiter) weiter.disabled = false;
+  }
+  function zug(e){
+    if(!malt) return;
+    e.preventDefault();
+    var p = punkt(e);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+  }
+  function ende(){ malt = false; }
+
+  ["mousedown","touchstart"].forEach(function(t){ leinwand.addEventListener(t, anfang, {passive:false}); });
+  ["mousemove","touchmove"].forEach(function(t){ leinwand.addEventListener(t, zug, {passive:false}); });
+  ["mouseup","mouseleave","touchend","touchcancel"].forEach(function(t){ leinwand.addEventListener(t, ende); });
+
+  if(loeschen){
+    loeschen.addEventListener("click", function(){
+      ctx.clearRect(0, 0, leinwand.width, leinwand.height);
+      feld.classList.remove("beschrieben");
+      zustand.unterschrieben = false;
+      if(weiter) weiter.disabled = true;
+    });
+  }
+}
+
+/* --------------------------- Bedienung --------------------------- */
+
+document.addEventListener("click", function(e){
+  var z = e.target.closest("[data-zu]");
+  if(z && !z.disabled){ zu(z.dataset.zu); return; }
+
+  var f = e.target.closest("[data-frage]");
+  if(f){
+    zustand.anamnese[f.dataset.frage] = f.dataset.wert;
+    zeichnen();
+    return;
+  }
+
+  var w = e.target.closest("[data-zustellung]");
+  if(w){
+    var art = w.dataset.zustellung;
+    var i = zustand.zustellung.indexOf(art);
+    if(i >= 0) zustand.zustellung.splice(i, 1);
+    else zustand.zustellung.push(art);
+    zeichnen();
+    return;
+  }
+});
+
+document.getElementById("technik-schalter").addEventListener("click", function(){
+  zustand.technik = !zustand.technik;
+  this.classList.toggle("an", zustand.technik);
+  zeichnen();
+});
+
+document.getElementById("praxis-schalter").addEventListener("click", function(){
+  zu(zustand.bildschirm === "praxis" ? "start" : "praxis");
+});
+
+function zeichnen(){
+  var f = BILDSCHIRME[zustand.bildschirm] || BILDSCHIRME.start;
+  f();
+  document.getElementById("praxis-schalter")
+    .classList.toggle("an", zustand.bildschirm === "praxis");
+}
+
+zeichnen();
+})();
+</script>
+</body>
+</html>
