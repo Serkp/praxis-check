@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Was sich in der Praxis ändert</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+:root{
+  --papier:#FFFFFF; --grund:#F4F5F4;
+  --schrift:#1A2027; --gedaempft:#4E5862; --blass:#7C868E;
+  --linie:#DFE3E1; --linie2:#C6CDC9;
+  --akzent:#2F6F6B; --akzent-weich:#EAF2F1; --akzent-dunkel:#1F4F4C;
+  --ruhe:#F6F8F7;
+  --serif:"Source Serif 4",Georgia,serif;
+  --sans:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--grund);color:var(--schrift);
+  font-family:var(--sans);font-size:11pt;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.blatt{
+  background:var(--papier);width:210mm;min-height:297mm;margin:16px auto;
+  padding:20mm 20mm 16mm;box-shadow:0 2px 14px rgba(26,32,39,.09);
+  position:relative;
+}
+.drucken{
+  position:sticky;top:0;z-index:5;background:var(--akzent);color:#fff;
+  text-align:center;padding:10px;font-size:10pt;
+}
+.drucken button{
+  font-family:inherit;font-size:10pt;background:#fff;color:var(--akzent);
+  border:0;padding:6px 16px;border-radius:6px;margin-left:10px;cursor:pointer;font-weight:500;
+}
+
+/* ---------- Typografie ---------- */
+.marke{
+  font-size:8.5pt;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--akzent);font-weight:600;margin:0 0 6mm;
+}
+h1{
+  font-family:var(--serif);font-weight:600;font-size:25pt;line-height:1.14;
+  margin:0 0 4mm;letter-spacing:-.01em;
+}
+.unter{font-size:13pt;color:var(--gedaempft);margin:0 0 8mm;line-height:1.45}
+h2{
+  font-family:var(--serif);font-size:15pt;font-weight:600;
+  margin:8mm 0 3mm;line-height:1.25;
+}
+h2:first-of-type{margin-top:0}
+h3{font-size:11.5pt;font-weight:600;margin:5mm 0 1.5mm}
+p{margin:0 0 3mm}
+strong{font-weight:600}
+ul{margin:0 0 3mm;padding-left:5mm}
+li{margin:1.2mm 0}
+
+/* ---------- Bausteine ---------- */
+.kasten{
+  background:var(--ruhe);border:1px solid var(--linie);border-left:3px solid var(--akzent);
+  border-radius:0 6px 6px 0;padding:4mm 5mm;margin:5mm 0;
+}
+.kasten p:last-child{margin-bottom:0}
+.kasten .titel{font-weight:600;margin-bottom:1.5mm}
+
+.stufe{
+  border:1px solid var(--linie);border-radius:7px;padding:4mm 5mm;margin-bottom:4mm;
+  break-inside:avoid;
+}
+.stufe-kopf{display:flex;align-items:baseline;gap:3mm;margin-bottom:2mm}
+.stufe-nr{
+  font-family:var(--serif);font-size:16pt;font-weight:600;color:var(--akzent);
+  line-height:1;
+}
+.stufe-titel{font-size:12pt;font-weight:600;flex:1}
+.stufe-zeit{
+  font-size:9pt;color:var(--gedaempft);background:var(--akzent-weich);
+  padding:2px 9px;border-radius:99px;white-space:nowrap;
+}
+.stufe ul{margin-bottom:0}
+
+table{width:100%;border-collapse:collapse;font-size:10.5pt;margin:3mm 0 5mm}
+th{
+  text-align:left;font-size:8.5pt;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--blass);font-weight:600;padding:0 3mm 2mm 0;border-bottom:1px solid var(--linie);
+}
+td{padding:2.5mm 3mm 2.5mm 0;border-bottom:1px solid var(--linie);vertical-align:top}
+td:first-child{font-weight:500;width:38%}
+
+.frage{margin-bottom:4mm;break-inside:avoid}
+.frage .f{font-weight:600;margin-bottom:1mm}
+.frage .a{color:var(--gedaempft);margin:0}
+
+.fuss{
+  margin-top:8mm;padding-top:3mm;border-top:1px solid var(--linie);
+  font-size:9pt;color:var(--blass);display:flex;justify-content:space-between;gap:4mm;
+}
+
+/* ---------- Druck ---------- */
+@page{size:A4;margin:0}
+@media print{
+  body{background:#fff}
+  .drucken{display:none}
+  .blatt{
+    width:auto;min-height:auto;margin:0;padding:18mm 18mm 14mm;
+    box-shadow:none;page-break-after:always;
+  }
+  .blatt:last-child{page-break-after:auto}
+  a{color:inherit;text-decoration:none}
+}
+@media (max-width:760px){
+  .blatt{width:auto;padding:22px 20px;margin:10px}
+}
+</style>
+</head>
+<body>
+
+<div class="drucken">
+  Diese Seite ist zum Ausdrucken gemacht — drei Seiten A4.
+  <button onclick="window.print()">Jetzt drucken</button>
+</div>
+
+<!-- ================= SEITE 1 ================= -->
+<div class="blatt">
+  <p class="marke">Information für das Praxisteam</p>
+  <h1>Was sich in unserer Praxis ändern wird</h1>
+  <p class="unter">
+    In den kommenden Monaten stellen wir Schritt für Schritt einige Abläufe um.
+    Diese Seiten erklären, was geplant ist, wann es soweit ist — und was das für
+    Ihre tägliche Arbeit bedeutet.
+  </p>
+
+  <h2>Worum es wirklich geht</h2>
+  <p>
+    Unsere Praxis hat gute Software. Das Problem ist nicht die Technik, sondern
+    das, was dazwischen liegt: <strong>Formulare werden ausgedruckt, unterschrieben,
+    eingescannt und wieder eingesortiert.</strong> Termine aus dem Online-Kalender
+    werden abgetippt. Anamnesebögen werden abgetippt. Privatrechnungen entstehen
+    abends von Hand.
+  </p>
+  <p>
+    Genau diese Zwischenschritte sollen verschwinden. Nichts davon ist medizinische
+    Arbeit, und nichts davon macht jemandem Freude.
+  </p>
+
+  <div class="kasten">
+    <p class="titel">Die Frage, die sich jetzt jede und jeder stellt</p>
+    <p>
+      <strong>Wird dadurch jemand überflüssig?</strong> Nein. Die Arbeit verschwindet
+      nicht — sie verschiebt sich. Wer heute eine Stunde am Scanner steht und Termine
+      abtippt, hat diese Stunde danach für Patienten, für das Telefon und für die
+      Dinge, die tatsächlich liegen bleiben. Eine Praxis dieser Größe hat kein
+      Personalüberangebot, sondern zu wenig Zeit.
+    </p>
+  </div>
+
+  <h2>Was ausdrücklich so bleibt, wie es ist</h2>
+  <ul>
+    <li><strong>Die Praxissoftware bleibt.</strong> Wir wechseln nicht das System.
+      Sie arbeiten weiter in der Karteikarte, die Sie kennen.</li>
+    <li><strong>Die Anmeldung bleibt besetzt.</strong> Kein Automat ersetzt den Tresen.
+      Patienten, die lieber mit einem Menschen sprechen, tun das weiterhin.</li>
+    <li><strong>Papier bleibt möglich.</strong> Wer nicht am Bildschirm ausfüllen
+      möchte — ältere Patienten, Menschen ohne Brille, wer es einfach nicht mag —
+      bekommt weiterhin ein Blatt.</li>
+    <li><strong>Nichts wird abgeschaltet, bevor das Neue läuft.</strong> Es gibt
+      keinen Stichtag, an dem etwas weg ist und das Neue noch nicht funktioniert.</li>
+  </ul>
+
+  <h2>Und was mit den Patientendaten passiert</h2>
+  <p>
+    Diese Frage bekommen Sie am Tresen gestellt werden, deshalb hier die Antwort,
+    die Sie geben können: <strong>Die Daten bleiben in der Praxis.</strong> Namen,
+    Geburtsdaten und Befunde werden nicht in eine Cloud geschickt. Was das System
+    nach außen meldet, sind Betriebszahlen — etwa „heute 42 Dokumente verarbeitet" —
+    und sonst nichts.
+  </p>
+
+  <div class="fuss">
+    <span>RHEINDERMA · Information für das Praxisteam</span>
+    <span>Seite 1 von 3</span>
+  </div>
+</div>
+
+<!-- ================= SEITE 2 ================= -->
+<div class="blatt">
+  <p class="marke">Der Plan</p>
+  <h1>In drei Stufen, nicht auf einmal</h1>
+  <p class="unter">
+    Jede Stufe läuft erst im Probebetrieb mit und wird erst dann scharf geschaltet,
+    wenn sie im Alltag funktioniert. Zwischen den Stufen liegen Wochen, keine Tage.
+  </p>
+
+  <div class="stufe">
+    <div class="stufe-kopf">
+      <span class="stufe-nr">1</span>
+      <span class="stufe-titel">Schluss mit Ausdrucken und Einscannen</span>
+      <span class="stufe-zeit">zuerst</span>
+    </div>
+    <p>Der Anamnesebogen wird digital. Patienten bekommen ihn vor dem Termin
+      aufs eigene Handy oder füllen ihn im Wartezimmer auf einem iPad aus.
+      Das Ergebnis steht in der Karteikarte, bevor der Arzt das Zimmer betritt.</p>
+    <p><strong>Für Sie heißt das:</strong></p>
+    <ul>
+      <li>Kein Abtippen von Anamnesebögen mehr.</li>
+      <li>Kein Scannen, kein Einsortieren.</li>
+      <li>Sie geben das iPad aus und nehmen es zurück — mehr nicht.</li>
+      <li>Wer auf Papier besteht, bekommt Papier. Sie scannen es wie bisher.</li>
+    </ul>
+  </div>
+
+  <div class="stufe">
+    <div class="stufe-kopf">
+      <span class="stufe-nr">2</span>
+      <span class="stufe-titel">Aufklärung und Einwilligung auf dem iPad</span>
+      <span class="stufe-zeit">danach</span>
+    </div>
+    <p>Aufklärungsbögen für Operationen, Laser und ästhetische Behandlungen
+      werden auf dem iPad gelesen und mit dem Finger unterschrieben. Der fertige
+      Bogen landet automatisch in der Akte.</p>
+    <p><strong>Für Sie heißt das:</strong></p>
+    <ul>
+      <li>Kein Suchen nach dem richtigen Formular im Ordner.</li>
+      <li>Die Bögen sind immer auf dem aktuellen Stand — das pflegt der Anbieter.</li>
+      <li><strong>Das Aufklärungsgespräch bleibt beim Arzt.</strong> Das iPad
+        bereitet es vor und dokumentiert es, es ersetzt es nicht. Das ist gesetzlich
+        so vorgeschrieben.</li>
+    </ul>
+  </div>
+
+  <div class="stufe">
+    <div class="stufe-kopf">
+      <span class="stufe-nr">3</span>
+      <span class="stufe-titel">Selbstanmeldung und Selbstabschluss</span>
+      <span class="stufe-zeit">zuletzt</span>
+    </div>
+    <p>Ein Terminal im Eingangsbereich. Patienten melden sich selbst an — Karte
+      auflegen, Daten bestätigen, Fragen beantworten, fertig. Am Ende des Besuchs
+      sehen Selbstzahler ihre Leistungen, bezahlen und bekommen die Rechnung,
+      bevor sie die Praxis verlassen.</p>
+    <p><strong>Für Sie heißt das:</strong></p>
+    <ul>
+      <li>Weniger Schlange am Tresen zur vollen Stunde.</li>
+      <li>Keine Privatrechnungen mehr am Abend — sie entstehen im Behandlungszimmer.</li>
+      <li>Sie sehen auf einen Blick, wer da ist, ohne jemanden abhaken zu müssen.</li>
+      <li>Wer sich nicht selbst anmelden will, kommt weiterhin zu Ihnen.</li>
+    </ul>
+  </div>
+
+  <div class="kasten">
+    <p class="titel">Was nebenbei entsteht</p>
+    <p>
+      Weil die Praxissoftware dann weiß, wer wann zur Vorsorge da war, bekommen Sie
+      jeden Morgen eine Liste: <strong>wer eine Hautkrebsvorsorge, eine Nachkontrolle
+      oder eine Auffrischung braucht</strong> — und es noch nicht gebucht hat.
+      Zum Abhaken, als Tabelle. Das sind Termine, die heute schlicht niemandem
+      auffallen.
+    </p>
+  </div>
+
+  <div class="fuss">
+    <span>RHEINDERMA · Information für das Praxisteam</span>
+    <span>Seite 2 von 3</span>
+  </div>
+</div>
+
+<!-- ================= SEITE 3 ================= -->
+<div class="blatt">
+  <p class="marke">Fragen und Antworten</p>
+  <h1>Was Sie jetzt wissen wollen</h1>
+
+  <div class="frage">
+    <p class="f">Muss ich etwas Kompliziertes lernen?</p>
+    <p class="a">Nein. Vor jeder Stufe gibt es eine Einweisung von etwa einer halben
+      Stunde, an der alle teilnehmen. Die Geräte bedienen sich wie ein Handy. Wenn
+      etwas unklar ist, fragen Sie — dafür sind wir da.</p>
+  </div>
+
+  <div class="frage">
+    <p class="f">Was, wenn das Gerät streikt oder der Strom ausfällt?</p>
+    <p class="a">Dann läuft es wie heute: Papier, Tresen, Karteikarte. Die
+      Praxissoftware bleibt unabhängig davon in Betrieb. Nichts von dem, was Sie
+      heute können, geht verloren.</p>
+  </div>
+
+  <div class="frage">
+    <p class="f">Und wenn ein Patient das nicht will oder nicht kann?</p>
+    <p class="a">Dann macht er es nicht. Niemand wird zu einem Bildschirm gezwungen.
+      Erfahrungsgemäß nutzen die meisten es freiwillig — und es bleibt mehr Zeit für
+      die, die Hilfe brauchen.</p>
+  </div>
+
+  <div class="frage">
+    <p class="f">Werden Gespräche aufgezeichnet?</p>
+    <p class="a">In den drei Stufen oben nicht. Eine KI-gestützte Dokumentation des
+      Arztgesprächs ist ein späteres Thema und käme nur mit ausdrücklicher
+      Zustimmung der Patienten — eine Aufzeichnung ohne Einwilligung wäre strafbar.
+      Darüber würde vorher offen gesprochen.</p>
+  </div>
+
+  <div class="frage">
+    <p class="f">Wer hilft, wenn etwas nicht funktioniert?</p>
+    <p class="a">Für die Praxissoftware und die Rechner wie bisher Ihr Systemhaus.
+      Für alles Neue sind wir Ihr Ansprechpartner — mit einer Nummer, unter der
+      jemand rangeht.</p>
+  </div>
+
+  <h2>Was wir von Ihnen brauchen</h2>
+  <p>
+    Nicht viel, aber es ist das Wichtigste am ganzen Projekt: <strong>Sie kennen die
+    Abläufe, wir nicht.</strong> Wenn Ihnen auffällt, dass etwas im Alltag nicht
+    funktioniert, unpraktisch ist oder einen Schritt zu viel hat — sagen Sie es
+    bitte sofort und nicht erst in drei Monaten. Fast alles lässt sich anpassen,
+    solange wir davon wissen.
+  </p>
+  <p>
+    Vor dem Start schauen wir uns außerdem gemeinsam an, welche Formulare bei Ihnen
+    tatsächlich im Umlauf sind. Diese Liste kann niemand außer Ihnen erstellen.
+  </p>
+
+  <h2>Der zeitliche Rahmen</h2>
+  <table>
+    <tbody>
+      <tr><td>Jetzt</td><td>Vorstellung im Team, Rückfragen, Aufnahme der
+        Formulare und Abläufe</td></tr>
+      <tr><td>Anschließend</td><td>Einrichtung im Hintergrund — davon merken Sie
+        nichts</td></tr>
+      <tr><td>Stufe 1</td><td>Einweisung, dann Probebetrieb parallel zum Papier</td></tr>
+      <tr><td>Danach</td><td>Stufe 2 und 3, jeweils mit Einweisung und
+        Probebetrieb</td></tr>
+    </tbody>
+  </table>
+  <p style="color:var(--gedaempft);font-size:10pt">
+    Konkrete Termine stimmen wir mit der Praxisleitung ab und hängen sie aus.
+    Abrechnungsrelevantes wird grundsätzlich nur zum Quartalswechsel umgestellt.
+  </p>
+
+  <div class="kasten">
+    <p class="titel">Das Wichtigste in einem Satz</p>
+    <p>
+      Es geht nicht darum, Arbeit wegzunehmen, sondern die Arbeit loszuwerden,
+      die niemand braucht — und niemand vermissen wird.
+    </p>
+  </div>
+
+  <div class="fuss">
+    <span>RHEINDERMA · Information für das Praxisteam</span>
+    <span>Seite 3 von 3</span>
+  </div>
+</div>
+
+</body>
+</html>
