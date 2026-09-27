@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Praxora — Praxis-Cockpit</title>
+<meta name="description" content="Das Cockpit für Praxen mit Duria². Selbstanmeldung, Formulare, Abschluss, Wiedervorlage und der Rückweg in die Karteikarte.">
+<style>
+:root{
+  --tinte:#0f172a;
+  --g900:#1e293b; --g700:#334155; --g600:#475569; --g500:#64748b;
+  --g400:#94a3b8; --g300:#cbd5e1; --g200:#e2e8f0; --g100:#f1f5f9; --g50:#f8fafc;
+  --akzent:#0b6e99; --akzent-tief:#074b69; --akzent-hell:#e9f3f8;
+  --gruen:#0f7a55; --gruen-hell:#e7f5ef;
+  --gelb:#a1620a; --gelb-hell:#fdf4e3;
+  --rot:#b02a2a;  --rot-hell:#fbecec;
+  --rand:#e4e9ef;
+  --schatten:0 1px 2px rgba(15,23,42,.06), 0 1px 3px rgba(15,23,42,.04);
+  --kopf:56px; --leiste:232px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:14px; line-height:1.5; color:var(--g700); background:var(--g50);
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--akzent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ===================== Gerüst ===================== */
+.huelle{display:flex;min-height:100vh}
+
+.seitenleiste{
+  width:var(--leiste); flex:0 0 var(--leiste);
+  background:var(--tinte); color:#cdd8e4;
+  display:flex; flex-direction:column;
+  position:sticky; top:0; height:100vh;
+}
+.marke{padding:18px 20px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.marke .wort{font-size:17px;font-weight:700;color:#fff;letter-spacing:-.01em}
+.marke .wort span{color:#5eb3d6}
+.marke .unter{font-size:11px;color:#7d8ea1;margin-top:2px;letter-spacing:.04em}
+
+nav{padding:10px 10px;flex:1;overflow-y:auto}
+nav .gruppe{font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:#64748b;
+  padding:14px 10px 6px;font-weight:600}
+nav button{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+  background:none;border:0;padding:8px 10px;border-radius:6px;
+  color:#b6c4d3;font-size:13.5px;margin-bottom:1px;
+}
+nav button:hover{background:rgba(255,255,255,.06);color:#fff}
+nav button.aktiv{background:var(--akzent);color:#fff;font-weight:600}
+nav button .sym{width:16px;text-align:center;font-size:14px;opacity:.85}
+nav button .zahl{margin-left:auto;font-size:11px;font-weight:700;
+  background:rgba(255,255,255,.14);padding:1px 6px;border-radius:9px}
+nav button.aktiv .zahl{background:rgba(255,255,255,.25)}
+
+.leisten-fuss{padding:12px 16px;border-top:1px solid rgba(255,255,255,.08);font-size:11px;color:#64748b}
+
+.buehne{flex:1;min-width:0;display:flex;flex-direction:column}
+
+.kopfleiste{
+  height:var(--kopf);flex:0 0 var(--kopf);background:#fff;border-bottom:1px solid var(--rand);
+  display:flex;align-items:center;gap:16px;padding:0 24px;position:sticky;top:0;z-index:20;
+}
+.mandant{display:flex;align-items:center;gap:9px}
+.mandant select{
+  font:inherit;font-weight:600;color:var(--tinte);border:1px solid var(--rand);
+  background:#fff;border-radius:6px;padding:5px 9px;cursor:pointer;
+}
+.kopf-rechts{margin-left:auto;display:flex;align-items:center;gap:14px}
+.datum{font-size:12.5px;color:var(--g500)}
+
+.pille{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;
+  padding:3px 9px;border-radius:20px;white-space:nowrap}
+.pille .punkt{width:6px;height:6px;border-radius:50%;background:currentColor;flex:0 0 6px}
+.p-gruen{background:var(--gruen-hell);color:var(--gruen)}
+.p-gelb{background:var(--gelb-hell);color:var(--gelb)}
+.p-rot{background:var(--rot-hell);color:var(--rot)}
+.p-blau{background:var(--akzent-hell);color:var(--akzent)}
+.p-grau{background:var(--g100);color:var(--g500)}
+
+.inhalt{padding:24px;max-width:1180px;width:100%}
+
+/* ===================== Bausteine ===================== */
+.seitenkopf{margin-bottom:20px}
+.seitenkopf h1{font-size:21px;font-weight:700;color:var(--tinte);margin:0 0 3px;letter-spacing:-.015em}
+.seitenkopf p{margin:0;color:var(--g500);font-size:13.5px;max-width:720px}
+
+.karte{background:#fff;border:1px solid var(--rand);border-radius:9px;box-shadow:var(--schatten)}
+.karte + .karte{margin-top:16px}
+.karte-kopf{padding:14px 18px;border-bottom:1px solid var(--rand);display:flex;align-items:center;gap:10px}
+.karte-kopf h2{font-size:14px;font-weight:700;color:var(--tinte);margin:0}
+.karte-kopf .hinweis{font-size:12px;color:var(--g500);margin-left:auto}
+.karte-koerper{padding:18px}
+.karte-fuss{padding:11px 18px;border-top:1px solid var(--rand);background:var(--g50);
+  border-radius:0 0 9px 9px;font-size:12.5px;color:var(--g500)}
+
+.gitter{display:grid;gap:16px;align-items:start}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:1000px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3,.g2{grid-template-columns:1fr}}
+
+.kennzahl{background:#fff;border:1px solid var(--rand);border-radius:9px;padding:15px 17px;box-shadow:var(--schatten)}
+.kennzahl .etikett{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--g500);font-weight:600}
+.kennzahl .wert{font-size:27px;font-weight:700;color:var(--tinte);line-height:1.15;margin:6px 0 2px;letter-spacing:-.02em}
+.kennzahl .wert small{font-size:14px;font-weight:600;color:var(--g400);margin-left:3px}
+.kennzahl .fuss{font-size:12px;color:var(--g500)}
+.kennzahl .fuss b{color:var(--gruen)}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+thead th{text-align:left;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--g500);font-weight:700;padding:10px 18px;background:var(--g50);
+  border-bottom:1px solid var(--rand)}
+tbody td{padding:11px 18px;border-bottom:1px solid var(--g100);vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+tbody tr.klickbar{cursor:pointer}
+tbody tr.klickbar:hover{background:var(--g50)}
+td .haupt{font-weight:600;color:var(--tinte)}
+td .neben{font-size:12px;color:var(--g500)}
+.rechts{text-align:right}
+.zahl-sp{font-variant-numeric:tabular-nums}
+
+.knopf{
+  display:inline-flex;align-items:center;gap:6px;border:1px solid var(--rand);background:#fff;
+  border-radius:6px;padding:6px 12px;font-size:13px;font-weight:600;color:var(--g700);
+}
+.knopf:hover{background:var(--g50);border-color:var(--g300)}
+.knopf.haupt{background:var(--akzent);border-color:var(--akzent);color:#fff}
+.knopf.haupt:hover{background:var(--akzent-tief);border-color:var(--akzent-tief)}
+.knopf.klein{padding:4px 9px;font-size:12px}
+.knopf.still{border-color:transparent;background:transparent;color:var(--akzent)}
+.knopf.still:hover{background:var(--akzent-hell)}
+.knopf:disabled{opacity:.45;cursor:default}
+
+.reiter{display:flex;gap:2px;border-bottom:1px solid var(--rand);margin-bottom:18px}
+.reiter button{background:none;border:0;padding:8px 13px;font-size:13.5px;font-weight:600;
+  color:var(--g500);border-bottom:2px solid transparent;margin-bottom:-1px}
+.reiter button:hover{color:var(--tinte)}
+.reiter button.aktiv{color:var(--akzent);border-bottom-color:var(--akzent)}
+
+/* Schalter */
+.schalter-zeile{display:flex;align-items:flex-start;gap:14px;padding:13px 0;border-bottom:1px solid var(--g100)}
+.schalter-zeile:last-child{border-bottom:0;padding-bottom:0}
+.schalter-zeile .txt{flex:1;min-width:0}
+.schalter-zeile .txt b{display:block;color:var(--tinte);font-size:13.5px;font-weight:600}
+.schalter-zeile .txt span{font-size:12.5px;color:var(--g500)}
+.schalter{position:relative;width:38px;height:22px;flex:0 0 38px;border:0;border-radius:11px;
+  background:var(--g300);padding:0;transition:background .15s}
+.schalter::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;
+  background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:transform .15s}
+.schalter.an{background:var(--akzent)}
+.schalter.an::after{transform:translateX(16px)}
+.schalter:disabled{opacity:.4;cursor:default}
+
+/* Ablaufkette */
+.kette{display:flex;flex-wrap:wrap;align-items:stretch;gap:0}
+.kette .glied{flex:1;min-width:120px;border:1px solid var(--rand);border-right:0;padding:12px 14px;background:#fff}
+.kette .glied:first-child{border-radius:7px 0 0 7px}
+.kette .glied:last-child{border-right:1px solid var(--rand);border-radius:0 7px 7px 0}
+.kette .glied.aus{background:var(--g50);color:var(--g400)}
+.kette .glied .nr{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--g400);font-weight:700}
+.kette .glied.an .nr{color:var(--akzent)}
+.kette .glied b{display:block;font-size:13px;color:var(--tinte);margin-top:3px}
+.kette .glied.aus b{color:var(--g400)}
+.kette .glied span{font-size:11.5px;color:var(--g500)}
+.kette .glied.aus span{color:var(--g400)}
+
+/* Protokoll */
+.protokoll{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.2px;line-height:1.75}
+.protokoll .zeile{display:flex;gap:12px;padding:3px 0;border-bottom:1px solid var(--g100)}
+.protokoll .zeile:last-child{border-bottom:0}
+.protokoll .zeit{color:var(--g400);flex:0 0 74px}
+.protokoll .art{flex:0 0 78px;font-weight:700}
+.protokoll .a-ok{color:var(--gruen)} .protokoll .a-warn{color:var(--gelb)}
+.protokoll .a-fehl{color:var(--rot)} .protokoll .a-info{color:var(--g500)}
+.protokoll .text{flex:1;color:var(--g700)}
+
+/* Hinweisbox */
+.box{border:1px solid var(--rand);border-left:3px solid var(--akzent);background:var(--akzent-hell);
+  border-radius:0 7px 7px 0;padding:13px 16px;font-size:13px;color:var(--akzent-tief)}
+.box b{display:block;margin-bottom:2px;color:var(--akzent-tief)}
+.box.warn{border-left-color:var(--gelb);background:var(--gelb-hell);color:#6f4308;border-color:#f0e3c8}
+.box.warn b{color:#6f4308}
+
+.liste-schlicht{list-style:none;margin:0;padding:0;font-size:13.5px}
+.liste-schlicht li{position:relative;padding:5px 0 5px 20px;color:var(--g600)}
+.liste-schlicht li::before{content:"";position:absolute;left:2px;top:12px;width:6px;height:6px;
+  border-radius:50%;background:var(--akzent)}
+.liste-schlicht li b{color:var(--tinte)}
+
+.leer{padding:44px 20px;text-align:center;color:var(--g400)}
+.leer .gross{font-size:26px;margin-bottom:6px}
+
+/* Schublade */
+.schleier{position:fixed;inset:0;background:rgba(15,23,42,.35);z-index:50;display:none}
+.schleier.offen{display:block}
+.schublade{position:fixed;top:0;right:0;bottom:0;width:420px;max-width:92vw;background:#fff;
+  z-index:51;box-shadow:-6px 0 24px rgba(15,23,42,.13);transform:translateX(100%);
+  transition:transform .18s ease;display:flex;flex-direction:column}
+.schublade.offen{transform:translateX(0)}
+.schublade-kopf{padding:16px 20px;border-bottom:1px solid var(--rand);display:flex;align-items:flex-start;gap:12px}
+.schublade-kopf h3{margin:0;font-size:16px;color:var(--tinte)}
+.schublade-kopf .neben{font-size:12.5px;color:var(--g500);margin-top:2px}
+.schublade-kopf .zu{margin-left:auto;background:none;border:0;font-size:20px;color:var(--g400);line-height:1;padding:0 2px}
+.schublade-koerper{padding:18px 20px;overflow-y:auto;flex:1}
+.paar{display:flex;gap:12px;padding:7px 0;border-bottom:1px solid var(--g100);font-size:13.5px}
+.paar:last-child{border-bottom:0}
+.paar .k{flex:0 0 140px;color:var(--g500)}
+.paar .v{flex:1;color:var(--tinte);font-weight:500}
+
+.feinzeile{font-size:12px;color:var(--g400);margin-top:10px}
+
+@media (max-width:820px){
+  .seitenleiste{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform .2s;z-index:60}
+  .seitenleiste.offen{transform:translateX(0)}
+  .inhalt{padding:16px}
+  .kopfleiste{padding:0 14px}
+}
+.menuknopf{display:none;background:none;border:1px solid var(--rand);border-radius:6px;padding:4px 9px}
+@media (max-width:820px){.menuknopf{display:inline-block}}
+</style>
+</head>
+<body>
+
+<div class="huelle">
+
+  <aside class="seitenleiste" id="seitenleiste">
+    <div class="marke">
+      <div class="wort">Prax<span>ora</span></div>
+      <div class="unter">Praxis-Cockpit</div>
+    </div>
+    <nav id="navigation"></nav>
+    <div class="leisten-fuss">
+      Vorführfassung 0.1<br>Erfundene Daten, nichts wird gespeichert.
+    </div>
+  </aside>
+
+  <div class="buehne">
+    <header class="kopfleiste">
+      <button class="menuknopf" id="menuknopf">☰</button>
+      <div class="mandant">
+        <span style="font-size:12px;color:var(--g500)">Praxis</span>
+        <select id="mandantwahl"></select>
+      </div>
+      <div class="kopf-rechts">
+        <span class="datum" id="datumfeld"></span>
+        <span class="pille p-gruen" id="bruecke-pille"><span class="punkt"></span>Duria² verbunden</span>
+      </div>
+    </header>
+    <div class="inhalt" id="inhalt"></div>
+  </div>
+
+</div>
+
+<div class="schleier" id="schleier"></div>
+<aside class="schublade" id="schublade"></aside>
+
+<script>
+(function(){
+"use strict";
+
+/* ==========================================================================
+   Praxora — Praxis-Cockpit, Vorführfassung.
+   Eine Datei, kein Server. Alle Daten sind erfunden.
+   Das Cockpit zeigt, was in der Praxis passiert; die Arbeit macht der
+   Agent auf dem Praxisrechner, der nach Duria² zurückschreibt.
+   ========================================================================== */
+
+/* --------------------------------------------------------------- Stammdaten */
+
+var PRAXEN = {
+
+  rheinderma: {
+    name: "RHEINDERMA", ort: "Krefeld", fach: "Dermatologie",
+    behandler: ["Dr. Lodin"],
+    pvs: "Duria² — GDT 3.0", terminal: 1, ipads: 4,
+    module: { anmeldung:true, anamnese:true, aufklaerung:true, abschluss:true,
+              wiedervorlage:true, transkript:false },
+    kennzahlen: { erwartet:38, angemeldet:23, schnitt:"1:47", quote:71,
+                  offenAnzahl:14, offenBetrag:4380.50, faellig:57 },
+    patienten: [
+      {nr:"10234", name:"J. M.-Lüdenscheidt", zeit:"10:40", art:"Privat", anlass:"Hautkrebsvorsorge",
+       status:"zimmer", formular:"fertig", betrag:175.00, behandler:"Dr. Lodin"},
+      {nr:"10411", name:"A. Şahin", zeit:"10:50", art:"Gesetzlich", anlass:"Kontrolle Nävus",
+       status:"wartet", formular:"fertig", betrag:0, behandler:"Dr. Lodin"},
+      {nr:"10087", name:"K. Brenner", zeit:"11:00", art:"Privat", anlass:"Laser, Folgetermin",
+       status:"wartet", formular:"offen", betrag:0, behandler:"Dr. Lodin"},
+      {nr:"10592", name:"T. Weißenberg", zeit:"11:10", art:"Selbstzahler", anlass:"Ästhetik-Beratung",
+       status:"erwartet", formular:"offen", betrag:0, behandler:"Dr. Lodin"},
+      {nr:"10120", name:"R. Özdemir", zeit:"11:20", art:"Gesetzlich", anlass:"Ekzem",
+       status:"erwartet", formular:"fertig", betrag:0, behandler:"Dr. Lodin"},
+      {nr:"10333", name:"S. Kowalczyk", zeit:"09:30", art:"Privat", anlass:"Fibrome entfernt",
+       status:"fertig", formular:"fertig", betrag:96.00, behandler:"Dr. Lodin"},
+      {nr:"10278", name:"M. Hoffmann", zeit:"09:10", art:"Privat", anlass:"Vorsorge",
+       status:"fertig", formular:"fertig", betrag:79.00, behandler:"Dr. Lodin"}
+    ],
+    rechnungen: [
+      {nr:"2026-0914", pat:"S. Kowalczyk", datum:"27.09.2026", betrag:96.00,  weg:"Terminal", status:"bezahlt"},
+      {nr:"2026-0913", pat:"M. Hoffmann",  datum:"27.09.2026", betrag:79.00,  weg:"Terminal", status:"bezahlt"},
+      {nr:"2026-0902", pat:"C. Ahrens",    datum:"18.09.2026", betrag:248.00, weg:"E-Mail",   status:"offen"},
+      {nr:"2026-0888", pat:"L. Reineke",   datum:"11.09.2026", betrag:412.50, weg:"Post",     status:"offen"},
+      {nr:"2026-0851", pat:"D. Fuhrmann",  datum:"02.09.2026", betrag:189.00, weg:"E-Mail",   status:"offen"},
+      {nr:"2026-0790", pat:"B. Klenk",     datum:"14.08.2026", betrag:325.00, weg:"Post",     status:"ueberfaellig"},
+      {nr:"2026-0744", pat:"H. Stemmler",  datum:"29.07.2026", betrag:167.50, weg:"Post",     status:"ueberfaellig"}
+    ],
+    wiedervorlage: [
+      {nr:"10044", name:"G. Pietsch",   grund:"Hautkrebsvorsorge", letzte:"08.2024", faellig:401, alter:"63"},
+      {nr:"10310", name:"N. Bauer",     grund:"Hautkrebsvorsorge", letzte:"03.2025", faellig:212, alter:"51"},
+      {nr:"10155", name:"F. Lindemann", grund:"Nachkontrolle Melanom-Exzision", letzte:"05.2026", faellig:118, alter:"47"},
+      {nr:"10488", name:"P. Zimmer",    grund:"Auffrischung Botulinumtoxin", letzte:"04.2026", faellig:96, alter:"39"},
+      {nr:"10201", name:"I. Kraushaar", grund:"Kontrolle Basaliom", letzte:"01.2026", faellig:88, alter:"71"},
+      {nr:"10367", name:"V. Adler",     grund:"Hautkrebsvorsorge", letzte:"09.2024", faellig:369, alter:"58"}
+    ],
+    bruecke: {
+      zustand:"gut", verzeichnis:"D:\\DURIA\\GDT", satzart:"6310",
+      letzte:"vor 3 Minuten", wartend:0, heute:47, fehler:0, modus:"Textmodus",
+      felder:[
+        {id:"8000", was:"Satzidentifikation", wert:"6310", quelle:"Norm"},
+        {id:"8100", was:"Satzlänge",           wert:"berechnet", quelle:"Norm"},
+        {id:"8315", was:"Kennung Sender",      wert:"PRAXORA",  quelle:"gesetzt"},
+        {id:"8316", was:"Kennung Empfänger",   wert:"DURIA",    quelle:"erkannt"},
+        {id:"9206", was:"Zeichensatz",         wert:"3 — ISO-8859-1", quelle:"erkannt"},
+        {id:"9218", was:"GDT-Version",         wert:"03.00",    quelle:"erkannt"},
+        {id:"3000", was:"Patientennummer",     wert:"aus Übergabe", quelle:"Norm"},
+        {id:"6200", was:"Datum des Befundes",  wert:"Tagesdatum", quelle:"Norm"},
+        {id:"6220", was:"Befund als Text",     wert:"Inhalt des Bogens", quelle:"Norm"},
+        {id:"8402", was:"Gerätespezifisches Kennfeld", wert:"ALLG00", quelle:"erkannt"}
+      ],
+      protokoll:[
+        {z:"11:04:12", a:"ok",   t:"Vorgang 4c1f — Anamnesebogen als 6310 übergeben (1.842 Byte)"},
+        {z:"11:03:58", a:"info", t:"Vorgang 4c1f — Sitzung aus Satzart 6302 übernommen, Zuordnung eindeutig"},
+        {z:"10:58:31", a:"ok",   t:"Vorgang 4b9e — Einwilligung mit Unterschrift übergeben"},
+        {z:"10:58:07", a:"info", t:"Vorgang 4b9e — Datei stabil seit 6 s, wird verarbeitet"},
+        {z:"10:51:44", a:"ok",   t:"Vorgang 4b52 — Rechnungsbeleg abgelegt, Betrag im Abschluss quittiert"},
+        {z:"10:40:19", a:"warn", t:"Vorgang 4ae0 — Zeichensatz 8 (UTF-8) im Eingang, auf 3 umgesetzt"},
+        {z:"10:22:03", a:"ok",   t:"Vorgang 4a71 — Anamnesebogen als 6310 übergeben (2.104 Byte)"},
+        {z:"08:00:02", a:"info", t:"Dienst gestartet, Lizenz gültig bis 31.12.2026"}
+      ]
+    }
+  },
+
+  hautzentrum: {
+    name: "Hautzentrum Rhein-Ruhr", ort: "Duisburg", fach: "Dermatologie, 3 Behandler",
+    behandler: ["Dr. Arnoldt","Dr. Ivanović","Fr. Dr. Schepp"],
+    pvs: "Duria² — GDT 2.10", terminal: 2, ipads: 9,
+    module: { anmeldung:true, anamnese:true, aufklaerung:false, abschluss:true,
+              wiedervorlage:true, transkript:false },
+    kennzahlen: { erwartet:94, angemeldet:61, schnitt:"2:06", quote:65,
+                  offenAnzahl:31, offenBetrag:11240.00, faellig:183 },
+    patienten: [
+      {nr:"22013", name:"E. Nowak",    zeit:"10:35", art:"Gesetzlich", anlass:"Psoriasis",
+       status:"zimmer",  formular:"fertig", betrag:0, behandler:"Dr. Arnoldt"},
+      {nr:"22190", name:"U. Bergmann", zeit:"10:45", art:"Privat", anlass:"Vorsorge",
+       status:"wartet",  formular:"fertig", betrag:0, behandler:"Dr. Ivanović"},
+      {nr:"22455", name:"C. Thiele",   zeit:"10:55", art:"Gesetzlich", anlass:"Akne, Kontrolle",
+       status:"wartet",  formular:"offen",  betrag:0, behandler:"Fr. Dr. Schepp"},
+      {nr:"22077", name:"O. Kraft",    zeit:"11:05", art:"Privat", anlass:"Laser",
+       status:"erwartet",formular:"fertig", betrag:0, behandler:"Dr. Arnoldt"},
+      {nr:"22301", name:"J. Vogelsang",zeit:"09:15", art:"Privat", anlass:"Exzision",
+       status:"fertig",  formular:"fertig", betrag:284.00, behandler:"Dr. Ivanović"}
+    ],
+    rechnungen: [
+      {nr:"H-4410", pat:"J. Vogelsang", datum:"27.09.2026", betrag:284.00, weg:"Terminal", status:"bezahlt"},
+      {nr:"H-4388", pat:"A. Pesch",     datum:"22.09.2026", betrag:516.00, weg:"E-Mail",   status:"offen"},
+      {nr:"H-4301", pat:"W. Lamprecht", datum:"09.09.2026", betrag:143.00, weg:"Post",     status:"offen"},
+      {nr:"H-4102", pat:"S. Drews",     datum:"30.07.2026", betrag:892.00, weg:"Post",     status:"ueberfaellig"}
+    ],
+    wiedervorlage: [
+      {nr:"22008", name:"R. Kleinschmidt", grund:"Hautkrebsvorsorge", letzte:"06.2024", faellig:458, alter:"66"},
+      {nr:"22244", name:"D. Marquardt",   grund:"Kontrolle Basaliom", letzte:"11.2025", faellig:301, alter:"74"},
+      {nr:"22519", name:"L. Ostermann",   grund:"Hautkrebsvorsorge", letzte:"02.2025", faellig:241, alter:"49"}
+    ],
+    bruecke: {
+      zustand:"warn", verzeichnis:"\\\\SRV-DUR\\gdt$", satzart:"6305",
+      letzte:"vor 12 Minuten", wartend:3, heute:118, fehler:1, modus:"Textmodus",
+      felder:[
+        {id:"8000", was:"Satzidentifikation", wert:"6305", quelle:"erkannt"},
+        {id:"8100", was:"Satzlänge",          wert:"berechnet", quelle:"Norm"},
+        {id:"8315", was:"Kennung Sender",     wert:"PRAXORA", quelle:"gesetzt"},
+        {id:"8316", was:"Kennung Empfänger",  wert:"DUR2",    quelle:"erkannt"},
+        {id:"9206", was:"Zeichensatz",        wert:"3 — ISO-8859-1", quelle:"erkannt"},
+        {id:"9218", was:"GDT-Version",        wert:"02.10",   quelle:"erkannt"},
+        {id:"3000", was:"Patientennummer",    wert:"aus Übergabe", quelle:"Norm"},
+        {id:"6200", was:"Datum des Befundes", wert:"Tagesdatum", quelle:"Norm"},
+        {id:"6220", was:"Befund als Text",    wert:"Inhalt des Bogens", quelle:"Norm"},
+        {id:"8402", was:"Gerätespezifisches Kennfeld", wert:"—", quelle:"nicht belegt"}
+      ],
+      protokoll:[
+        {z:"11:01:40", a:"warn", t:"Vorgang 7d20 — Zielverzeichnis 9 s nicht erreichbar, Wiederholung folgt"},
+        {z:"10:59:12", a:"ok",   t:"Vorgang 7d1c — Anamnesebogen als 6305 übergeben (1.610 Byte)"},
+        {z:"10:44:05", a:"fehl", t:"Vorgang 7cf8 — zwei Treffer zur Patientennummer, keine Zuordnung vorgenommen"},
+        {z:"10:44:05", a:"info", t:"Vorgang 7cf8 — auf die Klärliste gesetzt, Original unverändert abgelegt"},
+        {z:"10:30:51", a:"ok",   t:"Vorgang 7ce1 — Anamnesebogen als 6305 übergeben (2.388 Byte)"},
+        {z:"07:45:01", a:"info", t:"Dienst gestartet, Feldzuordnung aus 214 Altdateien erkannt"}
+      ]
+    }
+  },
+
+  vogel: {
+    name: "Praxis Dr. Vogel", ort: "Mönchengladbach", fach: "Allgemeinmedizin",
+    behandler: ["Dr. Vogel"],
+    pvs: "Duria² — GDT 3.0", terminal: 1, ipads: 2,
+    module: { anmeldung:true, anamnese:true, aufklaerung:false, abschluss:false,
+              wiedervorlage:false, transkript:false },
+    kennzahlen: { erwartet:52, angemeldet:34, schnitt:"1:29", quote:78,
+                  offenAnzahl:2, offenBetrag:186.00, faellig:0 },
+    patienten: [
+      {nr:"3021", name:"H. Görlitz",  zeit:"10:30", art:"Gesetzlich", anlass:"Infekt",
+       status:"zimmer",  formular:"fertig", betrag:0, behandler:"Dr. Vogel"},
+      {nr:"3180", name:"M. Elsner",   zeit:"10:45", art:"Gesetzlich", anlass:"Check-up 35",
+       status:"wartet",  formular:"fertig", betrag:0, behandler:"Dr. Vogel"},
+      {nr:"3044", name:"A. Türkmen",  zeit:"11:00", art:"Gesetzlich", anlass:"DMP Diabetes",
+       status:"erwartet",formular:"offen",  betrag:0, behandler:"Dr. Vogel"}
+    ],
+    rechnungen: [
+      {nr:"V-221", pat:"K. Ludwig", datum:"19.09.2026", betrag:98.00, weg:"E-Mail", status:"offen"},
+      {nr:"V-218", pat:"F. Sattler", datum:"15.09.2026", betrag:88.00, weg:"Post",  status:"offen"}
+    ],
+    wiedervorlage: [],
+    bruecke: {
+      zustand:"gut", verzeichnis:"C:\\DURIA\\GDT", satzart:"6310",
+      letzte:"vor 1 Minute", wartend:0, heute:29, fehler:0, modus:"Textmodus",
+      felder:[
+        {id:"8000", was:"Satzidentifikation", wert:"6310", quelle:"Norm"},
+        {id:"8100", was:"Satzlänge",          wert:"berechnet", quelle:"Norm"},
+        {id:"8315", was:"Kennung Sender",     wert:"PRAXORA", quelle:"gesetzt"},
+        {id:"8316", was:"Kennung Empfänger",  wert:"DURIA",   quelle:"erkannt"},
+        {id:"9206", was:"Zeichensatz",        wert:"3 — ISO-8859-1", quelle:"erkannt"},
+        {id:"9218", was:"GDT-Version",        wert:"03.00",   quelle:"erkannt"},
+        {id:"3000", was:"Patientennummer",    wert:"aus Übergabe", quelle:"Norm"},
+        {id:"6200", was:"Datum des Befundes", wert:"Tagesdatum", quelle:"Norm"},
+        {id:"6220", was:"Befund als Text",    wert:"Inhalt des Bogens", quelle:"Norm"},
+        {id:"8402", was:"Gerätespezifisches Kennfeld", wert:"ALLG00", quelle:"erkannt"}
+      ],
+      protokoll:[
+        {z:"11:05:30", a:"ok",   t:"Vorgang 9a04 — Anamnesebogen als 6310 übergeben (1.201 Byte)"},
+        {z:"10:47:18", a:"ok",   t:"Vorgang 99f1 — Anamnesebogen als 6310 übergeben (988 Byte)"},
+        {z:"07:30:00", a:"info", t:"Dienst gestartet, Lizenz gültig bis 31.12.2026"}
+      ]
+    }
+  }
+};
+
+var SCHRITTE = [
+  {id:"ankommen",   pflicht:true,  titel:"Ankommen",        unter:"Termin finden",           modul:null},
+  {id:"stammdaten", pflicht:true,  titel:"Daten bestätigen",unter:"Anschrift, Kasse",        modul:"anmeldung"},
+  {id:"einwillig",  pflicht:false, titel:"Einwilligungen",  unter:"Datenschutz, Foto",       modul:"anmeldung"},
+  {id:"anamnese",   pflicht:false, titel:"Anamnese",        unter:"Bogen zum Anlass",        modul:"anamnese"},
+  {id:"aufklaerung",pflicht:false, titel:"Aufklärung",      unter:"Lesen und unterschreiben",modul:"aufklaerung"},
+  {id:"warten",     pflicht:true,  titel:"Platz nehmen",    unter:"Anmeldung sieht den Stand",modul:null},
+  {id:"leistungen", pflicht:false, titel:"Leistungen",      unter:"Erfassung im Zimmer",     modul:"abschluss"},
+  {id:"zahlen",     pflicht:false, titel:"Bezahlen",        unter:"Karte oder Rechnung",     modul:"abschluss"},
+  {id:"beleg",      pflicht:false, titel:"Beleg",           unter:"Druck, Mail oder Post",   modul:"abschluss"}
+];
+
+var BOEGEN = [
+  {name:"Anamnese Dermatologie — allgemein", anlass:"Erstvorstellung, Kontrolle", felder:18, stand:"09/2026", quelle:"Praxora"},
+  {name:"Anamnese Ästhetik",                 anlass:"Beratung Ästhetik",          felder:24, stand:"08/2026", quelle:"Praxora"},
+  {name:"Hautkrebsvorsorge — Vorbefragung",  anlass:"Vorsorge",                   felder:11, stand:"09/2026", quelle:"Praxora"},
+  {name:"Einwilligung Datenverarbeitung",    anlass:"Erstvorstellung",            felder:4,  stand:"07/2026", quelle:"Praxis"},
+  {name:"Einwilligung Fotodokumentation",    anlass:"Vor Eingriff, Verlauf",      felder:3,  stand:"07/2026", quelle:"Praxis"},
+  {name:"Aufklärung Exzision in Lokalanästhesie", anlass:"Eingriff",              felder:9,  stand:"06/2026", quelle:"Anbieter"},
+  {name:"Aufklärung Lasertherapie",          anlass:"Laser",                      felder:8,  stand:"06/2026", quelle:"Anbieter"},
+  {name:"Aufklärung Botulinumtoxin",         anlass:"Ästhetik",                   felder:10, stand:"06/2026", quelle:"Anbieter"}
+];
+
+var SEITEN = [
+  {gruppe:"Betrieb"},
+  {id:"heute",        sym:"◧", titel:"Heute"},
+  {id:"anmeldung",    sym:"▤", titel:"Selbstanmeldung"},
+  {id:"formulare",    sym:"▦", titel:"Formulare"},
+  {gruppe:"Geld und Nachsorge"},
+  {id:"abschluss",    sym:"▧", titel:"Abschluss und PKV"},
+  {id:"wiedervorlage",sym:"◇", titel:"Wiedervorlage"},
+  {gruppe:"Technik"},
+  {id:"bruecke",      sym:"⇄", titel:"Duria-Brücke"},
+  {id:"praxis",       sym:"⚙", titel:"Praxis und Module"}
+];
+
+/* ------------------------------------------------------------------ Zustand */
+
+var zustand = {
+  mandant: "rheinderma",
+  seite: "heute",
+  reiter: {},
+  erledigt: {},          /* Wiedervorlage: abgehakte Nummern je Mandant */
+  filter: "alle"
+};
+
+function praxis(){ return PRAXEN[zustand.mandant]; }
+
+/* Modulschalter überleben einen Neuladen, wenn der Browser es zulässt. */
+function schalterLaden(){
+  try{
+    var roh = window.localStorage.getItem("praxora.module");
+    if(!roh) return;
+    var g = JSON.parse(roh);
+    Object.keys(PRAXEN).forEach(function(k){
+      if(g[k]) Object.keys(g[k]).forEach(function(m){
+        if(m in PRAXEN[k].module) PRAXEN[k].module[m] = !!g[k][m];
+      });
+    });
+  }catch(e){ /* privates Fenster, blockierte Daten — egal */ }
+}
+function schalterSichern(){
+  try{
+    var g = {};
+    Object.keys(PRAXEN).forEach(function(k){ g[k] = PRAXEN[k].module; });
+    window.localStorage.setItem("praxora.module", JSON.stringify(g));
+  }catch(e){ /* egal */ }
+}
+
+/* ---------------------------------------------------------------- Hilfsmittel */
+
+function euro(n){
+  return n.toLocaleString("de-DE",{minimumFractionDigits:2,maximumFractionDigits:2}) + " €";
+}
+function sicher(s){
+  return String(s).replace(/[&<>"]/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];
+  });
+}
+function pille(art, text){
+  return '<span class="pille p-' + art + '"><span class="punkt"></span>' + text + '</span>';
+}
+function karte(titel, hinweis, koerper, fuss){
+  return '<section class="karte">' +
+    (titel ? '<div class="karte-kopf"><h2>' + titel + '</h2>' +
+             (hinweis ? '<span class="hinweis">' + hinweis + '</span>' : '') + '</div>' : '') +
+    koerper +
+    (fuss ? '<div class="karte-fuss">' + fuss + '</div>' : '') +
+    '</section>';
+}
+function kennzahl(etikett, wert, einheit, fuss){
+  return '<div class="kennzahl"><div class="etikett">' + etikett + '</div>' +
+    '<div class="wert">' + wert + (einheit ? '<small>' + einheit + '</small>' : '') + '</div>' +
+    '<div class="fuss">' + (fuss||"") + '</div></div>';
+}
+function kopf(titel, text){
+  return '<div class="seitenkopf"><h1>' + titel + '</h1><p>' + text + '</p></div>';
+}
+function leer(text, unter){
+  return '<div class="leer"><div class="gross">◌</div><div><b>' + text + '</b></div>' +
+         (unter ? '<div style="font-size:13px;margin-top:4px">' + unter + '</div>' : '') + '</div>';
+}
+function reiter(schluessel, punkte){
+  var jetzt = zustand.reiter[schluessel] || punkte[0].id;
+  return '<div class="reiter">' + punkte.map(function(p){
+    return '<button data-reiter="' + schluessel + '" data-wert="' + p.id + '"' +
+           (p.id === jetzt ? ' class="aktiv"' : '') + '>' + p.titel + '</button>';
+  }).join("") + '</div>';
+}
+function reiterWert(schluessel, standard){
+  return zustand.reiter[schluessel] || standard;
+}
+
+var STATUS = {
+  erwartet: {art:"grau",  text:"erwartet"},
+  wartet:   {art:"blau",  text:"angemeldet"},
+  zimmer:   {art:"gelb",  text:"im Zimmer"},
+  fertig:   {art:"gruen", text:"abgeschlossen"}
+};
+
+/* ==================================================================== Seiten */
+
+var ANSICHTEN = {};
+
+/* --------------------------------------------------------------- Heute */
+ANSICHTEN.heute = function(){
+  var p = praxis(), k = p.kennzahlen;
+  var offeneFormulare = p.patienten.filter(function(x){
+    return x.formular === "offen" && x.status !== "fertig";
+  }).length;
+
+  var zeilen = p.patienten.map(function(x){
+    var s = STATUS[x.status];
+    return '<tr class="klickbar" data-patient="' + x.nr + '">' +
+      '<td class="zahl-sp" style="color:var(--g500)">' + x.zeit + '</td>' +
+      '<td><div class="haupt">' + sicher(x.name) + '</div>' +
+          '<div class="neben">Nr. ' + x.nr + ' · ' + x.art + '</div></td>' +
+      '<td>' + sicher(x.anlass) + '<div class="neben">' + sicher(x.behandler) + '</div></td>' +
+      '<td>' + (x.formular === "fertig"
+                  ? pille("gruen","Bogen liegt vor")
+                  : pille("gelb","Bogen offen")) + '</td>' +
+      '<td>' + pille(s.art, s.text) + '</td>' +
+      '<td class="rechts zahl-sp">' + (x.betrag ? euro(x.betrag) : '<span style="color:var(--g300)">—</span>') + '</td>' +
+    '</tr>';
+  }).join("");
+
+  return kopf("Heute in der Praxis",
+      "Was ohne dieses Bild passiert: jemand fragt über den Tresen, wer schon da ist. " +
+      "Hier steht es, ohne dass jemand etwas abhaken muss.") +
+    '<div class="gitter g4" style="margin-bottom:16px">' +
+      kennzahl("Termine heute", k.erwartet, "", "davon " + k.angemeldet + " bereits angemeldet") +
+      kennzahl("Selbst angemeldet", k.quote, "%", "der Rest kommt an den Tresen") +
+      kennzahl("Dauer der Anmeldung", k.schnitt, "", "Mittel der letzten 30 Tage") +
+      kennzahl("Bögen offen", offeneFormulare, "",
+               offeneFormulare ? "vor dem Aufruf erledigen" : "<b>nichts offen</b>") +
+    '</div>' +
+    karte("Sprechstunde", "Zeile anklicken für Einzelheiten",
+      '<table><thead><tr><th>Zeit</th><th>Patient</th><th>Anlass</th>' +
+      '<th>Bogen</th><th>Status</th><th class="rechts">Heute fällig</th></tr></thead>' +
+      '<tbody>' + zeilen + '</tbody></table>',
+      "Namen stehen nur auf diesem Bildschirm. Nach außen meldet das System ausschließlich Betriebszahlen.");
+};
+
+/* --------------------------------------------------------- Selbstanmeldung */
+ANSICHTEN.anmeldung = function(){
+  var p = praxis();
+
+  var glieder = SCHRITTE.map(function(s){
+    var an = s.pflicht || (s.modul && p.module[s.modul]);
+    return '<div class="glied ' + (an ? "an" : "aus") + '">' +
+      '<div class="nr">' + (an ? "aktiv" : "aus") + '</div>' +
+      '<b>' + s.titel + '</b><span>' + s.unter + '</span></div>';
+  }).join("");
+
+  var schalter = [
+    {m:"anmeldung",  b:"Stammdaten und Einwilligungen",
+     t:"Der Patient bestätigt, was schon da ist, statt es zu diktieren. Änderungen gehen als Vorschlag an die Anmeldung."},
+    {m:"anamnese",   b:"Anamnesebogen",
+     t:"Vorab auf dem eigenen Handy oder im Wartezimmer auf dem iPad. Das Ergebnis steht in der Karteikarte, bevor der Behandler das Zimmer betritt."},
+    {m:"aufklaerung",b:"Aufklärung mit Unterschrift",
+     t:"Bogen lesen, mit dem Finger unterschreiben, fertig in die Akte. Das Gespräch bleibt beim Arzt — das ist gesetzlich so vorgeschrieben."},
+    {m:"abschluss",  b:"Selbstabschluss mit Rechnung",
+     t:"Leistungen werden im Zimmer erfasst. Der Patient sieht die Aufstellung, zahlt und nimmt die Rechnung mit."}
+  ].map(function(z){
+    var an = p.module[z.m];
+    return '<div class="schalter-zeile"><div class="txt"><b>' + z.b + '</b><span>' + z.t + '</span></div>' +
+      '<button class="schalter' + (an ? " an" : "") + '" data-modul="' + z.m + '" ' +
+      'aria-pressed="' + an + '" title="' + (an ? "abschalten" : "einschalten") + '"></button></div>';
+  }).join("");
+
+  return kopf("Selbstanmeldung und Selbstabschluss",
+      "Der Ablauf am Terminal lässt sich pro Praxis zusammenstellen. Was abgeschaltet ist, " +
+      "übernimmt wie bisher die Anmeldung — es fällt nichts weg, es wird nur nicht angeboten.") +
+    karte("So läuft der Besuch", p.terminal + " Terminal · " + p.ipads + " iPads",
+      '<div class="karte-koerper"><div class="kette">' + glieder + '</div>' +
+      '<div class="feinzeile">Wer sich nicht selbst anmelden will oder kann, geht an den Tresen. ' +
+      'Papier bleibt für jeden Schritt möglich.</div></div>') +
+    karte("Bausteine", null, '<div class="karte-koerper">' + schalter + '</div>',
+      'Änderungen greifen sofort in der Vorschau. In der Praxis wird ein Baustein erst nach ' +
+      'Einweisung und Probebetrieb scharf geschaltet.') +
+    karte("Vorführung", null,
+      '<div class="karte-koerper">' +
+      '<div class="box"><b>Das Terminal lässt sich anklicken.</b>' +
+      'Der Prototyp zeigt den vollständigen Weg von der Begrüßung bis zur Rechnung — ' +
+      'mit Unterschriftenfeld und Belegwahl. Erfundene Daten, nichts wird gespeichert.</div>' +
+      '<div style="margin-top:14px"><a class="knopf haupt" href="../terminal/" target="_blank" rel="noopener">Terminal öffnen ↗</a></div>' +
+      '</div>');
+};
+
+/* ------------------------------------------------------------- Formulare */
+ANSICHTEN.formulare = function(){
+  var p = praxis();
+  var zeilen = BOEGEN.map(function(b){
+    var art = b.quelle === "Anbieter" ? "blau" : (b.quelle === "Praxis" ? "grau" : "gruen");
+    return '<tr><td><div class="haupt">' + sicher(b.name) + '</div>' +
+      '<div class="neben">' + b.felder + ' Felder · Stand ' + b.stand + '</div></td>' +
+      '<td>' + sicher(b.anlass) + '</td>' +
+      '<td>' + pille(art, b.quelle) + '</td>' +
+      '<td class="rechts">' + pille("gruen","geht nach Duria²") + '</td></tr>';
+  }).join("");
+
+  return kopf("Formulare",
+      "Jeder Bogen hat genau einen Weg: ausfüllen, unterschreiben, in die Karteikarte. " +
+      "Was hier steht, wird nicht mehr gedruckt und nicht mehr gescannt.") +
+    (p.module.aufklaerung ? "" :
+      '<div class="box warn" style="margin-bottom:16px"><b>Aufklärung ist in dieser Praxis noch abgeschaltet.</b>' +
+      'Aufklärungsbögen werden vorerst weiter auf Papier geführt. Einschalten unter „Selbstanmeldung".</div>') +
+    karte("Bögen im Umlauf", BOEGEN.length + " Bögen",
+      '<table><thead><tr><th>Bogen</th><th>Anlass</th><th>Gepflegt von</th>' +
+      '<th class="rechts">Rückweg</th></tr></thead><tbody>' + zeilen + '</tbody></table>',
+      "Aufklärungsbögen pflegt der Anbieter und hält sie aktuell. Die Praxis-eigenen Einwilligungen " +
+      "ändern wir auf Zuruf.") +
+    karte("Was noch auf Papier läuft", null,
+      '<div class="karte-koerper">' +
+      '<ul class="liste-schlicht">' +
+      '<li><b>Überweisungen und Rezepte</b> — laufen über Duria² und die Telematikinfrastruktur, nicht über uns.</li>' +
+      '<li><b>Fremdbefunde</b> — kommen als Brief oder Fax und werden weiterhin eingescannt.</li>' +
+      '<li><b>Alles, was ein Patient lieber auf Papier ausfüllt</b> — bleibt möglich und wird wie bisher gescannt.</li>' +
+      '</ul></div>');
+};
+
+/* --------------------------------------------------------- Abschluss / PKV */
+ANSICHTEN.abschluss = function(){
+  var p = praxis(), k = p.kennzahlen;
+
+  if(!p.module.abschluss){
+    return kopf("Abschluss und Privatabrechnung",
+        "In dieser Praxis noch nicht eingeschaltet.") +
+      karte(null, null, '<div class="karte-koerper">' + leer("Selbstabschluss ist abgeschaltet",
+        "Einschalten unter „Selbstanmeldung“ — danach entstehen Rechnungen im Behandlungszimmer statt abends.") + '</div>');
+  }
+
+  var f = reiterWert("rechnungen","alle");
+  var liste = p.rechnungen.filter(function(r){
+    return f === "alle" ? true : (f === "offen" ? r.status !== "bezahlt" : r.status === f);
+  });
+
+  var offen = p.rechnungen.filter(function(r){ return r.status !== "bezahlt"; });
+  var ueber = p.rechnungen.filter(function(r){ return r.status === "ueberfaellig"; });
+  var summeOffen = offen.reduce(function(s,r){ return s + r.betrag; }, 0);
+  var summeUeber = ueber.reduce(function(s,r){ return s + r.betrag; }, 0);
+  var amTerminal = p.rechnungen.filter(function(r){ return r.weg === "Terminal"; });
+  var summeTerminal = amTerminal.reduce(function(s,r){ return s + r.betrag; }, 0);
+
+  var zeilen = liste.length ? liste.map(function(r){
+    var art = r.status === "bezahlt" ? "gruen" : (r.status === "offen" ? "gelb" : "rot");
+    var txt = r.status === "bezahlt" ? "bezahlt" : (r.status === "offen" ? "offen" : "überfällig");
+    return '<tr><td class="haupt zahl-sp">' + r.nr + '</td>' +
+      '<td>' + sicher(r.pat) + '</td>' +
+      '<td class="zahl-sp" style="color:var(--g500)">' + r.datum + '</td>' +
+      '<td>' + r.weg + '</td>' +
+      '<td>' + pille(art, txt) + '</td>' +
+      '<td class="rechts zahl-sp haupt">' + euro(r.betrag) + '</td></tr>';
+  }).join("") : '<tr><td colspan="6">' + leer("Nichts in dieser Auswahl") + '</td></tr>';
+
+  return kopf("Abschluss und Privatabrechnung",
+      "Die Rechnung entsteht dort, wo die Leistung erbracht wird. Was am Terminal bezahlt wird, " +
+      "steht nie auf dieser Liste — es wird zu keinem offenen Posten.") +
+    '<div class="gitter g4" style="margin-bottom:16px">' +
+      kennzahl("Am Terminal bezahlt", euro(summeTerminal), "",
+               amTerminal.length + " Rechnungen · <b>sofort beglichen</b>") +
+      kennzahl("Offen insgesamt", euro(summeOffen), "",
+               offen.length + " Rechnungen unterwegs, davon " + ueber.length + " überfällig") +
+      kennzahl("Davon überfällig", euro(summeUeber), "", "länger als 30 Tage unbezahlt") +
+      kennzahl("Mahnlauf", k.offenAnzahl, "", "Vorgänge in Beobachtung") +
+    '</div>' +
+    reiter("rechnungen", [
+      {id:"alle", titel:"Alle"}, {id:"offen", titel:"Offen"},
+      {id:"ueberfaellig", titel:"Überfällig"}, {id:"bezahlt", titel:"Bezahlt"}
+    ]) +
+    karte("Rechnungen", liste.length + " von " + p.rechnungen.length,
+      '<table><thead><tr><th>Nummer</th><th>Patient</th><th>Datum</th><th>Zustellung</th>' +
+      '<th>Status</th><th class="rechts">Betrag</th></tr></thead><tbody>' + zeilen + '</tbody></table>',
+      "Zahlungseingänge kommen aus der Praxisbuchhaltung. Das Cockpit zeigt den Stand, " +
+      "es bucht nichts und führt kein Konto.");
+};
+
+/* ------------------------------------------------------------ Wiedervorlage */
+ANSICHTEN.wiedervorlage = function(){
+  var p = praxis();
+
+  if(!p.module.wiedervorlage){
+    return kopf("Wiedervorlage", "In dieser Praxis noch nicht eingeschaltet.") +
+      karte(null, null, '<div class="karte-koerper">' + leer("Wiedervorlage ist abgeschaltet",
+        "Sobald Vorsorgen und Kontrollen strukturiert dokumentiert sind, entsteht diese Liste von selbst.") + '</div>');
+  }
+
+  var erledigt = zustand.erledigt[zustand.mandant] || {};
+  var offen = p.wiedervorlage.filter(function(w){ return !erledigt[w.nr]; });
+
+  var zeilen = offen.length ? offen.map(function(w){
+    var art = w.faellig > 365 ? "rot" : (w.faellig > 180 ? "gelb" : "grau");
+    return '<tr><td><div class="haupt">' + sicher(w.name) + '</div>' +
+      '<div class="neben">Nr. ' + w.nr + ' · ' + w.alter + ' Jahre</div></td>' +
+      '<td>' + sicher(w.grund) + '</td>' +
+      '<td class="zahl-sp" style="color:var(--g500)">' + w.letzte + '</td>' +
+      '<td>' + pille(art, w.faellig + " Tage überfällig") + '</td>' +
+      '<td class="rechts">' +
+        '<button class="knopf klein" data-erinnern="' + w.nr + '">Erinnern</button> ' +
+        '<button class="knopf klein still" data-erledigt="' + w.nr + '">Erledigt</button>' +
+      '</td></tr>';
+  }).join("") : '<tr><td colspan="5">' +
+      leer("Liste für heute abgearbeitet", "Morgen früh steht die nächste bereit.") + '</td></tr>';
+
+  return kopf("Wiedervorlage",
+      "Ein Terminportal erinnert an Termine, die schon gebucht sind. Diese Liste erinnert an " +
+      "Vorsorgen, die noch niemand gebucht hat.") +
+    '<div class="gitter g3" style="margin-bottom:16px">' +
+      kennzahl("Heute vorzulegen", offen.length, "", "zum Abhaken, nicht zum Suchen") +
+      kennzahl("Fällig im Bestand", p.kennzahlen.faellig, "", "über alle Vorsorgeanlässe") +
+      kennzahl("Länger als ein Jahr",
+        offen.filter(function(w){ return w.faellig > 365; }).length, "",
+        "hier lohnt der Anruf zuerst") +
+    '</div>' +
+    karte("Vorschläge für heute", "erfundene Daten",
+      '<table><thead><tr><th>Patient</th><th>Anlass</th><th>Zuletzt</th>' +
+      '<th>Fällig</th><th class="rechts">Aktion</th></tr></thead><tbody>' + zeilen + '</tbody></table>',
+      "Die Liste entsteht aus der Dokumentation in Duria², nicht aus einer eigenen Datenhaltung. " +
+      "Wer widersprochen hat, erscheint nicht.");
+};
+
+/* ------------------------------------------------------------ Duria-Brücke */
+ANSICHTEN.bruecke = function(){
+  var p = praxis(), b = p.bruecke;
+  var gut = b.zustand === "gut";
+
+  var felder = b.felder.map(function(f){
+    var art = f.quelle === "erkannt" ? "blau" : (f.quelle === "Norm" ? "gruen" : "grau");
+    return '<tr><td class="haupt zahl-sp">' + f.id + '</td>' +
+      '<td>' + sicher(f.was) + '</td>' +
+      '<td style="color:var(--g500)">' + sicher(f.wert) + '</td>' +
+      '<td class="rechts">' + pille(art, f.quelle) + '</td></tr>';
+  }).join("");
+
+  var prot = b.protokoll.map(function(e){
+    var txt = {ok:"ÜBERGEBEN", warn:"HINWEIS", fehl:"ANGEHALTEN", info:"BETRIEB"}[e.a];
+    return '<div class="zeile"><span class="zeit">' + e.z + '</span>' +
+      '<span class="art a-' + e.a + '">' + txt + '</span>' +
+      '<span class="text">' + sicher(e.t) + '</span></div>';
+  }).join("");
+
+  return kopf("Die Brücke nach Duria²",
+      "Jeder Wunsch der Praxis scheitert an derselben Stelle: am Rückweg in die Karteikarte. " +
+      "Genau den macht dieser Teil — über die standardisierte GDT-Schnittstelle, ohne Eingriff ins System.") +
+    '<div class="gitter g4" style="margin-bottom:16px">' +
+      kennzahl("Verbindung", gut ? "in Ordnung" : "gestört", "",
+               "zuletzt " + b.letzte) +
+      kennzahl("Heute übergeben", b.heute, "", b.fehler
+               ? '<span style="color:var(--rot)">' + b.fehler + " angehalten</span>"
+               : "<b>ohne Beanstandung</b>") +
+      kennzahl("In der Warteschlange", b.wartend, "",
+               b.wartend ? "wird abgearbeitet" : "nichts liegt an") +
+      kennzahl("Betriebsart", b.modus, "", "Satzart " + b.satzart) +
+    '</div>' +
+    (gut ? "" :
+      '<div class="box warn" style="margin-bottom:16px"><b>Das Zielverzeichnis war kurzzeitig nicht erreichbar.</b>' +
+      'Nichts geht dabei verloren: Unfertige Dateien werden nie geschrieben, angehaltene Vorgänge ' +
+      'bleiben im Original liegen und werden erneut versucht. Die Praxis arbeitet unverändert weiter.</div>') +
+    karte("Feldzuordnung", "Verzeichnis " + sicher(b.verzeichnis),
+      '<table><thead><tr><th>Feld</th><th>Bedeutung</th><th>Belegt mit</th>' +
+      '<th class="rechts">Herkunft</th></tr></thead><tbody>' + felder + '</tbody></table>',
+      '<b>„erkannt"</b> heißt: aus dem vorhandenen GDT-Verkehr dieser Praxis abgelesen, nicht geraten. ' +
+      'Deshalb läuft die Brücke in jeder Duria-Praxis, ohne dass jemand erst Felder vereinbaren muss.') +
+    karte("Protokoll", "letzte Ereignisse",
+      '<div class="karte-koerper"><div class="protokoll">' + prot + '</div></div>',
+      "Im Protokoll steht kein Patientenname und keine Patientennummer — nur Vorgangskennungen. " +
+      "Das ist nicht Einstellungssache, sondern fest eingebaut.");
+};
+
+/* ---------------------------------------------------------------- Praxis */
+ANSICHTEN.praxis = function(){
+  var p = praxis();
+
+  var zeilen = [
+    ["Praxis", p.name], ["Ort", p.ort], ["Fachrichtung", p.fach],
+    ["Behandler", p.behandler.join(", ")],
+    ["Praxissoftware", p.pvs],
+    ["Terminals", String(p.terminal)], ["iPads", String(p.ipads)]
+  ].map(function(z){
+    return '<div class="paar"><div class="k">' + z[0] + '</div><div class="v">' + sicher(z[1]) + '</div></div>';
+  }).join("");
+
+  var module = [
+    {m:"anmeldung",   b:"Selbstanmeldung",            t:"Terminal im Eingangsbereich"},
+    {m:"anamnese",    b:"Digitale Anamnese",          t:"Handy vorab oder iPad im Wartezimmer"},
+    {m:"aufklaerung", b:"Aufklärung mit Unterschrift",t:"Bogen auf dem iPad, fertig in die Akte"},
+    {m:"abschluss",   b:"Selbstabschluss",            t:"Leistungen im Zimmer, Rechnung beim Gehen"},
+    {m:"wiedervorlage",b:"Wiedervorlage",             t:"Tägliche Liste fälliger Vorsorgen"},
+    {m:"transkript",  b:"Dokumentation des Gesprächs",t:"Nur mit Einwilligung und Folgenabschätzung — noch nicht freigegeben", sperre:true}
+  ].map(function(z){
+    var an = p.module[z.m];
+    return '<div class="schalter-zeile"><div class="txt"><b>' + z.b + '</b><span>' + z.t + '</span></div>' +
+      '<button class="schalter' + (an ? " an" : "") + '" data-modul="' + z.m + '"' +
+      (z.sperre ? " disabled" : "") + ' aria-pressed="' + an + '"></button></div>';
+  }).join("");
+
+  return kopf("Praxis und Module",
+      "Dieselbe Software, andere Praxis. Was eine Praxis nutzt, entscheidet sie hier — " +
+      "es gibt keine zweite Fassung des Programms und keine Anpassung im Quelltext.") +
+    '<div class="gitter g2">' +
+      karte("Stammdaten", null, '<div class="karte-koerper">' + zeilen + '</div>') +
+      karte("Module", null, '<div class="karte-koerper">' + module + '</div>',
+        "Ein gesperrter Schalter bedeutet: rechtlich oder fachlich noch nicht so weit. " +
+        "Nicht: technisch unmöglich.") +
+    '</div>' +
+    karte("Warum das für jede Praxis gilt", null,
+      '<div class="karte-koerper"><ul class="liste-schlicht">' +
+      '<li><b>Kein Systemwechsel.</b> Duria² bleibt führend. Wir setzen uns davor und dahinter, nicht an seine Stelle.</li>' +
+      '<li><b>Keine Feldabsprache je Praxis.</b> Die Brücke liest die Zuordnung aus dem vorhandenen GDT-Verkehr ab.</li>' +
+      '<li><b>Keine Abhängigkeit von uns im Betrieb.</b> Fällt die Verbindung nach außen weg, arbeitet die Praxis weiter.</li>' +
+      '<li><b>Keine Patientendaten außer Haus.</b> Nach außen gehen Betriebszahlen — verarbeitete Dokumente, Laufzeiten, Fehler.</li>' +
+      '</ul></div>');
+};
+
+/* =============================================================== Schublade */
+
+function schubladeOeffnen(nr){
+  var p = praxis();
+  var x = null;
+  p.patienten.forEach(function(k){ if(k.nr === nr) x = k; });
+  if(!x) return;
+  var s = STATUS[x.status];
+
+  var zeilen = [
+    ["Patientennummer", x.nr],
+    ["Termin", x.zeit + " Uhr"],
+    ["Behandler", x.behandler],
+    ["Anlass", x.anlass],
+    ["Abrechnung", x.art],
+    ["Anamnesebogen", x.formular === "fertig" ? "liegt vor, in der Karteikarte" : "noch nicht ausgefüllt"],
+    ["Heute fällig", x.betrag ? euro(x.betrag) : "keine Selbstzahlerleistung"]
+  ].map(function(z){
+    return '<div class="paar"><div class="k">' + z[0] + '</div><div class="v">' + sicher(z[1]) + '</div></div>';
+  }).join("");
+
+  var naechstes =
+    x.status === "erwartet" ? "Noch nicht eingetroffen. Der Bogen kann vorab aufs Handy geschickt werden." :
+    x.status === "wartet"   ? "Angemeldet und wartend. Die Anmeldung muss nichts tun." :
+    x.status === "zimmer"   ? "Im Behandlungszimmer. Leistungen werden dort erfasst, die Rechnung entsteht beim Abschluss." :
+                              "Abgeschlossen. Rechnung quittiert, Dokumente sind in der Karteikarte.";
+
+  document.getElementById("schublade").innerHTML =
+    '<div class="schublade-kopf"><div>' +
+      '<h3>' + sicher(x.name) + '</h3>' +
+      '<div class="neben">' + pille(s.art, s.text) + '</div>' +
+    '</div><button class="zu" id="schubladeZu" aria-label="Schließen">×</button></div>' +
+    '<div class="schublade-koerper">' + zeilen +
+      '<div class="box" style="margin-top:16px"><b>Nächster Schritt</b>' + naechstes + '</div>' +
+      '<div class="feinzeile">Erfundene Daten. Das Cockpit hält keine Patientenakte — ' +
+      'es zeigt den Stand des heutigen Tages und schreibt alles Dokumentarische nach Duria².</div>' +
+    '</div>';
+
+  document.getElementById("schublade").classList.add("offen");
+  document.getElementById("schleier").classList.add("offen");
+}
+function schubladeSchliessen(){
+  document.getElementById("schublade").classList.remove("offen");
+  document.getElementById("schleier").classList.remove("offen");
+}
+
+/* =================================================================== Aufbau */
+
+function navZeichnen(){
+  var p = praxis();
+  var erledigt = zustand.erledigt[zustand.mandant] || {};
+  var zahlen = {
+    heute: p.patienten.filter(function(x){ return x.status !== "fertig"; }).length,
+    abschluss: p.module.abschluss
+      ? p.rechnungen.filter(function(r){ return r.status !== "bezahlt"; }).length : 0,
+    wiedervorlage: p.module.wiedervorlage
+      ? p.wiedervorlage.filter(function(w){ return !erledigt[w.nr]; }).length : 0,
+    bruecke: p.bruecke.wartend + p.bruecke.fehler
+  };
+
+  document.getElementById("navigation").innerHTML = SEITEN.map(function(s){
+    if(s.gruppe) return '<div class="gruppe">' + s.gruppe + '</div>';
+    var z = zahlen[s.id];
+    return '<button data-seite="' + s.id + '"' + (zustand.seite === s.id ? ' class="aktiv"' : '') + '>' +
+      '<span class="sym">' + s.sym + '</span>' + s.titel +
+      (z ? '<span class="zahl">' + z + '</span>' : '') + '</button>';
+  }).join("");
+}
+
+function kopfZeichnen(){
+  var p = praxis();
+  document.getElementById("mandantwahl").innerHTML = Object.keys(PRAXEN).map(function(k){
+    return '<option value="' + k + '"' + (k === zustand.mandant ? " selected" : "") + '>' +
+      sicher(PRAXEN[k].name) + ' — ' + sicher(PRAXEN[k].ort) + '</option>';
+  }).join("");
+
+  var d = new Date();
+  var tage = ["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"];
+  document.getElementById("datumfeld").textContent =
+    tage[d.getDay()] + ", " + d.toLocaleDateString("de-DE",{day:"2-digit",month:"long",year:"numeric"});
+
+  var b = p.bruecke, pil = document.getElementById("bruecke-pille");
+  pil.className = "pille " + (b.zustand === "gut" ? "p-gruen" : "p-gelb");
+  pil.innerHTML = '<span class="punkt"></span>' +
+    (b.zustand === "gut" ? "Duria² verbunden" : "Duria² gestört");
+}
+
+function zeichnen(){
+  navZeichnen();
+  kopfZeichnen();
+  var f = ANSICHTEN[zustand.seite] || ANSICHTEN.heute;
+  document.getElementById("inhalt").innerHTML = f();
+  window.scrollTo(0,0);
+}
+
+/* --------------------------------------------------------------- Ereignisse */
+
+document.addEventListener("click", function(e){
+  var t = e.target;
+
+  var navKnopf = t.closest ? t.closest("[data-seite]") : null;
+  if(navKnopf){
+    zustand.seite = navKnopf.getAttribute("data-seite");
+    document.getElementById("seitenleiste").classList.remove("offen");
+    adresseSetzen();
+    zeichnen(); return;
+  }
+
+  var r = t.closest ? t.closest("[data-reiter]") : null;
+  if(r){
+    zustand.reiter[r.getAttribute("data-reiter")] = r.getAttribute("data-wert");
+    zeichnen(); return;
+  }
+
+  var m = t.closest ? t.closest("[data-modul]") : null;
+  if(m && !m.disabled){
+    var schl = m.getAttribute("data-modul");
+    praxis().module[schl] = !praxis().module[schl];
+    schalterSichern();
+    zeichnen(); return;
+  }
+
+  var erl = t.closest ? t.closest("[data-erledigt]") : null;
+  if(erl){
+    var nr = erl.getAttribute("data-erledigt");
+    if(!zustand.erledigt[zustand.mandant]) zustand.erledigt[zustand.mandant] = {};
+    zustand.erledigt[zustand.mandant][nr] = true;
+    zeichnen(); return;
+  }
+
+  var ern = t.closest ? t.closest("[data-erinnern]") : null;
+  if(ern){
+    ern.textContent = "Vorgemerkt";
+    ern.disabled = true;
+    return;
+  }
+
+  var zeile = t.closest ? t.closest("[data-patient]") : null;
+  if(zeile){ schubladeOeffnen(zeile.getAttribute("data-patient")); return; }
+
+  if(t.id === "schubladeZu" || t.id === "schleier"){ schubladeSchliessen(); return; }
+
+  if(t.id === "menuknopf"){
+    document.getElementById("seitenleiste").classList.toggle("offen");
+    return;
+  }
+});
+
+document.getElementById("mandantwahl").addEventListener("change", function(e){
+  zustand.mandant = e.target.value;
+  zustand.reiter = {};
+  schubladeSchliessen();
+  adresseSetzen();
+  zeichnen();
+});
+
+/* Ansicht und Praxis stehen in der Adresse — so lässt sich eine Ansicht verlinken. */
+function adresseSetzen(){
+  try{
+    var neu = "#" + zustand.mandant + "/" + zustand.seite;
+    if(window.location.hash !== neu) window.history.replaceState(null, "", neu);
+  }catch(e){ /* egal */ }
+}
+function adresseLesen(){
+  var roh = (window.location.hash || "").replace(/^#/, "");
+  if(!roh) return;
+  var teile = roh.split("/");
+  if(teile[0] && PRAXEN[teile[0]]) zustand.mandant = teile[0];
+  if(teile[1] && ANSICHTEN[teile[1]]) zustand.seite = teile[1];
+}
+
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape") schubladeSchliessen();
+});
+
+/* ------------------------------------------------------------------ Start */
+schalterLaden();
+adresseLesen();
+adresseSetzen();
+zeichnen();
+
+})();
+</script>
+</body>
+</html>
