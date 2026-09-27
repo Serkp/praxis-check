@@ -193,6 +193,30 @@ td .neben{font-size:12px;color:var(--g500)}
   border-radius:50%;background:var(--akzent)}
 .liste-schlicht li b{color:var(--tinte)}
 
+/* Gegenüberstellung Gespräch / Karteikarteneintrag */
+.gegenueber{display:flex;border:1px solid var(--rand);border-radius:7px;overflow:hidden}
+.gegenueber > div{flex:1;padding:15px 17px;min-width:0}
+.gegenueber > div + div{border-left:1px solid var(--rand);background:var(--g50)}
+.gegenueber .titel{font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--g500);font-weight:700;margin-bottom:9px}
+.gespraech-text{font-size:13px;line-height:1.75;color:var(--g600)}
+.gespraech-text .wer{color:var(--g400);font-weight:700}
+.eintrag .feld{margin-bottom:11px}
+.eintrag .feld:last-child{margin-bottom:0}
+.eintrag .feld b{display:block;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--akzent);margin-bottom:2px;font-weight:700}
+.eintrag .feld span{font-size:13px;line-height:1.55;color:var(--tinte);display:block}
+@media (max-width:900px){.gegenueber{flex-direction:column}
+  .gegenueber > div + div{border-left:0;border-top:1px solid var(--rand)}}
+
+/* Prüfliste */
+.pruefzeile{display:flex;align-items:flex-start;gap:14px;padding:11px 0;border-bottom:1px solid var(--g100)}
+.pruefzeile:last-child{border-bottom:0;padding-bottom:0}
+.pruefzeile .txt{flex:1;min-width:0}
+.pruefzeile .txt b{display:block;color:var(--tinte);font-size:13.5px;font-weight:600}
+.pruefzeile .txt span{font-size:12.5px;color:var(--g500)}
+.pruefzeile .stand{flex:0 0 auto;padding-top:2px}
+
 .leer{padding:44px 20px;text-align:center;color:var(--g400)}
 .leer .gross{font-size:26px;margin-bottom:6px}
 
@@ -469,17 +493,122 @@ var BOEGEN = [
   {name:"Aufklärung Botulinumtoxin",         anlass:"Ästhetik",                   felder:10, stand:"06/2026", quelle:"Anbieter"}
 ];
 
+/* Beispiel für die Gesprächsdokumentation. Erfunden, aber im Aufbau echt:
+   links der gesprochene Ausschnitt, rechts der Entwurf für die Karteikarte. */
+var GESPRAECH = {
+  ausschnitt: [
+    ["Patient", "Also die Stelle am Rücken — die ist mir vor ungefähr zwei Monaten aufgefallen. Meine Frau hat gesagt, die sieht anders aus als früher."],
+    ["Arzt",    "Juckt sie? Hat sie mal geblutet?"],
+    ["Patient", "Jucken manchmal, ja, aber nicht schlimm. Geblutet hat sie nie."],
+    ["Arzt",    "Gut. Ich schaue sie mir unter dem Auflichtmikroskop an … Sie ist unregelmäßig begrenzt und mehrfarbig. Das gefällt mir nicht gut genug, um es nur zu beobachten. Ich würde sie herausnehmen und untersuchen lassen."],
+    ["Patient", "Und das geht hier in der Praxis?"],
+    ["Arzt",    "Ja, örtlich betäubt, etwa zwanzig Minuten. Das Ergebnis haben wir in gut einer Woche."]
+  ],
+  entwurf: [
+    ["Anamnese",   "Seit ca. 2 Monaten Größen- und Farbveränderung eines vorbestehenden Nävus am Rücken, von Angehöriger bemerkt. Intermittierender Pruritus, keine Blutung, keine Ulzeration."],
+    ["Befund",     "Rücken paravertebral rechts: Pigmentierte Läsion, unregelmäßig begrenzt, mehrfarbig. Auflichtmikroskopisch asymmetrisches Pigmentnetz."],
+    ["Beurteilung","Dysplastischer Nävus, Melanom nicht auszuschließen. Exzision indiziert."],
+    ["Procedere",  "Exzision in Lokalanästhesie mit histologischer Aufarbeitung. Aufklärung erfolgt, Einwilligung liegt vor. Befundbesprechung in ca. 1 Woche."]
+  ]
+};
+
+/* Was erfüllt sein muss, bevor mitgeschrieben werden darf. */
+var GESPRAECH_PRUEFUNG = [
+  {was:"Einwilligung von Patient und Behandler vor jeder Aufnahme",
+   warum:"§ 201 StGB — das nicht öffentlich gesprochene Wort aufzuzeichnen ist ohne Einwilligung strafbar. Widerruf jederzeit, die Aufnahme wird dann verworfen.",
+   stand:"offen", hinweis:"Text im Entwurf"},
+  {was:"Datenschutz-Folgenabschätzung",
+   warum:"Art. 35 DSGVO, weil Gesundheitsdaten nach Art. 9 verarbeitet werden. Macht der oder die Datenschutzbeauftragte der Praxis.",
+   stand:"offen", hinweis:"noch nicht begonnen"},
+  {was:"Auftragsverarbeitungsvertrag mit dem Anbieter",
+   warum:"Die Spracherkennung läuft nicht auf unserem Rechner. Wer sie stellt, ist noch nicht entschieden — Verarbeitung in Deutschland ist Bedingung.",
+   stand:"offen", hinweis:"Anbieter offen"},
+  {was:"Hinweis, dass ein KI-System mitschreibt",
+   warum:"Art. 50 KI-Verordnung. Gehört in den Einwilligungstext und an die Wand im Behandlungszimmer.",
+   stand:"offen", hinweis:"mit dem Einwilligungstext"},
+  {was:"Mikrofon im Behandlungszimmer, WLAN",
+   warum:"Ein Tischmikrofon je Zimmer. Ohne tragfähiges WLAN in den Behandlungsräumen geht nichts.",
+   stand:"offen", hinweis:"Systemhaus"},
+  {was:"Freigabe durch den Arzt vor der Übernahme",
+   warum:"§ 630f BGB — die Dokumentation bleibt ärztliche Pflicht. Kein Entwurf geht ungeprüft in die Karteikarte. Fest eingebaut, nicht abschaltbar.",
+   stand:"fertig", hinweis:"eingebaut"},
+  {was:"Der Weg in die Karteikarte",
+   warum:"Derselbe wie für Anamnese und Aufklärung: als Text über Feld 6220 der GDT-Schnittstelle. Nichts Zusätzliches zu bauen.",
+   stand:"fertig", hinweis:"steht bereit"}
+];
+
+/* Der ursprüngliche Auftrag, Punkt für Punkt — und wo er landet. */
+var VORHABEN = [
+  {wunsch:"Duria² als Praxissoftware behalten",
+   wo:"Duria-Brücke", ziel:"bruecke",
+   stand:"laeuft", wer:"wir",
+   text:"Kein Systemwechsel. Alles Neue schreibt über GDT in die vorhandene Karteikarte zurück."},
+  {wunsch:"Druckfrei werden",
+   wo:"Formulare, Selbstanmeldung, Abschluss", ziel:"formulare",
+   stand:"teils", wer:"wir",
+   text:"Anamnese, Aufklärung, Einwilligungen und Rechnungen laufen ohne Papier. Fremdbefunde und Rezepte bleiben vorerst, die kommen nicht von uns."},
+  {wunsch:"iPads in der Beratung",
+   wo:"Anamnese, Aufklärung, Leistungserfassung", ziel:"anmeldung",
+   stand:"bereit", wer:"wir + Systemhaus",
+   text:"Inhaltlich fertig. Voraussetzung ist tragfähiges WLAN in den Behandlungsräumen — das macht das Systemhaus."},
+  {wunsch:"Selbstanmeldung und Selbstabschluss",
+   wo:"Selbstanmeldung", ziel:"anmeldung",
+   stand:"bereit", wer:"wir",
+   text:"Prototyp läuft und lässt sich vorführen. Kartenleser und Kassensicherung bei Kartenzahlung sind noch zu klären."},
+  {wunsch:"PKV-Abrechnung weiter selbst machen",
+   wo:"Abschluss und PKV", ziel:"abschluss",
+   stand:"bereit", wer:"wir",
+   text:"Die Rechnung entsteht im Zimmer statt abends. Wir ersetzen keine Abrechnungssoftware, wir füttern sie und behalten den Stand im Blick."},
+  {wunsch:"Beratungsgespräch dokumentieren",
+   wo:"Gespräch", ziel:"gespraech",
+   stand:"vorbereitung", wer:"wir + Datenschutz",
+   text:"Technisch der kürzeste Weg — der Rückweg steht schon. Rechtlich der längste: Einwilligung, Folgenabschätzung, Anbieter."},
+  {wunsch:"Vorsorgen im Blick behalten",
+   wo:"Wiedervorlage", ziel:"wiedervorlage",
+   stand:"bereit", wer:"wir",
+   text:"Nicht im Auftrag genannt, aber der größte stille Hebel: Termine, die heute schlicht niemandem auffallen."},
+  {wunsch:"Doctolib als Terminverwaltung",
+   wo:"Termine nach Duria²", ziel:null,
+   stand:"offen", wer:"Doctolib + DSC",
+   text:"Ob Termine automatisch nach Duria² kommen, ist die wichtigste offene Frage. Bis das nachgewiesen ist, ändern wir am Kalender nichts."},
+  {wunsch:"Telefon entlasten",
+   wo:"Telefonassistent", ziel:null,
+   stand:"gesperrt", wer:"Praxis + Systemhaus",
+   text:"Setzt eine digitale Telefonanlage voraus, die die Praxis heute nicht hat. Ohne sie kein Assistent — das ist zuerst zu beauftragen."},
+  {wunsch:"Serverstruktur, Hosting, Backup",
+   wo:"außerhalb unseres Teils", ziel:null,
+   stand:"fremd", wer:"Systemhaus / DSC",
+   text:"Server, Netz, Backup und Telematikinfrastruktur macht das Systemhaus nach unserem Pflichtenheft. Wir nehmen ab, wir haften nicht dafür."},
+  {wunsch:"Duria App / mobiler Zugriff",
+   wo:"dieses Cockpit", ziel:"heute",
+   stand:"laeuft", wer:"wir",
+   text:"Läuft im Browser, auch auf dem iPad. Kein Programm zu installieren, keine App im Store, kein Gerät zu verwalten."}
+];
+
+var STAND_ART = {
+  bereit:       {art:"gruen", text:"steht bereit"},
+  laeuft:       {art:"gruen", text:"läuft"},
+  teils:        {art:"blau",  text:"teilweise"},
+  vorbereitung: {art:"gelb",  text:"in Vorbereitung"},
+  offen:        {art:"gelb",  text:"offen"},
+  gesperrt:     {art:"rot",   text:"blockiert"},
+  fremd:        {art:"grau",  text:"nicht unser Teil"}
+};
+
 var SEITEN = [
   {gruppe:"Betrieb"},
   {id:"heute",        sym:"◧", titel:"Heute"},
   {id:"anmeldung",    sym:"▤", titel:"Selbstanmeldung"},
   {id:"formulare",    sym:"▦", titel:"Formulare"},
+  {id:"gespraech",    sym:"◐", titel:"Gespräch"},
   {gruppe:"Geld und Nachsorge"},
   {id:"abschluss",    sym:"▧", titel:"Abschluss und PKV"},
   {id:"wiedervorlage",sym:"◇", titel:"Wiedervorlage"},
   {gruppe:"Technik"},
   {id:"bruecke",      sym:"⇄", titel:"Duria-Brücke"},
-  {id:"praxis",       sym:"⚙", titel:"Praxis und Module"}
+  {id:"praxis",       sym:"⚙", titel:"Praxis und Module"},
+  {gruppe:"Überblick"},
+  {id:"vorhaben",     sym:"◈", titel:"Das ganze Vorhaben"}
 ];
 
 /* ------------------------------------------------------------------ Zustand */
@@ -880,6 +1009,140 @@ ANSICHTEN.praxis = function(){
       '</ul></div>');
 };
 
+/* ------------------------------------------------- Gespräch dokumentieren */
+ANSICHTEN.gespraech = function(){
+  var p = praxis();
+  var frei = p.module.transkript;
+
+  var kette = [
+    {t:"Einwilligung", u:"beide stimmen zu, sonst kein Start"},
+    {t:"Mitschrift",   u:"Mikrofon im Zimmer, Ton bleibt im Haus"},
+    {t:"Entwurf",      u:"aus dem Gesagten wird ein Eintrag"},
+    {t:"Freigabe",     u:"der Arzt prüft und ändert"},
+    {t:"Karteikarte",  u:"als Text über die GDT-Brücke"},
+    {t:"Ton gelöscht", u:"nach der Freigabe, ohne Ausnahme"}
+  ].map(function(s,i){
+    return '<div class="glied an"><div class="nr">Schritt ' + (i+1) + '</div>' +
+           '<b>' + s.t + '</b><span>' + s.u + '</span></div>';
+  }).join("");
+
+  var links = GESPRAECH.ausschnitt.map(function(z){
+    return '<p style="margin:0 0 7px"><span class="wer">' + z[0] + '</span> &nbsp;' + sicher(z[1]) + '</p>';
+  }).join("");
+
+  var rechts = GESPRAECH.entwurf.map(function(z){
+    return '<div class="feld"><b>' + z[0] + '</b><span>' + sicher(z[1]) + '</span></div>';
+  }).join("");
+
+  var offen = GESPRAECH_PRUEFUNG.filter(function(z){ return z.stand === "offen"; }).length;
+  var fertig = GESPRAECH_PRUEFUNG.length - offen;
+
+  var pruefung = GESPRAECH_PRUEFUNG.map(function(z){
+    return '<div class="pruefzeile"><div class="txt"><b>' + sicher(z.was) + '</b>' +
+      '<span>' + sicher(z.warum) + '</span></div>' +
+      '<div class="stand">' + pille(z.stand === "fertig" ? "gruen" : "gelb", z.hinweis) + '</div></div>';
+  }).join("");
+
+  return kopf("Das Gespräch dokumentieren",
+      "Der Wunsch, der den größten Unterschied macht und die längste Vorbereitung braucht. " +
+      "Technisch ist es der kürzeste Weg von allen — der Rückweg in die Karteikarte steht bereits.") +
+    (frei ? "" :
+      '<div class="box warn" style="margin-bottom:16px"><b>Noch nicht freigegeben — das hier ist die Vorschau.</b>' +
+      'In dieser Praxis wird nichts aufgezeichnet. Freigeschaltet wird erst, wenn die Punkte weiter unten ' +
+      'abgearbeitet sind. Ein Gespräch ohne Einwilligung aufzunehmen ist strafbar, nicht bloß heikel.</div>') +
+    '<div class="gitter g4" style="margin-bottom:16px">' +
+      kennzahl("Voraussetzungen erfüllt", fertig + " von " + GESPRAECH_PRUEFUNG.length, "",
+               offen + " noch offen") +
+      kennzahl("Weg in die Karteikarte", "steht", "", "<b>dieselbe GDT-Brücke wie sonst</b>") +
+      kennzahl("Entlastung je Gespräch", "4—6", " Min.", "geschätzt, noch nicht gemessen") +
+      kennzahl("Ohne Arztfreigabe", "0", "", "nichts geht ungeprüft in die Akte") +
+    '</div>' +
+    karte("So läuft es ab", null,
+      '<div class="karte-koerper"><div class="kette">' + kette + '</div>' +
+      '<div class="feinzeile">Der Ton verlässt die Praxis nicht dauerhaft und wird nach der Freigabe gelöscht. ' +
+      'In die Karteikarte geht Text, keine Aufnahme. Wer nicht einwilligt, wird dokumentiert wie bisher — ' +
+      'ohne Nachteil und ohne Nachfrage.</div></div>') +
+    karte("Was dabei herauskommt", "erfundenes Beispiel",
+      '<div class="karte-koerper"><div class="gegenueber">' +
+        '<div><div class="titel">Ausschnitt aus dem Gespräch</div>' +
+          '<div class="gespraech-text">' + links + '</div></div>' +
+        '<div><div class="titel">Entwurf für die Karteikarte</div>' +
+          '<div class="eintrag">' + rechts + '</div></div>' +
+      '</div>' +
+      '<div style="margin-top:14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">' +
+        '<button class="knopf haupt" disabled>Freigeben und übernehmen</button>' +
+        '<button class="knopf" disabled>Ändern</button>' +
+        '<button class="knopf" disabled>Verwerfen</button>' +
+        '<span class="feinzeile" style="margin:0 0 0 6px">In der Vorschau ohne Funktion.</span>' +
+      '</div></div>',
+      "Der Arzt sieht den Entwurf, nicht das Wortprotokoll. Was er ändert, merkt sich das System — " +
+      "der nächste Entwurf sieht mehr nach seiner eigenen Handschrift aus.") +
+    karte("Was vorher erfüllt sein muss", offen + " von " + GESPRAECH_PRUEFUNG.length + " offen",
+      '<div class="karte-koerper">' + pruefung + '</div>',
+      "Zwei Punkte sind bereits erledigt, weil sie von den anderen Modulen mitkommen. " +
+      "Die offenen liegen nicht an der Technik, sondern an Einwilligung, Datenschutz und Anbieterwahl.");
+};
+
+/* -------------------------------------------------------- Das ganze Vorhaben */
+ANSICHTEN.vorhaben = function(){
+  var zeilen = VORHABEN.map(function(v){
+    var s = STAND_ART[v.stand];
+    var wo = v.ziel
+      ? '<a href="#" data-seite="' + v.ziel + '">' + sicher(v.wo) + '</a>'
+      : '<span style="color:var(--g500)">' + sicher(v.wo) + '</span>';
+    return '<tr><td style="width:27%"><div class="haupt">' + sicher(v.wunsch) + '</div>' +
+      '<div class="neben">' + wo + '</div></td>' +
+      '<td>' + sicher(v.text) + '</td>' +
+      '<td style="width:12%">' + pille(s.art, s.text) + '</td>' +
+      '<td style="width:13%;color:var(--g500)">' + sicher(v.wer) + '</td></tr>';
+  }).join("");
+
+  var zaehl = {};
+  VORHABEN.forEach(function(v){ zaehl[v.stand] = (zaehl[v.stand]||0) + 1; });
+  var vonUns = VORHABEN.filter(function(v){ return v.wer.indexOf("wir") === 0; }).length;
+  var laeuft = (zaehl.bereit||0) + (zaehl.laeuft||0);
+
+  return kopf("Das ganze Vorhaben",
+      "Der Auftrag, wie er zu Beginn formuliert wurde — Punkt für Punkt, mit dem heutigen Stand " +
+      "und der ehrlichen Angabe, wer ihn erledigt. Nichts davon ist weggefallen.") +
+    '<div class="gitter g4" style="margin-bottom:16px">' +
+      kennzahl("Punkte im Auftrag", VORHABEN.length, "", "keiner gestrichen") +
+      kennzahl("Steht oder läuft", laeuft, "", "<b>vorführbar, nicht versprochen</b>") +
+      kennzahl("Liegt bei uns", vonUns, "", "der Rest bei Systemhaus und Anbietern") +
+      kennzahl("Blockiert", zaehl.gesperrt || 0, "", "wartet auf die Telefonanlage") +
+    '</div>' +
+    karte("Auftrag und Stand", "Zeilen mit Verweis lassen sich anklicken",
+      '<table><thead><tr><th>Wunsch</th><th>Wie wir ihn einlösen</th><th>Stand</th>' +
+      '<th>Wer</th></tr></thead><tbody>' + zeilen + '</tbody></table>') +
+    '<div class="gitter g2" style="margin-top:16px">' +
+      karte("Warum das eine Schnittstelle ist und nicht fünf", null,
+        '<div class="karte-koerper"><ul class="liste-schlicht">' +
+        '<li><b>Duria² hat keine offene Programmierschnittstelle.</b> Kein REST, kein FHIR, keine App. ' +
+        'Der dokumentierte Weg hinein ist GDT — für uns wie für jeden anderen Anbieter.</li>' +
+        '<li><b>Deshalb gibt es genau eine Brücke.</b> Anmeldung, Anamnese, Aufklärung, Rechnung und ' +
+        'später das Gespräch gehen alle durch dieselbe. Ein Modul mehr heißt nicht eine Schnittstelle mehr.</li>' +
+        '<li><b>Und genau ein Programm auf dem Praxisrechner.</b> Es wacht über ein Verzeichnis und ' +
+        'schreibt nach Duria². Mehr läuft dort nicht.</li>' +
+        '<li><b>Das Cockpit ist nur die Sicht darauf.</b> Es liegt im Browser und hält keine Patientenakte. ' +
+        'Fällt es aus, arbeitet die Praxis weiter.</li>' +
+        '</ul></div>',
+        "Der Aufwand steigt also nicht mit jedem Wunsch. Die schwere Arbeit war die erste Brücke.") +
+      karte("Was noch offen ist", null,
+        '<div class="karte-koerper"><ul class="liste-schlicht">' +
+        '<li><b>Kommen Doctolib-Termine nach Duria²?</b> Solange das nicht nachgewiesen ist, ' +
+        'bleibt der Kalender, wie er ist.</li>' +
+        '<li><b>Wann wird die Telefonanlage digital?</b> Ohne sie kein Telefonassistent. ' +
+        'Das ist eine Beauftragung, keine Entwicklung.</li>' +
+        '<li><b>Wer stellt die Spracherkennung?</b> Verarbeitung in Deutschland ist Bedingung, ' +
+        'der Anbieter ist noch nicht gewählt.</li>' +
+        '<li><b>Ist die Rücksicherung des Backups getestet?</b> Keine Digitalisierung auf einem ' +
+        'ungeprüften Backup — das ist das größte stille Risiko jeder Praxis-IT.</li>' +
+        '</ul></div>',
+        "Diese vier Fragen entscheiden über den Zeitplan. Drei davon beantwortet nicht die Praxis, " +
+        "sondern ihr Systemhaus und ihre Anbieter.") +
+    '</div>';
+};
+
 /* =============================================================== Schublade */
 
 function schubladeOeffnen(nr){
@@ -982,6 +1245,7 @@ document.addEventListener("click", function(e){
 
   var navKnopf = t.closest ? t.closest("[data-seite]") : null;
   if(navKnopf){
+    if(navKnopf.tagName === "A") e.preventDefault();
     zustand.seite = navKnopf.getAttribute("data-seite");
     document.getElementById("seitenleiste").classList.remove("offen");
     adresseSetzen();
