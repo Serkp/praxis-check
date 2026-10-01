@@ -4,32 +4,31 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Praxora — Praxis-Cockpit</title>
-<meta name="description" content="Das Cockpit für Praxen mit Duria². Selbstanmeldung, Formulare, Abschluss, Wiedervorlage und der Rückweg in die Karteikarte.">
+<meta name="description" content="Das Cockpit für Praxen mit Duria². Getrennt in das, was die Praxis bedient, und das, was der Patient sieht.">
 <style>
 :root{
   --tinte:#0f172a;
-  --g900:#1e293b; --g700:#334155; --g600:#475569; --g500:#64748b;
+  --g700:#334155; --g600:#475569; --g500:#64748b;
   --g400:#94a3b8; --g300:#cbd5e1; --g200:#e2e8f0; --g100:#f1f5f9; --g50:#f8fafc;
   --akzent:#0b6e99; --akzent-tief:#074b69; --akzent-hell:#e9f3f8;
   --gruen:#0f7a55; --gruen-hell:#e7f5ef;
   --gelb:#a1620a; --gelb-hell:#fdf4e3;
   --rot:#b02a2a;  --rot-hell:#fbecec;
   --rand:#e4e9ef;
-  --schatten:0 1px 2px rgba(15,23,42,.06), 0 1px 3px rgba(15,23,42,.04);
-  --kopf:56px; --leiste:232px;
+  --schatten:0 1px 2px rgba(15,23,42,.05), 0 1px 3px rgba(15,23,42,.04);
+  --leiste:244px;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;height:100%}
 body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  font-size:14px; line-height:1.5; color:var(--g700); background:var(--g50);
+  font-size:15px; line-height:1.55; color:var(--g700); background:var(--g50);
   -webkit-font-smoothing:antialiased;
 }
 button{font:inherit;color:inherit;cursor:pointer}
 a{color:var(--akzent);text-decoration:none}
-a:hover{text-decoration:underline}
 
-/* ===================== Gerüst ===================== */
+/* ============================ Gerüst ============================ */
 .huelle{display:flex;min-height:100vh}
 
 .seitenleiste{
@@ -38,44 +37,55 @@ a:hover{text-decoration:underline}
   display:flex; flex-direction:column;
   position:sticky; top:0; height:100vh;
 }
-.marke{padding:18px 20px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
-.marke .wort{font-size:17px;font-weight:700;color:#fff;letter-spacing:-.01em}
+.marke{padding:20px 20px 14px}
+.marke .wort{font-size:18px;font-weight:700;color:#fff;letter-spacing:-.01em}
 .marke .wort span{color:#5eb3d6}
-.marke .unter{font-size:11px;color:#7d8ea1;margin-top:2px;letter-spacing:.04em}
 
-nav{padding:10px 10px;flex:1;overflow-y:auto}
-nav .gruppe{font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:#64748b;
-  padding:14px 10px 6px;font-weight:600}
+/* Umschalter Praxis / Patient */
+.welt{display:flex;margin:0 14px 18px;background:rgba(255,255,255,.08);border-radius:9px;padding:3px}
+.welt button{flex:1;border:0;background:none;color:#9fb3c8;font-size:13.5px;font-weight:600;
+  padding:7px 0;border-radius:7px}
+.welt button.aktiv{background:#fff;color:var(--tinte)}
+
+nav{padding:0 12px;flex:1;overflow-y:auto}
 nav button{
-  display:flex;align-items:center;gap:10px;width:100%;text-align:left;
-  background:none;border:0;padding:8px 10px;border-radius:6px;
-  color:#b6c4d3;font-size:13.5px;margin-bottom:1px;
+  display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  background:none;border:0;padding:11px 12px;border-radius:8px;
+  color:#c3d0de;font-size:14.5px;margin-bottom:2px;
 }
-nav button:hover{background:rgba(255,255,255,.06);color:#fff}
+nav button:hover{background:rgba(255,255,255,.07);color:#fff}
 nav button.aktiv{background:var(--akzent);color:#fff;font-weight:600}
-nav button .sym{width:16px;text-align:center;font-size:14px;opacity:.85}
-nav button .zahl{margin-left:auto;font-size:11px;font-weight:700;
-  background:rgba(255,255,255,.14);padding:1px 6px;border-radius:9px}
-nav button.aktiv .zahl{background:rgba(255,255,255,.25)}
+nav button .sym{width:18px;text-align:center;font-size:15px;opacity:.9}
+nav button .zahl{margin-left:auto;font-size:12px;font-weight:700;
+  background:rgba(255,255,255,.16);padding:1px 7px;border-radius:9px}
+nav button.aktiv .zahl{background:rgba(255,255,255,.26)}
 
-.leisten-fuss{padding:12px 16px;border-top:1px solid rgba(255,255,255,.08);font-size:11px;color:#64748b}
+.leisten-fuss{padding:14px;border-top:1px solid rgba(255,255,255,.08)}
+.leisten-fuss button{display:block;width:100%;text-align:left;background:none;border:0;
+  color:#8da3b8;font-size:13px;padding:6px 12px;border-radius:7px}
+.leisten-fuss button:hover{background:rgba(255,255,255,.07);color:#fff}
+.leisten-fuss .fein{font-size:11.5px;color:#5b6b7d;padding:8px 12px 0;line-height:1.45}
 
 .buehne{flex:1;min-width:0;display:flex;flex-direction:column}
-
 .kopfleiste{
-  height:var(--kopf);flex:0 0 var(--kopf);background:#fff;border-bottom:1px solid var(--rand);
-  display:flex;align-items:center;gap:16px;padding:0 24px;position:sticky;top:0;z-index:20;
+  height:60px;flex:0 0 60px;background:#fff;border-bottom:1px solid var(--rand);
+  display:flex;align-items:center;gap:14px;padding:0 28px;position:sticky;top:0;z-index:20;
 }
-.mandant{display:flex;align-items:center;gap:9px}
-.mandant select{
-  font:inherit;font-weight:600;color:var(--tinte);border:1px solid var(--rand);
-  background:#fff;border-radius:6px;padding:5px 9px;cursor:pointer;
+.kopfleiste select{
+  font:inherit;font-size:14.5px;font-weight:600;color:var(--tinte);border:1px solid var(--rand);
+  background:#fff;border-radius:8px;padding:6px 10px;cursor:pointer;
 }
-.kopf-rechts{margin-left:auto;display:flex;align-items:center;gap:14px}
-.datum{font-size:12.5px;color:var(--g500)}
+.kopf-rechts{margin-left:auto;display:flex;align-items:center;gap:16px}
+.datum{font-size:13.5px;color:var(--g500)}
+.inhalt{padding:28px;max-width:1120px;width:100%}
 
-.pille{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;
-  padding:3px 9px;border-radius:20px;white-space:nowrap}
+/* ============================ Bausteine ============================ */
+.seitenkopf{margin-bottom:22px}
+.seitenkopf h1{font-size:25px;font-weight:700;color:var(--tinte);margin:0 0 4px;letter-spacing:-.02em}
+.seitenkopf p{margin:0;color:var(--g500);font-size:15px;max-width:640px}
+
+.pille{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;
+  padding:3px 10px;border-radius:20px;white-space:nowrap}
 .pille .punkt{width:6px;height:6px;border-radius:50%;background:currentColor;flex:0 0 6px}
 .p-gruen{background:var(--gruen-hell);color:var(--gruen)}
 .p-gelb{background:var(--gelb-hell);color:var(--gelb)}
@@ -83,255 +93,200 @@ nav button.aktiv .zahl{background:rgba(255,255,255,.25)}
 .p-blau{background:var(--akzent-hell);color:var(--akzent)}
 .p-grau{background:var(--g100);color:var(--g500)}
 
-.inhalt{padding:24px;max-width:1180px;width:100%}
+/* schmale Kennzahlenzeile statt Kachelwand */
+.lage{display:flex;gap:28px;flex-wrap:wrap;padding:14px 20px;background:#fff;
+  border:1px solid var(--rand);border-radius:10px;box-shadow:var(--schatten);margin-bottom:18px}
+.lage .punkt2{display:flex;flex-direction:column}
+.lage .wert{font-size:22px;font-weight:700;color:var(--tinte);line-height:1.1;letter-spacing:-.02em}
+.lage .wert small{font-size:13px;font-weight:600;color:var(--g400);margin-left:2px}
+.lage .et{font-size:12.5px;color:var(--g500);margin-top:2px}
+.lage .warn .wert{color:var(--rot)}
 
-/* ===================== Bausteine ===================== */
-.seitenkopf{margin-bottom:20px}
-.seitenkopf h1{font-size:21px;font-weight:700;color:var(--tinte);margin:0 0 3px;letter-spacing:-.015em}
-.seitenkopf p{margin:0;color:var(--g500);font-size:13.5px;max-width:720px}
+.karte{background:#fff;border:1px solid var(--rand);border-radius:10px;box-shadow:var(--schatten)}
+.karte + .karte{margin-top:18px}
+.karte-kopf{padding:15px 20px;border-bottom:1px solid var(--rand);display:flex;align-items:center;gap:10px}
+.karte-kopf h2{font-size:15.5px;font-weight:700;color:var(--tinte);margin:0}
+.karte-kopf .hinweis{font-size:13px;color:var(--g500);margin-left:auto}
+.karte-koerper{padding:20px}
 
-.karte{background:#fff;border:1px solid var(--rand);border-radius:9px;box-shadow:var(--schatten)}
-.karte + .karte{margin-top:16px}
-.karte-kopf{padding:14px 18px;border-bottom:1px solid var(--rand);display:flex;align-items:center;gap:10px}
-.karte-kopf h2{font-size:14px;font-weight:700;color:var(--tinte);margin:0}
-.karte-kopf .hinweis{font-size:12px;color:var(--g500);margin-left:auto}
-.karte-koerper{padding:18px}
-.karte-fuss{padding:11px 18px;border-top:1px solid var(--rand);background:var(--g50);
-  border-radius:0 0 9px 9px;font-size:12.5px;color:var(--g500)}
-
-.gitter{display:grid;gap:16px;align-items:start}
-.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
-.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
-.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
-@media (max-width:1000px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3,.g2{grid-template-columns:1fr}}
-
-.kennzahl{background:#fff;border:1px solid var(--rand);border-radius:9px;padding:15px 17px;box-shadow:var(--schatten)}
-.kennzahl .etikett{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--g500);font-weight:600}
-.kennzahl .wert{font-size:27px;font-weight:700;color:var(--tinte);line-height:1.15;margin:6px 0 2px;letter-spacing:-.02em}
-.kennzahl .wert small{font-size:14px;font-weight:600;color:var(--g400);margin-left:3px}
-.kennzahl .fuss{font-size:12px;color:var(--g500)}
-.kennzahl .fuss b{color:var(--gruen)}
-
-table{width:100%;border-collapse:collapse;font-size:13.5px}
-thead th{text-align:left;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;
-  color:var(--g500);font-weight:700;padding:10px 18px;background:var(--g50);
-  border-bottom:1px solid var(--rand)}
-tbody td{padding:11px 18px;border-bottom:1px solid var(--g100);vertical-align:middle}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+thead th{text-align:left;font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--g500);font-weight:700;padding:11px 20px;background:var(--g50);border-bottom:1px solid var(--rand)}
+tbody td{padding:13px 20px;border-bottom:1px solid var(--g100);vertical-align:middle}
 tbody tr:last-child td{border-bottom:0}
-tbody tr.klickbar{cursor:pointer}
-tbody tr.klickbar:hover{background:var(--g50)}
 td .haupt{font-weight:600;color:var(--tinte)}
-td .neben{font-size:12px;color:var(--g500)}
+td .neben{font-size:13px;color:var(--g500)}
 .rechts{text-align:right}
 .zahl-sp{font-variant-numeric:tabular-nums}
+tr.notfall td{background:var(--rot-hell)}
+tr.notfall td:first-child{box-shadow:inset 3px 0 0 var(--rot)}
 
-.knopf{
-  display:inline-flex;align-items:center;gap:6px;border:1px solid var(--rand);background:#fff;
-  border-radius:6px;padding:6px 12px;font-size:13px;font-weight:600;color:var(--g700);
-}
+.knopf{display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  border:1px solid var(--rand);background:#fff;border-radius:8px;padding:9px 16px;
+  font-size:14.5px;font-weight:600;color:var(--g700)}
 .knopf:hover{background:var(--g50);border-color:var(--g300)}
 .knopf.haupt{background:var(--akzent);border-color:var(--akzent);color:#fff}
 .knopf.haupt:hover{background:var(--akzent-tief);border-color:var(--akzent-tief)}
-.knopf.klein{padding:4px 9px;font-size:12px}
 .knopf.still{border-color:transparent;background:transparent;color:var(--akzent)}
 .knopf.still:hover{background:var(--akzent-hell)}
+.knopf.gross{padding:13px 22px;font-size:16px;border-radius:9px}
 .knopf:disabled{opacity:.45;cursor:default}
 
-.reiter{display:flex;gap:2px;border-bottom:1px solid var(--rand);margin-bottom:18px}
-.reiter button{background:none;border:0;padding:8px 13px;font-size:13.5px;font-weight:600;
+.reiter{display:flex;gap:4px;border-bottom:1px solid var(--rand);margin-bottom:22px;flex-wrap:wrap}
+.reiter button{background:none;border:0;padding:9px 14px;font-size:14.5px;font-weight:600;
   color:var(--g500);border-bottom:2px solid transparent;margin-bottom:-1px}
 .reiter button:hover{color:var(--tinte)}
 .reiter button.aktiv{color:var(--akzent);border-bottom-color:var(--akzent)}
 
-/* Schalter */
-.schalter-zeile{display:flex;align-items:flex-start;gap:14px;padding:13px 0;border-bottom:1px solid var(--g100)}
-.schalter-zeile:last-child{border-bottom:0;padding-bottom:0}
-.schalter-zeile .txt{flex:1;min-width:0}
-.schalter-zeile .txt b{display:block;color:var(--tinte);font-size:13.5px;font-weight:600}
-.schalter-zeile .txt span{font-size:12.5px;color:var(--g500)}
-.schalter{position:relative;width:38px;height:22px;flex:0 0 38px;border:0;border-radius:11px;
-  background:var(--g300);padding:0;transition:background .15s}
-.schalter::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;
-  background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:transform .15s}
-.schalter.an{background:var(--akzent)}
-.schalter.an::after{transform:translateX(16px)}
-.schalter:disabled{opacity:.4;cursor:default}
+.meldung{display:flex;align-items:flex-start;gap:12px;background:var(--akzent-hell);
+  border:1px solid #cfe4ef;border-radius:10px;padding:14px 18px;margin-bottom:18px;font-size:15px;color:var(--akzent-tief)}
+.meldung .sym{font-size:17px;line-height:1.3}
+.hinweisbox{border:1px solid var(--rand);border-left:3px solid var(--gelb);background:var(--gelb-hell);
+  border-radius:0 10px 10px 0;padding:14px 18px;margin-bottom:18px;font-size:14.5px;color:#6f4308}
+.hinweisbox b{display:block;margin-bottom:2px}
 
-/* Ablaufkette */
-.kette{display:flex;flex-wrap:wrap;align-items:stretch;gap:0}
-.kette .glied{flex:1;min-width:120px;border:1px solid var(--rand);border-right:0;padding:12px 14px;background:#fff}
-.kette .glied:first-child{border-radius:7px 0 0 7px}
-.kette .glied:last-child{border-right:1px solid var(--rand);border-radius:0 7px 7px 0}
-.kette .glied.aus{background:var(--g50);color:var(--g400)}
-.kette .glied .nr{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--g400);font-weight:700}
-.kette .glied.an .nr{color:var(--akzent)}
-.kette .glied b{display:block;font-size:13px;color:var(--tinte);margin-top:3px}
-.kette .glied.aus b{color:var(--g400)}
-.kette .glied span{font-size:11.5px;color:var(--g500)}
-.kette .glied.aus span{color:var(--g400)}
+.leer{padding:48px 20px;text-align:center;color:var(--g400)}
+.leer .gross{font-size:30px;margin-bottom:8px}
+.leer b{color:var(--g500);font-size:16px}
 
-/* Protokoll */
-.protokoll{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.2px;line-height:1.75}
-.protokoll .zeile{display:flex;gap:12px;padding:3px 0;border-bottom:1px solid var(--g100)}
-.protokoll .zeile:last-child{border-bottom:0}
-.protokoll .zeit{color:var(--g400);flex:0 0 74px}
-.protokoll .art{flex:0 0 78px;font-weight:700}
-.protokoll .a-ok{color:var(--gruen)} .protokoll .a-warn{color:var(--gelb)}
-.protokoll .a-fehl{color:var(--rot)} .protokoll .a-info{color:var(--g500)}
-.protokoll .text{flex:1;color:var(--g700)}
+.fein{font-size:13px;color:var(--g400);margin-top:12px;line-height:1.5}
 
-/* Hinweisbox */
-.box{border:1px solid var(--rand);border-left:3px solid var(--akzent);background:var(--akzent-hell);
-  border-radius:0 7px 7px 0;padding:13px 16px;font-size:13px;color:var(--akzent-tief)}
-.box b{display:block;margin-bottom:2px;color:var(--akzent-tief)}
-.box.warn{border-left-color:var(--gelb);background:var(--gelb-hell);color:#6f4308;border-color:#f0e3c8}
-.box.warn b{color:#6f4308}
-
-.liste-schlicht{list-style:none;margin:0;padding:0;font-size:13.5px}
-.liste-schlicht li{position:relative;padding:5px 0 5px 20px;color:var(--g600)}
-.liste-schlicht li::before{content:"";position:absolute;left:2px;top:12px;width:6px;height:6px;
-  border-radius:50%;background:var(--akzent)}
-.liste-schlicht li b{color:var(--tinte)}
-
-/* Raumtafel */
-.raumgitter{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(212px,1fr))}
-.raum{border:1px solid var(--rand);border-top:3px solid var(--g300);border-radius:8px;
-  background:#fff;padding:12px 14px;box-shadow:var(--schatten);display:flex;flex-direction:column}
+/* ============================ Raumtafel ============================ */
+.raumgitter{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
+.raum{border:1px solid var(--rand);border-top:4px solid var(--g300);border-radius:10px;
+  background:#fff;padding:16px 18px;box-shadow:var(--schatten);display:flex;flex-direction:column}
 .raum.frei{border-top-color:var(--gruen)}
 .raum.wartet{border-top-color:var(--akzent)}
 .raum.arzt{border-top-color:var(--gelb)}
 .raum.richten{border-top-color:var(--g300);background:var(--g50)}
-.raum .rname{font-size:13.5px;font-weight:700;color:var(--tinte)}
-.raum .rbeh{font-size:11.5px;color:var(--g500);margin-bottom:9px}
-.raum .rkoerper{flex:1;min-height:46px}
-.raum .rpat{font-size:13px;color:var(--tinte);font-weight:600;line-height:1.35}
-.raum .rzeit{font-size:11.5px;color:var(--g500);margin-top:2px}
-.raum .rleer{font-size:12.5px;color:var(--g400);padding-top:4px}
-.raum .rakt{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
-.raum .rgeraet{display:block;font-size:10px;letter-spacing:.09em;text-transform:uppercase;
-  color:var(--akzent);font-weight:700;margin-top:3px}
+.raum .rname{font-size:16px;font-weight:700;color:var(--tinte)}
+.raum .rbeh{font-size:13px;color:var(--g500)}
+.raum .rgeraet{display:inline-block;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--akzent);font-weight:700;margin-top:4px}
+.raum .rkoerper{flex:1;min-height:56px;padding-top:11px}
+.raum .rpat{font-size:15px;color:var(--tinte);font-weight:600;line-height:1.35}
+.raum .rzeit{font-size:13px;color:var(--g500);margin-top:3px}
+.raum .rleer{font-size:14px;color:var(--g400)}
+.raum .rakt{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
 
-tr.notfall td{background:var(--rot-hell)}
-tr.notfall td:first-child{box-shadow:inset 3px 0 0 var(--rot)}
-
-/* Gerät (iPad im Zimmer) */
-.geraet{border:9px solid #1b2738;border-radius:16px;background:#fff;overflow:hidden;
-  box-shadow:0 8px 26px rgba(15,23,42,.15);max-width:880px}
-.geraet-kopf{background:var(--tinte);color:#fff;padding:11px 16px;display:flex;align-items:center;gap:12px}
-.geraet-kopf .wer{font-size:14.5px;font-weight:700}
-.geraet-kopf .was{font-size:12px;color:#9fb3c8}
-.geraet-kopf .rechts{margin-left:auto;font-size:11.5px;color:#9fb3c8;text-align:right}
-.geraet-koerper{padding:16px 18px}
-.block{border-bottom:1px solid var(--g100);padding:13px 0}
+/* ============================ Gerät ============================ */
+.geraet{border:10px solid #1b2738;border-radius:20px;background:#fff;overflow:hidden;
+  box-shadow:0 10px 30px rgba(15,23,42,.14);max-width:820px;margin:0 auto}
+.geraet.breit{max-width:100%}
+.geraet-kopf{background:var(--tinte);color:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px}
+.geraet-kopf .wer{font-size:16px;font-weight:700}
+.geraet-kopf .was{font-size:13px;color:#9fb3c8;margin-top:1px}
+.geraet-kopf .rechts{margin-left:auto;font-size:12.5px;color:#9fb3c8;text-align:right;line-height:1.45}
+.geraet-koerper{padding:20px 22px}
+.block{border-bottom:1px solid var(--g100);padding:16px 0}
 .block:first-child{padding-top:0}
 .block:last-child{border-bottom:0;padding-bottom:0}
-.block .btitel{font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--g500);
-  font-weight:700;margin-bottom:7px;display:flex;align-items:center;gap:8px}
-.block .btitel .mehr{margin-left:auto;font-weight:600;letter-spacing:0;text-transform:none;font-size:12px}
+.block .btitel{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--g500);
+  font-weight:700;margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.block .btitel .mehr{margin-left:auto;font-weight:600;letter-spacing:0;text-transform:none;font-size:13px}
 
-.wahl{display:flex;align-items:center;gap:11px;padding:7px 0;border-bottom:1px solid var(--g100);cursor:pointer}
+.wahl{display:flex;align-items:center;gap:13px;padding:10px 0;border-bottom:1px solid var(--g100);cursor:pointer}
 .wahl:last-child{border-bottom:0}
-.wahl .kasten{flex:0 0 17px;height:17px;border:1.5px solid var(--g300);border-radius:4px;
-  display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;background:#fff}
+.wahl .kasten{flex:0 0 20px;height:20px;border:1.5px solid var(--g300);border-radius:5px;
+  display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;background:#fff}
 .wahl.an .kasten{background:var(--akzent);border-color:var(--akzent)}
-.wahl .txt{flex:1;min-width:0;font-size:13.5px;color:var(--tinte)}
-.wahl .txt span{display:block;font-size:12px;color:var(--g500)}
-.wahl .betrag{font-size:13.5px;font-weight:700;color:var(--tinte);font-variant-numeric:tabular-nums}
+.wahl .txt{flex:1;min-width:0;font-size:15px;color:var(--tinte)}
+.wahl .txt span{display:block;font-size:13px;color:var(--g500)}
+.wahl .betrag{font-size:15px;font-weight:700;color:var(--tinte);font-variant-numeric:tabular-nums}
 .wahl.an .betrag{color:var(--akzent)}
+.summe{display:flex;align-items:baseline;gap:10px;padding-top:14px;margin-top:4px;border-top:1px solid var(--g200)}
+.summe .et{font-size:14px;color:var(--g500)}
+.summe .wt{margin-left:auto;font-size:23px;font-weight:700;color:var(--tinte);font-variant-numeric:tabular-nums}
+.fertigleiste{background:var(--g50);border-top:1px solid var(--rand);padding:16px 22px;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.fertigleiste .hinweis{font-size:14px;color:var(--g500);flex:1;min-width:200px}
 
-.summe{display:flex;align-items:baseline;gap:10px;padding-top:11px;margin-top:4px;border-top:1px solid var(--g200)}
-.summe .et{font-size:12.5px;color:var(--g500)}
-.summe .wt{margin-left:auto;font-size:19px;font-weight:700;color:var(--tinte);font-variant-numeric:tabular-nums}
+/* Patientenbildschirm */
+.patient-schirm{padding:34px 38px;text-align:center}
+.patient-schirm .schritt{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--akzent);font-weight:700}
+.patient-schirm h2{font-size:27px;font-weight:700;color:var(--tinte);margin:8px 0 10px;letter-spacing:-.02em}
+.patient-schirm p{font-size:16.5px;color:var(--g600);margin:0 auto 24px;max-width:460px;line-height:1.6}
+.pknopf{display:block;width:100%;max-width:420px;margin:0 auto 11px;border:1px solid var(--rand);
+  background:#fff;border-radius:11px;padding:17px 20px;text-align:left;font-size:16.5px;
+  font-weight:600;color:var(--tinte);display:flex;align-items:center;gap:12px}
+.pknopf .pfeil{margin-left:auto;color:var(--g300);font-size:20px}
+.pknopf.haupt{background:var(--akzent);border-color:var(--akzent);color:#fff;justify-content:center}
+.pknopf.haupt .pfeil{color:rgba(255,255,255,.6)}
+.pknopf .feld{flex:1;min-width:0}
+.pknopf small{display:block;font-size:13px;font-weight:600;color:var(--g500);margin-bottom:2px;
+  letter-spacing:.03em}
+.punkte{display:flex;gap:7px;justify-content:center;margin-top:26px}
+.punkte i{width:7px;height:7px;border-radius:50%;background:var(--g200)}
+.punkte i.an{background:var(--akzent);width:22px;border-radius:4px}
 
-.fertigleiste{background:var(--g50);border-top:1px solid var(--rand);padding:13px 18px;
-  display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.fertigleiste .hinweis{font-size:12.5px;color:var(--g500);flex:1;min-width:180px}
+.zeile-liste{list-style:none;margin:0;padding:0;font-size:15px}
+.zeile-liste li{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--g100)}
+.zeile-liste li:last-child{border-bottom:0}
+.zeile-liste li b{color:var(--tinte)}
+.zeile-liste li .nebensatz{display:block;color:var(--g500);font-size:13.5px}
+.zeile-liste li .haken{flex:0 0 18px;color:var(--gruen);font-weight:700}
 
-/* Telefonregeln */
-.regel{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--g100);font-size:13.5px}
+.regel{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--g100);font-size:14.5px}
 .regel:last-child{border-bottom:0}
-.regel .anlass{flex:0 0 40%;color:var(--tinte);font-weight:600}
-.regel .pfeil{color:var(--g300);flex:0 0 auto}
+.regel .anlass{flex:0 0 38%;color:var(--tinte);font-weight:600}
+.regel .pfeil{color:var(--g300)}
 .regel .wohin{flex:1;color:var(--g600)}
 
-/* Gegenüberstellung Gespräch / Karteikarteneintrag */
-.gegenueber{display:flex;border:1px solid var(--rand);border-radius:7px;overflow:hidden}
-.gegenueber > div{flex:1;padding:15px 17px;min-width:0}
-.gegenueber > div + div{border-left:1px solid var(--rand);background:var(--g50)}
-.gegenueber .titel{font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;
-  color:var(--g500);font-weight:700;margin-bottom:9px}
-.gespraech-text{font-size:13px;line-height:1.75;color:var(--g600)}
-.gespraech-text .wer{color:var(--g400);font-weight:700}
-.eintrag .feld{margin-bottom:11px}
-.eintrag .feld:last-child{margin-bottom:0}
-.eintrag .feld b{display:block;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;
-  color:var(--akzent);margin-bottom:2px;font-weight:700}
-.eintrag .feld span{font-size:13px;line-height:1.55;color:var(--tinte);display:block}
-@media (max-width:900px){.gegenueber{flex-direction:column}
-  .gegenueber > div + div{border-left:0;border-top:1px solid var(--rand)}}
+.schalter-zeile{display:flex;align-items:flex-start;gap:16px;padding:15px 0;border-bottom:1px solid var(--g100)}
+.schalter-zeile:last-child{border-bottom:0;padding-bottom:0}
+.schalter-zeile .txt{flex:1;min-width:0}
+.schalter-zeile .txt b{display:block;color:var(--tinte);font-size:15px;font-weight:600}
+.schalter-zeile .txt span{font-size:13.5px;color:var(--g500)}
+.schalter{position:relative;width:42px;height:24px;flex:0 0 42px;border:0;border-radius:12px;
+  background:var(--g300);padding:0;transition:background .15s}
+.schalter::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;
+  background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:transform .15s}
+.schalter.an{background:var(--akzent)}
+.schalter.an::after{transform:translateX(18px)}
+.schalter:disabled{opacity:.4;cursor:default}
 
-/* Prüfliste */
-.pruefzeile{display:flex;align-items:flex-start;gap:14px;padding:11px 0;border-bottom:1px solid var(--g100)}
-.pruefzeile:last-child{border-bottom:0;padding-bottom:0}
-.pruefzeile .txt{flex:1;min-width:0}
-.pruefzeile .txt b{display:block;color:var(--tinte);font-size:13.5px;font-weight:600}
-.pruefzeile .txt span{font-size:12.5px;color:var(--g500)}
-.pruefzeile .stand{flex:0 0 auto;padding-top:2px}
+.gitter2{display:grid;gap:18px;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+@media (max-width:980px){.gitter2{grid-template-columns:1fr}}
 
-.leer{padding:44px 20px;text-align:center;color:var(--g400)}
-.leer .gross{font-size:26px;margin-bottom:6px}
+.protokoll{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.75}
+.protokoll .zeile{display:flex;gap:14px;padding:4px 0;border-bottom:1px solid var(--g100)}
+.protokoll .zeile:last-child{border-bottom:0}
+.protokoll .zeit{color:var(--g400);flex:0 0 76px}
+.protokoll .art{flex:0 0 84px;font-weight:700}
+.protokoll .a-ok{color:var(--gruen)} .protokoll .a-warn{color:var(--gelb)}
+.protokoll .a-fehl{color:var(--rot)} .protokoll .a-info{color:var(--g500)}
+.protokoll .text{flex:1;color:var(--g700)}
 
-/* Schublade */
-.schleier{position:fixed;inset:0;background:rgba(15,23,42,.35);z-index:50;display:none}
-.schleier.offen{display:block}
-.schublade{position:fixed;top:0;right:0;bottom:0;width:420px;max-width:92vw;background:#fff;
-  z-index:51;box-shadow:-6px 0 24px rgba(15,23,42,.13);transform:translateX(100%);
-  transition:transform .18s ease;display:flex;flex-direction:column}
-.schublade.offen{transform:translateX(0)}
-.schublade-kopf{padding:16px 20px;border-bottom:1px solid var(--rand);display:flex;align-items:flex-start;gap:12px}
-.schublade-kopf h3{margin:0;font-size:16px;color:var(--tinte)}
-.schublade-kopf .neben{font-size:12.5px;color:var(--g500);margin-top:2px}
-.schublade-kopf .zu{margin-left:auto;background:none;border:0;font-size:20px;color:var(--g400);line-height:1;padding:0 2px}
-.schublade-koerper{padding:18px 20px;overflow-y:auto;flex:1}
-.paar{display:flex;gap:12px;padding:7px 0;border-bottom:1px solid var(--g100);font-size:13.5px}
-.paar:last-child{border-bottom:0}
-.paar .k{flex:0 0 140px;color:var(--g500)}
-.paar .v{flex:1;color:var(--tinte);font-weight:500}
-
-.feinzeile{font-size:12px;color:var(--g400);margin-top:10px}
-
-@media (max-width:820px){
+.menuknopf{display:none;background:none;border:1px solid var(--rand);border-radius:8px;padding:6px 11px}
+@media (max-width:860px){
   .seitenleiste{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform .2s;z-index:60}
   .seitenleiste.offen{transform:translateX(0)}
-  .inhalt{padding:16px}
-  .kopfleiste{padding:0 14px}
+  .inhalt{padding:18px}
+  .kopfleiste{padding:0 16px}
+  .menuknopf{display:inline-block}
 }
-.menuknopf{display:none;background:none;border:1px solid var(--rand);border-radius:6px;padding:4px 9px}
-@media (max-width:820px){.menuknopf{display:inline-block}}
 </style>
 </head>
 <body>
 
 <div class="huelle">
-
   <aside class="seitenleiste" id="seitenleiste">
-    <div class="marke">
-      <div class="wort">Prax<span>ora</span></div>
-      <div class="unter">Praxis-Cockpit</div>
+    <div class="marke"><div class="wort">Prax<span>ora</span></div></div>
+    <div class="welt" id="weltwahl">
+      <button data-welt="praxis">Praxis</button>
+      <button data-welt="patient">Patient</button>
     </div>
     <nav id="navigation"></nav>
     <div class="leisten-fuss">
-      Vorführfassung 0.1<br>Erfundene Daten, nichts wird gespeichert.
+      <button data-seite="vorhaben">Das Vorhaben im Überblick</button>
+      <div class="fein">Vorführfassung · erfundene Daten</div>
     </div>
   </aside>
 
   <div class="buehne">
     <header class="kopfleiste">
       <button class="menuknopf" id="menuknopf">☰</button>
-      <div class="mandant">
-        <span style="font-size:12px;color:var(--g500)">Praxis</span>
-        <select id="mandantwahl"></select>
-      </div>
+      <select id="mandantwahl"></select>
       <div class="kopf-rechts">
         <span class="datum" id="datumfeld"></span>
         <span class="pille p-gruen" id="bruecke-pille"><span class="punkt"></span>Duria² verbunden</span>
@@ -339,11 +294,7 @@ tr.notfall td:first-child{box-shadow:inset 3px 0 0 var(--rot)}
     </header>
     <div class="inhalt" id="inhalt"></div>
   </div>
-
 </div>
-
-<div class="schleier" id="schleier"></div>
-<aside class="schublade" id="schublade"></aside>
 
 <script>
 (function(){
@@ -351,12 +302,9 @@ tr.notfall td:first-child{box-shadow:inset 3px 0 0 var(--rot)}
 
 /* ==========================================================================
    Praxora — Praxis-Cockpit, Vorführfassung.
-   Eine Datei, kein Server. Alle Daten sind erfunden.
-   Das Cockpit zeigt, was in der Praxis passiert; die Arbeit macht der
-   Agent auf dem Praxisrechner, der nach Duria² zurückschreibt.
+   Zwei getrennte Welten: was die Praxis bedient, und was der Patient sieht.
+   Eine Datei, kein Server, alle Daten erfunden.
    ========================================================================== */
-
-/* --------------------------------------------------------------- Stammdaten */
 
 var PRAXEN = {
 
@@ -787,43 +735,119 @@ var STAND_ART = {
   gesperrt:     {art:"rot",   text:"blockiert"},
   fremd:        {art:"grau",  text:"nicht unser Teil"}
 };
+/* ===================================================== Seiten und Welten */
 
-var SEITEN = [
-  {gruppe:"Der Tag"},
-  {id:"heute",        sym:"◧", titel:"Heute"},
-  {id:"anmeldung",    sym:"▤", titel:"Selbstanmeldung"},
-  {id:"raeume",       sym:"⊞", titel:"Wartebereich und Räume"},
-  {id:"zimmer",       sym:"▣", titel:"Behandlungszimmer"},
-  {gruppe:"Inhalte"},
-  {id:"formulare",    sym:"▦", titel:"Formulare"},
-  {id:"gespraech",    sym:"◐", titel:"Gespräch dokumentieren"},
-  {id:"telefon",      sym:"☏", titel:"Telefon und Termine"},
-  {gruppe:"Geld und Nachsorge"},
-  {id:"abschluss",    sym:"▧", titel:"Abschluss und PKV"},
-  {id:"wiedervorlage",sym:"◇", titel:"Wiedervorlage"},
-  {gruppe:"Technik"},
-  {id:"bruecke",      sym:"⇄", titel:"Duria-Brücke"},
-  {id:"praxis",       sym:"⚙", titel:"Praxis und Module"},
-  {gruppe:"Überblick"},
-  {id:"vorhaben",     sym:"◈", titel:"Das ganze Vorhaben"}
-];
+var SEITEN = {
+  praxis: [
+    {id:"tag",          sym:"◧", titel:"Der Tag"},
+    {id:"zimmer",       sym:"▣", titel:"Behandlungszimmer"},
+    {id:"abrechnung",   sym:"▧", titel:"Abrechnung"},
+    {id:"nachsorge",    sym:"◇", titel:"Nachsorge"},
+    {id:"einstellungen",sym:"⚙", titel:"Einstellungen"}
+  ],
+  patient: [
+    {id:"pterminal",  sym:"▤", titel:"Anmeldung am Terminal"},
+    {id:"pboegen",    sym:"▦", titel:"Bögen auf dem iPad"},
+    {id:"pabschluss", sym:"▧", titel:"Abschluss und Rechnung"}
+  ]
+};
 
-/* ------------------------------------------------------------------ Zustand */
+function weltVon(seite){
+  var w = null;
+  Object.keys(SEITEN).forEach(function(k){
+    SEITEN[k].forEach(function(s){ if(s.id === seite) w = k; });
+  });
+  return w;
+}
+
+/* ===================================================== Zustand */
 
 var zustand = {
   mandant: "rheinderma",
-  seite: "heute",
+  welt: "praxis",
+  seite: "tag",
   reiter: {},
-  erledigt: {},          /* Wiedervorlage: abgehakte Nummern je Mandant */
-  filter: "alle",
-  raumStand: {},         /* veränderbare Kopie der Raumtafel je Mandant */
+  erledigt: {},
+  raumStand: {},
   warteStand: {},
-  meldung: null,         /* was das System zuletzt selbst getan hat */
+  meldung: null,
   zimmer: { leistungen:{}, rezepte:{}, diktat:false, abschluss:null }
 };
 
-/* Räume und Warteliste werden im Betrieb verändert. Damit die Vorführung
-   nicht die Stammdaten überschreibt, arbeitet sie auf einer Kopie. */
+function praxis(){ return PRAXEN[zustand.mandant]; }
+
+function schalterLaden(){
+  try{
+    var roh = window.localStorage.getItem("praxora.module");
+    if(!roh) return;
+    var g = JSON.parse(roh);
+    Object.keys(PRAXEN).forEach(function(k){
+      if(g[k]) Object.keys(g[k]).forEach(function(m){
+        if(m in PRAXEN[k].module) PRAXEN[k].module[m] = !!g[k][m];
+      });
+    });
+  }catch(e){ /* privates Fenster oder blockierte Daten — belanglos */ }
+}
+function schalterSichern(){
+  try{
+    var g = {};
+    Object.keys(PRAXEN).forEach(function(k){ g[k] = PRAXEN[k].module; });
+    window.localStorage.setItem("praxora.module", JSON.stringify(g));
+  }catch(e){ /* belanglos */ }
+}
+
+/* ===================================================== Hilfsmittel */
+
+function euro(n){
+  return n.toLocaleString("de-DE",{minimumFractionDigits:2,maximumFractionDigits:2}) + " €";
+}
+function sicher(s){
+  return String(s).replace(/[&<>"]/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];
+  });
+}
+function pille(art, text){
+  return '<span class="pille p-' + art + '"><span class="punkt"></span>' + text + '</span>';
+}
+function kopf(titel, text){
+  return '<div class="seitenkopf"><h1>' + titel + '</h1>' +
+         (text ? '<p>' + text + '</p>' : '') + '</div>';
+}
+function karte(titel, hinweis, koerper){
+  return '<section class="karte">' +
+    (titel ? '<div class="karte-kopf"><h2>' + titel + '</h2>' +
+             (hinweis ? '<span class="hinweis">' + hinweis + '</span>' : '') + '</div>' : '') +
+    koerper + '</section>';
+}
+function lage(punkte){
+  return '<div class="lage">' + punkte.map(function(p){
+    return '<div class="punkt2' + (p.warn ? " warn" : "") + '">' +
+      '<span class="wert">' + p.wert + (p.einheit ? '<small>' + p.einheit + '</small>' : '') + '</span>' +
+      '<span class="et">' + p.et + '</span></div>';
+  }).join("") + '</div>';
+}
+function leer(text, unter){
+  return '<div class="leer"><div class="gross">◌</div><b>' + text + '</b>' +
+         (unter ? '<div style="font-size:14.5px;margin-top:6px">' + unter + '</div>' : '') + '</div>';
+}
+function reiter(schluessel, punkte){
+  var jetzt = reiterWert(schluessel, punkte[0].id);
+  return '<div class="reiter">' + punkte.map(function(p){
+    return '<button data-reiter="' + schluessel + '" data-wert="' + p.id + '"' +
+           (p.id === jetzt ? ' class="aktiv"' : '') + '>' + p.titel + '</button>';
+  }).join("") + '</div>';
+}
+function reiterWert(schluessel, standard){
+  return zustand.reiter[schluessel] || standard;
+}
+function meldungsbalken(){
+  return zustand.meldung
+    ? '<div class="meldung"><span class="sym">↻</span><span>' + sicher(zustand.meldung) + '</span></div>'
+    : "";
+}
+
+/* ===================================================== Räume */
+
 function raeume(){
   if(!zustand.raumStand[zustand.mandant]){
     zustand.raumStand[zustand.mandant] = JSON.parse(JSON.stringify(RAEUME[zustand.mandant] || []));
@@ -837,9 +861,8 @@ function warteliste(){
   return zustand.warteStand[zustand.mandant];
 }
 
-/* Wer kommt als Nächstes in welchen Raum?
-   Notfall vor Wartezeit. Ein gerätegebundener Raum wird nicht für einen
-   Patienten belegt, der das Gerät nicht braucht. */
+/* Notfall vor Wartezeit. Ein Raum mit Gerät wird nicht an jemanden vergeben,
+   der das Gerät nicht braucht. */
 function naechsteZuteilung(beh){
   var liste = warteliste().filter(function(w){ return !beh || w.beh === beh; });
   liste.sort(function(x,y){
@@ -860,86 +883,54 @@ function naechsteZuteilung(beh){
   });
   return treffer;
 }
-
-function zuteilen(treffer){
-  if(!treffer) return false;
-  treffer.raum.status = "wartet";
-  treffer.raum.pat = treffer.patient.name;
-  treffer.raum.nr  = treffer.patient.nr;
-  treffer.raum.seit = 0;
+function zuteilen(t){
+  if(!t) return false;
+  t.raum.status = "wartet"; t.raum.pat = t.patient.name; t.raum.nr = t.patient.nr; t.raum.seit = 0;
   var w = warteliste();
-  var i = w.map(function(x){ return x.nr; }).indexOf(treffer.patient.nr);
+  var i = w.map(function(x){ return x.nr; }).indexOf(t.patient.nr);
   if(i >= 0) w.splice(i,1);
   return true;
 }
-
-function praxis(){ return PRAXEN[zustand.mandant]; }
-
-/* Modulschalter überleben einen Neuladen, wenn der Browser es zulässt. */
-function schalterLaden(){
-  try{
-    var roh = window.localStorage.getItem("praxora.module");
-    if(!roh) return;
-    var g = JSON.parse(roh);
-    Object.keys(PRAXEN).forEach(function(k){
-      if(g[k]) Object.keys(g[k]).forEach(function(m){
-        if(m in PRAXEN[k].module) PRAXEN[k].module[m] = !!g[k][m];
-      });
-    });
-  }catch(e){ /* privates Fenster, blockierte Daten — egal */ }
+function raumHolen(id){
+  var k = null;
+  raeume().some(function(x){ if(x.id === id){ k = x; return true; } return false; });
+  return k;
 }
-function schalterSichern(){
-  try{
-    var g = {};
-    Object.keys(PRAXEN).forEach(function(k){ g[k] = PRAXEN[k].module; });
-    window.localStorage.setItem("praxora.module", JSON.stringify(g));
-  }catch(e){ /* egal */ }
+function nachruecken(id){
+  var k = raumHolen(id);
+  if(!k) return;
+  var t = naechsteZuteilung(k.beh);
+  zustand.meldung = (t && zuteilen(t))
+    ? t.patient.name + " wurde automatisch in " + t.raum.name + " gebeten" +
+      (t.patient.notfall ? " — außer der Reihe, weil akut." : ".")
+    : k.name + " ist frei. Es wartet gerade niemand Passendes.";
 }
-
-/* ---------------------------------------------------------------- Hilfsmittel */
-
-function euro(n){
-  return n.toLocaleString("de-DE",{minimumFractionDigits:2,maximumFractionDigits:2}) + " €";
-}
-function sicher(s){
-  return String(s).replace(/[&<>"]/g, function(c){
-    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];
-  });
-}
-function pille(art, text){
-  return '<span class="pille p-' + art + '"><span class="punkt"></span>' + text + '</span>';
-}
-function karte(titel, hinweis, koerper, fuss){
-  return '<section class="karte">' +
-    (titel ? '<div class="karte-kopf"><h2>' + titel + '</h2>' +
-             (hinweis ? '<span class="hinweis">' + hinweis + '</span>' : '') + '</div>' : '') +
-    koerper +
-    (fuss ? '<div class="karte-fuss">' + fuss + '</div>' : '') +
-    '</section>';
-}
-function kennzahl(etikett, wert, einheit, fuss){
-  return '<div class="kennzahl"><div class="etikett">' + etikett + '</div>' +
-    '<div class="wert">' + wert + (einheit ? '<small>' + einheit + '</small>' : '') + '</div>' +
-    '<div class="fuss">' + (fuss||"") + '</div></div>';
-}
-function kopf(titel, text){
-  return '<div class="seitenkopf"><h1>' + titel + '</h1><p>' + text + '</p></div>';
-}
-function leer(text, unter){
-  return '<div class="leer"><div class="gross">◌</div><div><b>' + text + '</b></div>' +
-         (unter ? '<div style="font-size:13px;margin-top:4px">' + unter + '</div>' : '') + '</div>';
-}
-function reiter(schluessel, punkte){
-  var jetzt = zustand.reiter[schluessel] || punkte[0].id;
-  return '<div class="reiter">' + punkte.map(function(p){
-    return '<button data-reiter="' + schluessel + '" data-wert="' + p.id + '"' +
-           (p.id === jetzt ? ' class="aktiv"' : '') + '>' + p.titel + '</button>';
-  }).join("") + '</div>';
-}
-function reiterWert(schluessel, standard){
-  return zustand.reiter[schluessel] || standard;
+function raumFreigeben(id, abschluss){
+  var k = raumHolen(id);
+  if(!k) return;
+  var name = k.pat || "Der Patient";
+  k.status = "richten"; k.pat = null; k.nr = null; k.seit = 0;
+  var t = naechsteZuteilung(k.beh), satz;
+  if(t && zuteilen(t)){
+    satz = t.patient.name + " wurde sofort in " + t.raum.name + " gebeten" +
+           (t.patient.notfall ? " — außer der Reihe, weil akut." : ".");
+  } else {
+    satz = "Es wartet gerade niemand Passendes; " + k.name + " bleibt nach dem Herrichten frei.";
+  }
+  zustand.meldung = name + " ist fertig. " + satz;
+  if(abschluss){
+    zustand.zimmer = { leistungen:{}, rezepte:{}, diktat:false,
+      abschluss:{ name:name, raum:k.name, naechster:satz,
+                  summe:abschluss.summe, rezepte:abschluss.rezepte } };
+  }
 }
 
+var RAUM_ART = {
+  frei:    {art:"gruen", text:"frei"},
+  richten: {art:"grau",  text:"wird hergerichtet"},
+  wartet:  {art:"blau",  text:"Patient wartet"},
+  arzt:    {art:"gelb",  text:"Behandler im Raum"}
+};
 var STATUS = {
   erwartet: {art:"grau",  text:"erwartet"},
   wartet:   {art:"blau",  text:"angemeldet"},
@@ -947,379 +938,89 @@ var STATUS = {
   fertig:   {art:"gruen", text:"abgeschlossen"}
 };
 
-/* ==================================================================== Seiten */
+/* ===================================================== Ansichten */
 
 var ANSICHTEN = {};
 
-/* --------------------------------------------------------------- Heute */
-ANSICHTEN.heute = function(){
-  var p = praxis(), k = p.kennzahlen;
-  var offeneFormulare = p.patienten.filter(function(x){
-    return x.formular === "offen" && x.status !== "fertig";
-  }).length;
-
-  var zeilen = p.patienten.map(function(x){
-    var s = STATUS[x.status];
-    return '<tr class="klickbar" data-patient="' + x.nr + '">' +
-      '<td class="zahl-sp" style="color:var(--g500)">' + x.zeit + '</td>' +
-      '<td><div class="haupt">' + sicher(x.name) + '</div>' +
-          '<div class="neben">Nr. ' + x.nr + ' · ' + x.art + '</div></td>' +
-      '<td>' + sicher(x.anlass) + '<div class="neben">' + sicher(x.behandler) + '</div></td>' +
-      '<td>' + (x.formular === "fertig"
-                  ? pille("gruen","Bogen liegt vor")
-                  : pille("gelb","Bogen offen")) + '</td>' +
-      '<td>' + pille(s.art, s.text) + '</td>' +
-      '<td class="rechts zahl-sp">' + (x.betrag ? euro(x.betrag) : '<span style="color:var(--g300)">—</span>') + '</td>' +
-    '</tr>';
-  }).join("");
-
-  return kopf("Heute in der Praxis",
-      "Was ohne dieses Bild passiert: jemand fragt über den Tresen, wer schon da ist. " +
-      "Hier steht es, ohne dass jemand etwas abhaken muss.") +
-    '<div class="gitter g4" style="margin-bottom:16px">' +
-      kennzahl("Termine heute", k.erwartet, "", "davon " + k.angemeldet + " bereits angemeldet") +
-      kennzahl("Selbst angemeldet", k.quote, "%", "der Rest kommt an den Tresen") +
-      kennzahl("Dauer der Anmeldung", k.schnitt, "", "Mittel der letzten 30 Tage") +
-      kennzahl("Bögen offen", offeneFormulare, "",
-               offeneFormulare ? "vor dem Aufruf erledigen" : "<b>nichts offen</b>") +
-    '</div>' +
-    karte("Sprechstunde", "Zeile anklicken für Einzelheiten",
-      '<table><thead><tr><th>Zeit</th><th>Patient</th><th>Anlass</th>' +
-      '<th>Bogen</th><th>Status</th><th class="rechts">Heute fällig</th></tr></thead>' +
-      '<tbody>' + zeilen + '</tbody></table>',
-      "Namen stehen nur auf diesem Bildschirm. Nach außen meldet das System ausschließlich Betriebszahlen.");
-};
-
-/* --------------------------------------------------------- Selbstanmeldung */
-ANSICHTEN.anmeldung = function(){
+/* ------------------------------------------------------------ Der Tag */
+ANSICHTEN.tag = function(){
   var p = praxis();
-
-  var glieder = SCHRITTE.map(function(s){
-    var an = s.pflicht || (s.modul && p.module[s.modul]);
-    return '<div class="glied ' + (an ? "an" : "aus") + '">' +
-      '<div class="nr">' + (an ? "aktiv" : "aus") + '</div>' +
-      '<b>' + s.titel + '</b><span>' + s.unter + '</span></div>';
-  }).join("");
-
-  var schalter = [
-    {m:"anmeldung",  b:"Stammdaten und Einwilligungen",
-     t:"Der Patient bestätigt, was schon da ist, statt es zu diktieren. Änderungen gehen als Vorschlag an die Anmeldung."},
-    {m:"anamnese",   b:"Anamnesebogen",
-     t:"Vorab auf dem eigenen Handy oder im Wartezimmer auf dem iPad. Das Ergebnis steht in der Karteikarte, bevor der Behandler das Zimmer betritt."},
-    {m:"aufklaerung",b:"Aufklärung mit Unterschrift",
-     t:"Bogen lesen, mit dem Finger unterschreiben, fertig in die Akte. Das Gespräch bleibt beim Arzt — das ist gesetzlich so vorgeschrieben."},
-    {m:"abschluss",  b:"Selbstabschluss mit Rechnung",
-     t:"Leistungen werden im Zimmer erfasst. Der Patient sieht die Aufstellung, zahlt und nimmt die Rechnung mit."}
-  ].map(function(z){
-    var an = p.module[z.m];
-    return '<div class="schalter-zeile"><div class="txt"><b>' + z.b + '</b><span>' + z.t + '</span></div>' +
-      '<button class="schalter' + (an ? " an" : "") + '" data-modul="' + z.m + '" ' +
-      'aria-pressed="' + an + '" title="' + (an ? "abschalten" : "einschalten") + '"></button></div>';
-  }).join("");
-
-  return kopf("Selbstanmeldung und Selbstabschluss",
-      "Der Ablauf am Terminal lässt sich pro Praxis zusammenstellen. Was abgeschaltet ist, " +
-      "übernimmt wie bisher die Anmeldung — es fällt nichts weg, es wird nur nicht angeboten.") +
-    karte("So läuft der Besuch", p.terminal + " Terminal · " + p.ipads + " iPads",
-      '<div class="karte-koerper"><div class="kette">' + glieder + '</div>' +
-      '<div class="feinzeile">Wer sich nicht selbst anmelden will oder kann, geht an den Tresen. ' +
-      'Papier bleibt für jeden Schritt möglich.</div></div>') +
-    karte("Bausteine", null, '<div class="karte-koerper">' + schalter + '</div>',
-      'Änderungen greifen sofort in der Vorschau. In der Praxis wird ein Baustein erst nach ' +
-      'Einweisung und Probebetrieb scharf geschaltet.') +
-    karte("Vorführung", null,
-      '<div class="karte-koerper">' +
-      '<div class="box"><b>Das Terminal lässt sich anklicken.</b>' +
-      'Der Prototyp zeigt den vollständigen Weg von der Begrüßung bis zur Rechnung — ' +
-      'mit Unterschriftenfeld und Belegwahl. Erfundene Daten, nichts wird gespeichert.</div>' +
-      '<div style="margin-top:14px"><a class="knopf haupt" href="../terminal/" target="_blank" rel="noopener">Terminal öffnen ↗</a></div>' +
-      '</div>');
-};
-
-/* ------------------------------------------------------------- Formulare */
-ANSICHTEN.formulare = function(){
-  var p = praxis();
-  var zeilen = BOEGEN.map(function(b){
-    var art = b.quelle === "Anbieter" ? "blau" : (b.quelle === "Praxis" ? "grau" : "gruen");
-    return '<tr><td><div class="haupt">' + sicher(b.name) + '</div>' +
-      '<div class="neben">' + b.felder + ' Felder · Stand ' + b.stand + '</div></td>' +
-      '<td>' + sicher(b.anlass) + '</td>' +
-      '<td>' + pille(art, b.quelle) + '</td>' +
-      '<td class="rechts">' + pille("gruen","geht nach Duria²") + '</td></tr>';
-  }).join("");
-
-  return kopf("Formulare",
-      "Jeder Bogen hat genau einen Weg: ausfüllen, unterschreiben, in die Karteikarte. " +
-      "Was hier steht, wird nicht mehr gedruckt und nicht mehr gescannt.") +
-    (p.module.aufklaerung ? "" :
-      '<div class="box warn" style="margin-bottom:16px"><b>Aufklärung ist in dieser Praxis noch abgeschaltet.</b>' +
-      'Aufklärungsbögen werden vorerst weiter auf Papier geführt. Einschalten unter „Selbstanmeldung".</div>') +
-    karte("Bögen im Umlauf", BOEGEN.length + " Bögen",
-      '<table><thead><tr><th>Bogen</th><th>Anlass</th><th>Gepflegt von</th>' +
-      '<th class="rechts">Rückweg</th></tr></thead><tbody>' + zeilen + '</tbody></table>',
-      "Aufklärungsbögen pflegt der Anbieter und hält sie aktuell. Die Praxis-eigenen Einwilligungen " +
-      "ändern wir auf Zuruf.") +
-    karte("Was noch auf Papier läuft", null,
-      '<div class="karte-koerper">' +
-      '<ul class="liste-schlicht">' +
-      '<li><b>Überweisungen und Rezepte</b> — laufen über Duria² und die Telematikinfrastruktur, nicht über uns.</li>' +
-      '<li><b>Fremdbefunde</b> — kommen als Brief oder Fax und werden weiterhin eingescannt.</li>' +
-      '<li><b>Alles, was ein Patient lieber auf Papier ausfüllt</b> — bleibt möglich und wird wie bisher gescannt.</li>' +
-      '</ul></div>');
-};
-
-/* --------------------------------------------------------- Abschluss / PKV */
-ANSICHTEN.abschluss = function(){
-  var p = praxis(), k = p.kennzahlen;
-
-  if(!p.module.abschluss){
-    return kopf("Abschluss und Privatabrechnung",
-        "In dieser Praxis noch nicht eingeschaltet.") +
-      karte(null, null, '<div class="karte-koerper">' + leer("Selbstabschluss ist abgeschaltet",
-        "Einschalten unter „Selbstanmeldung“ — danach entstehen Rechnungen im Behandlungszimmer statt abends.") + '</div>');
-  }
-
-  var f = reiterWert("rechnungen","alle");
-  var liste = p.rechnungen.filter(function(r){
-    return f === "alle" ? true : (f === "offen" ? r.status !== "bezahlt" : r.status === f);
-  });
-
-  var offen = p.rechnungen.filter(function(r){ return r.status !== "bezahlt"; });
-  var ueber = p.rechnungen.filter(function(r){ return r.status === "ueberfaellig"; });
-  var summeOffen = offen.reduce(function(s,r){ return s + r.betrag; }, 0);
-  var summeUeber = ueber.reduce(function(s,r){ return s + r.betrag; }, 0);
-  var amTerminal = p.rechnungen.filter(function(r){ return r.weg === "Terminal"; });
-  var summeTerminal = amTerminal.reduce(function(s,r){ return s + r.betrag; }, 0);
-
-  var zeilen = liste.length ? liste.map(function(r){
-    var art = r.status === "bezahlt" ? "gruen" : (r.status === "offen" ? "gelb" : "rot");
-    var txt = r.status === "bezahlt" ? "bezahlt" : (r.status === "offen" ? "offen" : "überfällig");
-    return '<tr><td class="haupt zahl-sp">' + r.nr + '</td>' +
-      '<td>' + sicher(r.pat) + '</td>' +
-      '<td class="zahl-sp" style="color:var(--g500)">' + r.datum + '</td>' +
-      '<td>' + r.weg + '</td>' +
-      '<td>' + pille(art, txt) + '</td>' +
-      '<td class="rechts zahl-sp haupt">' + euro(r.betrag) + '</td></tr>';
-  }).join("") : '<tr><td colspan="6">' + leer("Nichts in dieser Auswahl") + '</td></tr>';
-
-  return kopf("Abschluss und Privatabrechnung",
-      "Die Rechnung entsteht dort, wo die Leistung erbracht wird. Was am Terminal bezahlt wird, " +
-      "steht nie auf dieser Liste — es wird zu keinem offenen Posten.") +
-    '<div class="gitter g4" style="margin-bottom:16px">' +
-      kennzahl("Am Terminal bezahlt", euro(summeTerminal), "",
-               amTerminal.length + " Rechnungen · <b>sofort beglichen</b>") +
-      kennzahl("Offen insgesamt", euro(summeOffen), "",
-               offen.length + " Rechnungen unterwegs, davon " + ueber.length + " überfällig") +
-      kennzahl("Davon überfällig", euro(summeUeber), "", "länger als 30 Tage unbezahlt") +
-      kennzahl("Mahnlauf", k.offenAnzahl, "", "Vorgänge in Beobachtung") +
-    '</div>' +
-    reiter("rechnungen", [
-      {id:"alle", titel:"Alle"}, {id:"offen", titel:"Offen"},
-      {id:"ueberfaellig", titel:"Überfällig"}, {id:"bezahlt", titel:"Bezahlt"}
-    ]) +
-    karte("Rechnungen", liste.length + " von " + p.rechnungen.length,
-      '<table><thead><tr><th>Nummer</th><th>Patient</th><th>Datum</th><th>Zustellung</th>' +
-      '<th>Status</th><th class="rechts">Betrag</th></tr></thead><tbody>' + zeilen + '</tbody></table>',
-      "Zahlungseingänge kommen aus der Praxisbuchhaltung. Das Cockpit zeigt den Stand, " +
-      "es bucht nichts und führt kein Konto.");
-};
-
-/* ------------------------------------------------------------ Wiedervorlage */
-ANSICHTEN.wiedervorlage = function(){
-  var p = praxis();
-
-  if(!p.module.wiedervorlage){
-    return kopf("Wiedervorlage", "In dieser Praxis noch nicht eingeschaltet.") +
-      karte(null, null, '<div class="karte-koerper">' + leer("Wiedervorlage ist abgeschaltet",
-        "Sobald Vorsorgen und Kontrollen strukturiert dokumentiert sind, entsteht diese Liste von selbst.") + '</div>');
-  }
-
-  var erledigt = zustand.erledigt[zustand.mandant] || {};
-  var offen = p.wiedervorlage.filter(function(w){ return !erledigt[w.nr]; });
-
-  var zeilen = offen.length ? offen.map(function(w){
-    var art = w.faellig > 365 ? "rot" : (w.faellig > 180 ? "gelb" : "grau");
-    return '<tr><td><div class="haupt">' + sicher(w.name) + '</div>' +
-      '<div class="neben">Nr. ' + w.nr + ' · ' + w.alter + ' Jahre</div></td>' +
-      '<td>' + sicher(w.grund) + '</td>' +
-      '<td class="zahl-sp" style="color:var(--g500)">' + w.letzte + '</td>' +
-      '<td>' + pille(art, w.faellig + " Tage überfällig") + '</td>' +
-      '<td class="rechts">' +
-        '<button class="knopf klein" data-erinnern="' + w.nr + '">Erinnern</button> ' +
-        '<button class="knopf klein still" data-erledigt-wv="' + w.nr + '">Erledigt</button>' +
-      '</td></tr>';
-  }).join("") : '<tr><td colspan="5">' +
-      leer("Liste für heute abgearbeitet", "Morgen früh steht die nächste bereit.") + '</td></tr>';
-
-  return kopf("Wiedervorlage",
-      "Ein Terminportal erinnert an Termine, die schon gebucht sind. Diese Liste erinnert an " +
-      "Vorsorgen, die noch niemand gebucht hat.") +
-    '<div class="gitter g3" style="margin-bottom:16px">' +
-      kennzahl("Heute vorzulegen", offen.length, "", "zum Abhaken, nicht zum Suchen") +
-      kennzahl("Fällig im Bestand", p.kennzahlen.faellig, "", "über alle Vorsorgeanlässe") +
-      kennzahl("Länger als ein Jahr",
-        offen.filter(function(w){ return w.faellig > 365; }).length, "",
-        "hier lohnt der Anruf zuerst") +
-    '</div>' +
-    karte("Vorschläge für heute", "erfundene Daten",
-      '<table><thead><tr><th>Patient</th><th>Anlass</th><th>Zuletzt</th>' +
-      '<th>Fällig</th><th class="rechts">Aktion</th></tr></thead><tbody>' + zeilen + '</tbody></table>',
-      "Die Liste entsteht aus der Dokumentation in Duria², nicht aus einer eigenen Datenhaltung. " +
-      "Wer widersprochen hat, erscheint nicht.");
-};
-
-/* ------------------------------------------------------------ Duria-Brücke */
-ANSICHTEN.bruecke = function(){
-  var p = praxis(), b = p.bruecke;
-  var gut = b.zustand === "gut";
-
-  var felder = b.felder.map(function(f){
-    var art = f.quelle === "erkannt" ? "blau" : (f.quelle === "Norm" ? "gruen" : "grau");
-    return '<tr><td class="haupt zahl-sp">' + f.id + '</td>' +
-      '<td>' + sicher(f.was) + '</td>' +
-      '<td style="color:var(--g500)">' + sicher(f.wert) + '</td>' +
-      '<td class="rechts">' + pille(art, f.quelle) + '</td></tr>';
-  }).join("");
-
-  var prot = b.protokoll.map(function(e){
-    var txt = {ok:"ÜBERGEBEN", warn:"HINWEIS", fehl:"ANGEHALTEN", info:"BETRIEB"}[e.a];
-    return '<div class="zeile"><span class="zeit">' + e.z + '</span>' +
-      '<span class="art a-' + e.a + '">' + txt + '</span>' +
-      '<span class="text">' + sicher(e.t) + '</span></div>';
-  }).join("");
-
-  return kopf("Die Brücke nach Duria²",
-      "Jeder Wunsch der Praxis scheitert an derselben Stelle: am Rückweg in die Karteikarte. " +
-      "Genau den macht dieser Teil — über die standardisierte GDT-Schnittstelle, ohne Eingriff ins System.") +
-    '<div class="gitter g4" style="margin-bottom:16px">' +
-      kennzahl("Verbindung", gut ? "in Ordnung" : "gestört", "",
-               "zuletzt " + b.letzte) +
-      kennzahl("Heute übergeben", b.heute, "", b.fehler
-               ? '<span style="color:var(--rot)">' + b.fehler + " angehalten</span>"
-               : "<b>ohne Beanstandung</b>") +
-      kennzahl("In der Warteschlange", b.wartend, "",
-               b.wartend ? "wird abgearbeitet" : "nichts liegt an") +
-      kennzahl("Betriebsart", b.modus, "", "Satzart " + b.satzart) +
-    '</div>' +
-    (gut ? "" :
-      '<div class="box warn" style="margin-bottom:16px"><b>Das Zielverzeichnis war kurzzeitig nicht erreichbar.</b>' +
-      'Nichts geht dabei verloren: Unfertige Dateien werden nie geschrieben, angehaltene Vorgänge ' +
-      'bleiben im Original liegen und werden erneut versucht. Die Praxis arbeitet unverändert weiter.</div>') +
-    karte("Feldzuordnung", "Verzeichnis " + sicher(b.verzeichnis),
-      '<table><thead><tr><th>Feld</th><th>Bedeutung</th><th>Belegt mit</th>' +
-      '<th class="rechts">Herkunft</th></tr></thead><tbody>' + felder + '</tbody></table>',
-      '<b>„erkannt"</b> heißt: aus dem vorhandenen GDT-Verkehr dieser Praxis abgelesen, nicht geraten. ' +
-      'Deshalb läuft die Brücke in jeder Duria-Praxis, ohne dass jemand erst Felder vereinbaren muss.') +
-    karte("Protokoll", "letzte Ereignisse",
-      '<div class="karte-koerper"><div class="protokoll">' + prot + '</div></div>',
-      "Im Protokoll steht kein Patientenname und keine Patientennummer — nur Vorgangskennungen. " +
-      "Das ist nicht Einstellungssache, sondern fest eingebaut.");
-};
-
-/* ---------------------------------------------------------------- Praxis */
-ANSICHTEN.praxis = function(){
-  var p = praxis();
-
-  var zeilen = [
-    ["Praxis", p.name], ["Ort", p.ort], ["Fachrichtung", p.fach],
-    ["Behandler", p.behandler.join(", ")],
-    ["Praxissoftware", p.pvs],
-    ["Terminals", String(p.terminal)], ["iPads", String(p.ipads)]
-  ].map(function(z){
-    return '<div class="paar"><div class="k">' + z[0] + '</div><div class="v">' + sicher(z[1]) + '</div></div>';
-  }).join("");
-
-  var module = [
-    {m:"anmeldung",   b:"Selbstanmeldung",            t:"Terminal im Eingangsbereich"},
-    {m:"anamnese",    b:"Digitale Anamnese",          t:"Handy vorab oder iPad im Wartezimmer"},
-    {m:"aufklaerung", b:"Aufklärung mit Unterschrift",t:"Bogen auf dem iPad, fertig in die Akte"},
-    {m:"raeume",      b:"Wartebereich und Räume",     t:"Zuteilung der Wartenden, „Erledigt“ gibt den Raum frei"},
-    {m:"diktat",      b:"Diktat im Zimmer",           t:"Gesprochenes wird zum Entwurf für die Karteikarte"},
-    {m:"rezept",      b:"Rezept aus dem Zimmer",      t:"Auswahl im Zimmer, Ausstellung in Duria²"},
-    {m:"abschluss",   b:"Selbstabschluss",            t:"Leistungen im Zimmer, Rechnung beim Gehen"},
-    {m:"wiedervorlage",b:"Wiedervorlage",             t:"Tägliche Liste fälliger Vorsorgen"},
-    {m:"telefon",     b:"Telefonannahme",             t:"Terminiert nach den Regeln der Praxis — braucht eine digitale Anlage"},
-    {m:"transkript",  b:"Vollständige Gesprächsdokumentation", t:"Nur mit Einwilligung und Folgenabschätzung — noch nicht freigegeben", sperre:true}
-  ].map(function(z){
-    var an = p.module[z.m];
-    return '<div class="schalter-zeile"><div class="txt"><b>' + z.b + '</b><span>' + z.t + '</span></div>' +
-      '<button class="schalter' + (an ? " an" : "") + '" data-modul="' + z.m + '"' +
-      (z.sperre ? " disabled" : "") + ' aria-pressed="' + an + '"></button></div>';
-  }).join("");
-
-  return kopf("Praxis und Module",
-      "Dieselbe Software, andere Praxis. Was eine Praxis nutzt, entscheidet sie hier — " +
-      "es gibt keine zweite Fassung des Programms und keine Anpassung im Quelltext.") +
-    '<div class="gitter g2">' +
-      karte("Stammdaten", null, '<div class="karte-koerper">' + zeilen + '</div>') +
-      karte("Module", null, '<div class="karte-koerper">' + module + '</div>',
-        "Ein gesperrter Schalter bedeutet: rechtlich oder fachlich noch nicht so weit. " +
-        "Nicht: technisch unmöglich.") +
-    '</div>' +
-    karte("Warum das für jede Praxis gilt", null,
-      '<div class="karte-koerper"><ul class="liste-schlicht">' +
-      '<li><b>Kein Systemwechsel.</b> Duria² bleibt führend. Wir setzen uns davor und dahinter, nicht an seine Stelle.</li>' +
-      '<li><b>Keine Feldabsprache je Praxis.</b> Die Brücke liest die Zuordnung aus dem vorhandenen GDT-Verkehr ab.</li>' +
-      '<li><b>Keine Abhängigkeit von uns im Betrieb.</b> Fällt die Verbindung nach außen weg, arbeitet die Praxis weiter.</li>' +
-      '<li><b>Keine Patientendaten außer Haus.</b> Nach außen gehen Betriebszahlen — verarbeitete Dokumente, Laufzeiten, Fehler.</li>' +
-      '</ul></div>');
-};
-
-/* ------------------------------------------- Wartebereich und Räume */
-var RAUM_ART = {
-  frei:    {art:"gruen", text:"frei"},
-  richten: {art:"grau",  text:"wird hergerichtet"},
-  wartet:  {art:"blau",  text:"Patient wartet"},
-  arzt:    {art:"gelb",  text:"Behandler im Raum"}
-};
-
-ANSICHTEN.raeume = function(){
-  var p = praxis();
-
-  if(!p.module.raeume){
-    return kopf("Vom Wartebereich ins Zimmer", "In dieser Praxis noch nicht eingeschaltet.") +
-      karte(null, null, '<div class="karte-koerper">' + leer("Raumzuteilung ist abgeschaltet",
-        "Bei nur einem Behandler und zwei Räumen lohnt sie sich nicht. Einschalten unter „Praxis und Module“.") + '</div>');
-  }
+  var welcher = reiterWert("tag", "raeume");
 
   var r = raeume(), w = warteliste();
   var frei = r.filter(function(k){ return k.status === "frei"; }).length;
   var notfaelle = w.filter(function(k){ return k.notfall; }).length;
   var laengste = w.reduce(function(m,k){ return Math.max(m, k.seit); }, 0);
+  var offeneBoegen = p.patienten.filter(function(x){
+    return x.formular === "offen" && x.status !== "fertig"; }).length;
+
+  var kopfzeile = kopf("Der Tag",
+    "Ein Bildschirm für den ganzen Tag. Wer wartet, welcher Raum frei ist, wer dran ist.");
+
+  var reiterzeile = reiter("tag", [
+    {id:"raeume", titel:"Räume und Wartende"},
+    {id:"liste",  titel:"Sprechstunde"}
+  ]);
+
+  /* --- Sprechstunde --- */
+  if(welcher === "liste"){
+    var zeilen = p.patienten.map(function(x){
+      var s = STATUS[x.status];
+      return '<tr>' +
+        '<td class="zahl-sp" style="color:var(--g500)">' + x.zeit + '</td>' +
+        '<td><div class="haupt">' + sicher(x.name) + '</div>' +
+            '<div class="neben">Nr. ' + x.nr + ' · ' + x.art + '</div></td>' +
+        '<td>' + sicher(x.anlass) + '</td>' +
+        '<td>' + (x.formular === "fertig" ? pille("gruen","liegt vor") : pille("gelb","offen")) + '</td>' +
+        '<td>' + pille(s.art, s.text) + '</td></tr>';
+    }).join("");
+    return kopfzeile + reiterzeile +
+      lage([
+        {wert:p.kennzahlen.erwartet, et:"Termine heute"},
+        {wert:p.kennzahlen.angemeldet, et:"schon angemeldet"},
+        {wert:offeneBoegen, et:"Bögen offen", warn:offeneBoegen > 0}
+      ]) +
+      karte("Sprechstunde", null,
+        '<table><thead><tr><th>Zeit</th><th>Patient</th><th>Anlass</th>' +
+        '<th>Bogen</th><th>Status</th></tr></thead><tbody>' + zeilen + '</tbody></table>');
+  }
+
+  /* --- Räume und Wartende --- */
+  if(!p.module.raeume){
+    return kopfzeile + reiterzeile +
+      karte(null, null, '<div class="karte-koerper">' +
+        leer("Raumzuteilung ist abgeschaltet",
+             "Einzuschalten unter Einstellungen › Module.") + '</div>');
+  }
 
   var tafel = r.map(function(k){
-    var s = RAUM_ART[k.status];
-    var koerper, aktion = "";
-
+    var s = RAUM_ART[k.status], koerper, aktion = "";
     if(k.status === "frei"){
       var t = naechsteZuteilung(k.beh);
       koerper = '<div class="rleer">Niemand im Raum.</div>';
-      aktion = t && (t.raum.id === k.id)
-        ? '<button class="knopf klein haupt" data-zuteilen="' + t.patient.nr + '">' +
+      aktion = (t && t.raum.id === k.id)
+        ? '<button class="knopf haupt" data-zuteilen="' + t.patient.nr + '">' +
           sicher(t.patient.name) + ' hereinbitten</button>'
-        : '<span class="rleer">Wartet niemand Passendes.</span>';
+        : '<span class="rleer" style="font-size:13px">Niemand Passendes wartet.</span>';
     } else if(k.status === "richten"){
-      koerper = '<div class="rleer">Wird hergerichtet, seit ' + k.seit + ' Min.</div>';
-      aktion = '<button class="knopf klein" data-fertigraum="' + k.id + '">Raum ist fertig</button>';
+      koerper = '<div class="rleer">Wird hergerichtet.</div>';
+      aktion = '<button class="knopf" data-fertigraum="' + k.id + '">Raum ist fertig</button>';
     } else if(k.status === "wartet"){
       koerper = '<div class="rpat">' + sicher(k.pat) + '</div>' +
-                '<div class="rzeit">Nr. ' + k.nr + ' · wartet seit ' + k.seit + ' Min.</div>';
-      aktion = '<button class="knopf klein" data-betreten="' + k.id + '">Raum betreten</button>';
+                '<div class="rzeit">wartet seit ' + k.seit + ' Min.</div>';
+      aktion = '<button class="knopf" data-betreten="' + k.id + '">Raum betreten</button>';
     } else {
       koerper = '<div class="rpat">' + sicher(k.pat) + '</div>' +
-                '<div class="rzeit">Nr. ' + k.nr + ' · im Gespräch seit ' + k.seit + ' Min.</div>';
-      aktion = '<button class="knopf klein haupt" data-freigeben="' + k.id + '">Erledigt</button>' +
-               '<button class="knopf klein still" data-seite="zimmer">Zimmer öffnen</button>';
+                '<div class="rzeit">im Gespräch seit ' + k.seit + ' Min.</div>';
+      aktion = '<button class="knopf haupt" data-freigeben="' + k.id + '">Erledigt</button>';
     }
-
     return '<div class="raum ' + k.status + '">' +
       '<div class="rname">' + sicher(k.name) + '</div>' +
-      '<div class="rbeh">' + sicher(k.beh) +
-        (k.geraet ? '<span class="rgeraet">' + sicher(k.geraet) + '</span>' : '') + '</div>' +
-      '<div style="margin-bottom:7px">' + pille(s.art, s.text) + '</div>' +
+      '<div class="rbeh">' + sicher(k.beh) + '</div>' +
+      (k.geraet ? '<div class="rgeraet">' + sicher(k.geraet) + '</div>' : '') +
+      '<div style="margin-top:9px">' + pille(s.art, s.text) + '</div>' +
       '<div class="rkoerper">' + koerper + '</div>' +
-      '<div class="rakt">' + aktion + '</div>' +
-    '</div>';
+      '<div class="rakt">' + aktion + '</div></div>';
   }).join("");
 
   var warten = w.length ? w.slice().sort(function(x,y){
@@ -1330,103 +1031,70 @@ ANSICHTEN.raeume = function(){
     var dran = t && t.patient.nr === k.nr;
     return '<tr' + (k.notfall ? ' class="notfall"' : '') + '>' +
       '<td><div class="haupt">' + sicher(k.name) + '</div>' +
-          '<div class="neben">Nr. ' + k.nr + ' · ' + sicher(k.beh) + '</div></td>' +
+          '<div class="neben">' + sicher(k.beh) + '</div></td>' +
       '<td>' + sicher(k.anlass) +
           (k.braucht ? '<div class="neben">braucht ' + sicher(k.braucht) + '</div>' : '') + '</td>' +
       '<td>' + (k.notfall ? pille("rot","außer der Reihe") : pille("grau", k.seit + " Min.")) + '</td>' +
       '<td class="rechts">' + (dran
-          ? '<button class="knopf klein haupt" data-zuteilen="' + k.nr + '">In ' + sicher(t.raum.name) + '</button>'
-          : '<span style="color:var(--g400);font-size:12.5px">kein Raum frei</span>') + '</td>' +
-    '</tr>';
+          ? '<button class="knopf haupt" data-zuteilen="' + k.nr + '">In ' + sicher(t.raum.name) + '</button>'
+          : '<span style="color:var(--g400);font-size:13.5px">wartet auf einen Raum</span>') + '</td></tr>';
   }).join("") : '<tr><td colspan="4">' + leer("Niemand wartet") + '</td></tr>';
 
-  return kopf("Vom Wartebereich ins Zimmer",
-      "Der Behandler drückt nach dem Patienten auf „Erledigt“ — mehr nicht. Den Rest macht das " +
-      "System: Raum freigeben, den nächsten Wartenden hereinbitten, den Stand für alle sichtbar halten.") +
-    (zustand.meldung ?
-      '<div class="box" style="margin-bottom:16px"><b>Das System hat gerade selbst gehandelt</b>' +
-      sicher(zustand.meldung) + '</div>' : '') +
-    '<div class="gitter g4" style="margin-bottom:16px">' +
-      kennzahl("Räume frei", frei + " von " + r.length, "",
-               frei ? "sofort belegbar" : "<b>alles belegt</b>") +
-      kennzahl("Im Wartebereich", w.length, "", w.length ? "warten auf einen Raum" : "<b>niemand wartet</b>") +
-      kennzahl("Längste Wartezeit", laengste, " Min.", "ab Anmeldung gerechnet") +
-      kennzahl("Außer der Reihe", notfaelle, "",
-               notfaelle ? "laufen parallel mit" : "derzeit keine") +
-    '</div>' +
-    karte("Raumtafel", "dieselbe Ansicht an Anmeldung und in jedem Zimmer",
-      '<div class="karte-koerper"><div class="raumgitter">' + tafel + '</div></div>',
-      "Ein Raum mit Gerät wird nie für jemanden belegt, der das Gerät nicht braucht. " +
-      "Der Laserraum bleibt dem Laser vorbehalten, auch wenn er gerade leer steht.") +
-    karte("Wer wartet", w.length + " Wartende",
+  var punkte = [
+    {wert:w.length, et:"im Wartebereich"},
+    {wert:frei + " von " + r.length, et:"Räume frei"},
+    {wert:laengste, einheit:" Min.", et:"längste Wartezeit"}
+  ];
+  if(notfaelle) punkte.push({wert:notfaelle, et:"außer der Reihe", warn:true});
+
+  return kopfzeile + reiterzeile + lage(punkte) + meldungsbalken() +
+    karte("Räume", null, '<div class="karte-koerper"><div class="raumgitter">' + tafel + '</div></div>') +
+    karte("Wartebereich", w.length + " Wartende",
       '<table><thead><tr><th>Patient</th><th>Anlass</th><th>Wartet</th>' +
-      '<th class="rechts">Nächster Raum</th></tr></thead><tbody>' + warten + '</tbody></table>') +
-    karte("Nach welcher Regel zugeteilt wird", null,
-      '<div class="karte-koerper"><ul class="liste-schlicht">' +
-      '<li><b>Außer der Reihe geht vor Wartezeit.</b> Wer akut kommt, wird eingeschoben — ' +
-      'etwa eine Urtikaria oder ein Neurodermitis-Schub. Etwa jeder fünfte Patient.</li>' +
-      '<li><b>Jeder Behandler bekommt nur eigene Patienten.</b> Zwei Räume im Wechsel: ' +
-      'während im einen behandelt wird, sitzt im anderen schon der Nächste.</li>' +
-      '<li><b>Gerätegebundene Räume sind reserviert.</b> Laser und Eingriffsraum werden nur ' +
-      'belegt, wenn das Gerät gebraucht wird.</li>' +
-      '<li><b>Das System entscheidet nie, ob etwas ein Notfall ist.</b> Das bleibt beim Team. ' +
-      'Es sortiert nur, was ihm gesagt wurde.</li>' +
-      '</ul></div>',
-      "Die Regeln stehen in den Praxiseinstellungen und lassen sich ändern, ohne dass jemand " +
-      "am Programm arbeitet.");
+      '<th class="rechts">Nächster Schritt</th></tr></thead><tbody>' + warten + '</tbody></table>');
 };
 
-/* -------------------------------------------------------- Behandlungszimmer */
+/* ---------------------------------------------------- Behandlungszimmer */
 ANSICHTEN.zimmer = function(){
-  var p = praxis();
-  var r = raeume();
-  var aktiv = null;
+  var p = praxis(), r = raeume(), aktiv = null;
   r.some(function(k){ if(k.status === "arzt"){ aktiv = k; return true; } return false; });
 
   var ab = zustand.zimmer.abschluss;
   if(ab){
-    return kopf("Erledigt",
-        "Ein Druck auf einen Knopf — und das hier ist in derselben Sekunde passiert.") +
-      karte("Was ausgelöst wurde", sicher(ab.name),
-        '<div class="karte-koerper"><ul class="liste-schlicht">' +
-        '<li><b>' + sicher(ab.raum) + ' freigegeben</b> und zum Herrichten gemeldet.</li>' +
-        '<li><b>' + sicher(ab.naechster) + '</b></li>' +
-        '<li><b>Dokumentation unterwegs nach Duria²</b> — als Text über die GDT-Brücke, ' +
-        'in die Karteikarte von ' + sicher(ab.name) + '.</li>' +
-        '<li><b>' + ab.rezepte + ' Rezept' + (ab.rezepte === 1 ? "" : "e") + ' angestoßen</b>, ' +
-        'Ausstellung und Signatur in Duria².</li>' +
-        '<li><b>Selbstabschluss vorbereitet:</b> ' + euro(ab.summe) + ' liegen dort bereit, ' +
-        'bevor der Patient ankommt.</li>' +
-        '</ul></div>',
-        "Niemand musste gerufen, geholt, abgehakt oder abends nachgetragen werden.") +
-      karte(null, null, '<div class="karte-koerper" style="display:flex;gap:8px;flex-wrap:wrap">' +
-        '<button class="knopf haupt" data-seite="raeume">Raumtafel ansehen</button>' +
-        '<button class="knopf" data-seite="abschluss">Zum Abschluss und PKV</button>' +
+    return kopf("Erledigt", "Ein Druck — und das hier ist in derselben Sekunde passiert.") +
+      karte(sicher(ab.name), null, '<div class="karte-koerper"><ul class="zeile-liste">' +
+        '<li><span class="haken">✓</span><span><b>' + sicher(ab.raum) + ' freigegeben</b>' +
+          '<span class="nebensatz">und zum Herrichten gemeldet</span></span></li>' +
+        '<li><span class="haken">✓</span><span><b>Nächster Patient</b>' +
+          '<span class="nebensatz">' + sicher(ab.naechster) + '</span></span></li>' +
+        '<li><span class="haken">✓</span><span><b>Dokumentation unterwegs nach Duria²</b>' +
+          '<span class="nebensatz">als Text über die GDT-Brücke</span></span></li>' +
+        '<li><span class="haken">✓</span><span><b>' + ab.rezepte + ' Rezept' +
+          (ab.rezepte === 1 ? "" : "e") + ' angestoßen</b>' +
+          '<span class="nebensatz">Ausstellung und Signatur in Duria²</span></span></li>' +
+        '<li><span class="haken">✓</span><span><b>Selbstabschluss vorbereitet</b>' +
+          '<span class="nebensatz">' + euro(ab.summe) + ' liegen bereit, bevor der Patient dort ankommt</span></span></li>' +
+        '</ul><div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">' +
+        '<button class="knopf haupt" data-seite="tag">Zurück zum Tag</button>' +
         '<button class="knopf still" data-zuruecksetzen="1">Vorführung zurücksetzen</button>' +
-      '</div>');
+        '</div></div>');
   }
 
   if(!aktiv){
-    return kopf("Im Behandlungszimmer",
-        "Was der Behandler auf dem iPad sieht, während der Patient vor ihm sitzt.") +
+    return kopf("Behandlungszimmer", "Was der Behandler auf dem iPad sieht.") +
       karte(null, null, '<div class="karte-koerper">' +
-        leer("Gerade niemand im Gespräch",
-             "Unter „Wartebereich und Räume“ einen wartenden Patienten hereinbitten und den Raum betreten.") +
-        '<div style="text-align:center"><button class="knopf haupt" data-seite="raeume">Zur Raumtafel</button></div>' +
-      '</div>');
+        leer("Gerade niemand im Gespräch", "Im Tag einen Wartenden hereinbitten und den Raum betreten.") +
+        '<div style="text-align:center"><button class="knopf haupt" data-seite="tag">Zum Tag</button></div></div>');
   }
 
   var z = zustand.zimmer;
-
   var leistungen = ZIMMER_LEISTUNGEN.map(function(l){
     var an = (l.id in z.leistungen) ? z.leistungen[l.id] : l.vor;
     return '<div class="wahl' + (an ? " an" : "") + '" data-leistung="' + l.id + '">' +
       '<div class="kasten">' + (an ? "✓" : "") + '</div>' +
       '<div class="txt">' + sicher(l.text) + (l.unter ? '<span>' + sicher(l.unter) + '</span>' : '') + '</div>' +
-      '<div class="betrag">' + (l.betrag ? euro(l.betrag) : "—") + '</div>' +
-    '</div>';
+      '<div class="betrag">' + (l.betrag ? euro(l.betrag) : "—") + '</div></div>';
   }).join("");
-
   var summe = ZIMMER_LEISTUNGEN.reduce(function(s,l){
     var an = (l.id in z.leistungen) ? z.leistungen[l.id] : l.vor;
     return s + (an ? l.betrag : 0);
@@ -1437,403 +1105,445 @@ ANSICHTEN.zimmer = function(){
     return '<div class="wahl' + (an ? " an" : "") + '" data-rezept="' + x.id + '">' +
       '<div class="kasten">' + (an ? "✓" : "") + '</div>' +
       '<div class="txt">' + sicher(x.text) + '<span>' + sicher(x.unter) + '</span></div>' +
-      '<div class="betrag" style="font-size:11.5px;font-weight:700;color:var(--g500)">' + x.art + '</div>' +
-    '</div>';
+      '<div class="betrag" style="font-size:12.5px;color:var(--g500)">' + x.art + '</div></div>';
   }).join("");
+  var anzRez = Object.keys(z.rezepte).filter(function(k){ return z.rezepte[k]; }).length;
 
-  var anzahlRezepte = Object.keys(z.rezepte).filter(function(k){ return z.rezepte[k]; }).length;
+  var diktat = z.diktat
+    ? '<div class="eintrag">' + GESPRAECH.entwurf.map(function(x){
+        return '<div style="margin-bottom:12px"><b style="display:block;font-size:11px;' +
+          'letter-spacing:.05em;text-transform:uppercase;color:var(--akzent)">' + x[0] + '</b>' +
+          '<span style="font-size:14.5px;color:var(--tinte)">' + sicher(x[1]) + '</span></div>';
+      }).join("") + '</div>'
+    : '<button class="knopf haupt" data-diktat="1">Diktat starten</button>';
 
-  var diktatBlock = z.diktat
-    ? '<div class="gegenueber" style="margin-top:4px">' +
-      '<div><div class="titel">Mitgeschrieben</div><div class="gespraech-text">' +
-        GESPRAECH.ausschnitt.slice(0,3).map(function(x){
-          return '<p style="margin:0 0 7px"><span class="wer">' + x[0] + '</span> &nbsp;' + sicher(x[1]) + '</p>';
-        }).join("") + '</div></div>' +
-      '<div><div class="titel">Entwurf für die Karteikarte</div><div class="eintrag">' +
-        GESPRAECH.entwurf.map(function(x){
-          return '<div class="feld"><b>' + x[0] + '</b><span>' + sicher(x[1]) + '</span></div>';
-        }).join("") + '</div></div></div>' +
-      '<div class="feinzeile">Geht erst mit „Erledigt“ in die Karteikarte — und nur so, wie es hier steht.</div>'
-    : '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">' +
-      '<button class="knopf haupt" data-diktat="1">Diktat starten</button>' +
-      '<span class="feinzeile" style="margin:0">' +
-      (p.module.diktat ? 'Aufnahme nur nach Zustimmung beider Seiten.'
-                       : 'In dieser Praxis noch nicht eingeschaltet — hier nur zur Vorführung.') +
-      '</span></div>';
-
-  var fertigBlock =
-    '<button class="knopf haupt" data-erledigt="' + aktiv.id + '">Erledigt — Raum freigeben</button>' +
-    '<span class="hinweis">Ein Druck. Alles Weitere läuft von allein: Raum, nächster Patient, ' +
-    'Karteikarte, Rechnung.</span>';
-
-  return kopf("Im Behandlungszimmer",
-      "Was der Behandler auf dem iPad sieht, während der Patient vor ihm sitzt. Alles auf einer " +
-      "Fläche — kein Wechsel zwischen Programmen, kein Zettel, kein Nachtragen am Abend.") +
+  return kopf("Behandlungszimmer", "Alles auf einer Fläche — und ein Knopf am Ende.") +
     '<div class="geraet">' +
-      '<div class="geraet-kopf">' +
-        '<div><div class="wer">' + sicher(aktiv.pat) + '</div>' +
-        '<div class="was">Nr. ' + aktiv.nr + ' · ' + sicher(aktiv.name) + ' · ' + sicher(aktiv.beh) + '</div></div>' +
-        '<div class="rechts">Privat — Debeka<br>Hautkrebsvorsorge · 10:40 Uhr</div>' +
-      '</div>' +
+      '<div class="geraet-kopf"><div><div class="wer">' + sicher(aktiv.pat) + '</div>' +
+      '<div class="was">Nr. ' + aktiv.nr + ' · ' + sicher(aktiv.name) + '</div></div>' +
+      '<div class="rechts">Privat — Debeka<br>Hautkrebsvorsorge</div></div>' +
       '<div class="geraet-koerper">' +
-
-        '<div class="block"><div class="btitel">Vor dem Termin ausgefüllt' +
+        '<div class="block"><div class="btitel">Vorab ausgefüllt' +
           '<span class="mehr" style="color:var(--gruen)">liegt vor</span></div>' +
-          '<div style="font-size:13.5px;line-height:1.6">Keine Dauermedikation. Keine bekannten ' +
-          'Allergien. Hautkrebs in der Familie: Vater, Melanom 2019. Letzte Vorsorge 08.2024. ' +
-          '<span style="color:var(--g500)">Als Sorge angegeben: veränderte Stelle am Rücken.</span></div></div>' +
-
-        '<div class="block"><div class="btitel">Dokumentation</div>' + diktatBlock + '</div>' +
-
+          '<div style="font-size:15px;line-height:1.6">Keine Dauermedikation, keine bekannten ' +
+          'Allergien. Melanom beim Vater 2019. Letzte Vorsorge 08.2024. ' +
+          '<span style="color:var(--g500)">Sorge: veränderte Stelle am Rücken.</span></div></div>' +
+        '<div class="block"><div class="btitel">Dokumentation</div>' + diktat + '</div>' +
         '<div class="block"><div class="btitel">Leistungen' +
-          '<span class="mehr" style="color:var(--g500)">antippen zum Ändern</span></div>' +
-          leistungen +
-          '<div class="summe"><span class="et">Heute fällig, zahlbar beim Abschluss</span>' +
+          '<span class="mehr" style="color:var(--g500)">antippen zum Ändern</span></div>' + leistungen +
+          '<div class="summe"><span class="et">Zahlbar beim Abschluss</span>' +
           '<span class="wt">' + euro(summe) + '</span></div></div>' +
-
-        '<div class="block"><div class="btitel">Rezept' +
-          '<span class="mehr" style="color:var(--g500)">' +
-          (anzahlRezepte ? anzahlRezepte + " ausgewählt" : "nichts ausgewählt") + '</span></div>' +
-          rezepte +
-          '<div class="feinzeile">Ausgestellt wird in Duria² — bei Kassenrezepten als eRezept über ' +
-          'die Telematikinfrastruktur, bei Privatrezepten als Druck oder Datei. Wir wählen aus, ' +
-          'unterschrieben wird dort.</div></div>' +
-
+        '<div class="block"><div class="btitel">Rezept<span class="mehr" style="color:var(--g500)">' +
+          (anzRez ? anzRez + " ausgewählt" : "nichts ausgewählt") + '</span></div>' + rezepte + '</div>' +
       '</div>' +
-      '<div class="fertigleiste">' + fertigBlock + '</div>' +
-    '</div>' +
-    karte("Warum das ein Knopf ist und nicht sieben", null,
-      '<div class="karte-koerper"><ul class="liste-schlicht">' +
-      '<li><b>Der Behandler soll nicht verwalten.</b> Raum freigeben, Patient weiterschicken, ' +
-      'Leistungen weitergeben, Rezept anstoßen — das ist alles derselbe Moment.</li>' +
-      '<li><b>Die Rechnung entsteht hier, nicht abends.</b> Was angetippt wurde, liegt am ' +
-      'Selbstabschluss bereit, bevor der Patient dort ankommt.</li>' +
-      '<li><b>Der nächste Raum füllt sich von selbst.</b> Niemand muss gerufen, niemand ' +
-      'muss geholt werden.</li>' +
-      '</ul></div>',
-      "Das iPad ersetzt nicht die Karteikarte. Es füllt sie.");
-};
-
-/* ------------------------------------------------------ Telefon und Termine */
-ANSICHTEN.telefon = function(){
-  var p = praxis();
-  var t = TELEFON[zustand.mandant];
-  var digital = t.anlage === "digital";
-  var quote = t.anrufe ? Math.round(t.automatisch / t.anrufe * 100) : 0;
-
-  var balken = t.anliegen.map(function(a){
-    return '<div style="margin-bottom:9px">' +
-      '<div style="display:flex;font-size:13px;margin-bottom:3px">' +
-        '<span style="color:var(--tinte)">' + sicher(a.was) + '</span>' +
-        '<span style="margin-left:auto;color:var(--g500);font-variant-numeric:tabular-nums">' + a.anteil + ' %</span>' +
-      '</div>' +
-      '<div style="height:7px;background:var(--g100);border-radius:4px;overflow:hidden">' +
-        '<div style="height:100%;width:' + a.anteil * 2 + '%;max-width:100%;background:' +
-        (a.auto ? "var(--akzent)" : "var(--g300)") + '"></div>' +
+      '<div class="fertigleiste">' +
+        '<button class="knopf haupt gross" data-erledigt="' + aktiv.id + '">Erledigt</button>' +
+        '<span class="hinweis">Gibt den Raum frei, bittet den Nächsten herein, schickt alles weiter.</span>' +
       '</div></div>';
-  }).join("");
-
-  var autoAnteil = t.anliegen.reduce(function(s,a){ return s + (a.auto ? a.anteil : 0); }, 0);
-
-  var regeln = TERMINREGELN.map(function(r){
-    return '<div class="regel"><span class="anlass">' + sicher(r.anlass) + '</span>' +
-      '<span class="pfeil">→</span><span class="wohin">' + sicher(r.wohin) + '</span></div>';
-  }).join("");
-
-  var nie = TELEFON_NIE.map(function(x){ return '<li>' + sicher(x) + '</li>'; }).join("");
-
-  return kopf("Telefon und Termine",
-      "Die Anmeldung verliert den meisten Tag ans Telefon — und trotzdem kommt niemand durch. " +
-      "Eine Annahme, die rund um die Uhr erreichbar ist, nimmt genau die Anliegen ab, die nach " +
-      "einer festen Regel laufen.") +
-    (digital ? "" :
-      '<div class="box warn" style="margin-bottom:16px"><b>Voraussetzung fehlt noch: eine digitale Telefonanlage.</b>' +
-      'An einer analogen Anlage lässt sich keine Annahme dazwischenschalten. Das ist eine ' +
-      'Beauftragung beim Systemhaus, keine Entwicklung — und sie sollte früh laufen, weil die ' +
-      'Rufnummernübernahme Wochen dauern kann. Die Zahlen unten sind der heutige Zustand.</div>') +
-    '<div class="gitter g4" style="margin-bottom:16px">' +
-      kennzahl("Anrufe je Woche", t.anrufe, "", "geschätzt, noch nicht gemessen") +
-      kennzahl("Automatisch erledigt", quote, " %",
-               digital ? "<b>ohne Zutun der Anmeldung</b>" : "heute keiner") +
-      kennzahl("Nicht angenommen", t.verpasst, "",
-               digital ? "deutlich weniger als vorher" : '<span style="color:var(--rot)">jeder davon ruft wieder an</span>') +
-      kennzahl("Offene Rückrufe", t.rueckstand, "", t.rueckstand ? "stehen auf der Liste" : "<b>nichts offen</b>") +
-    '</div>' +
-    '<div class="gitter g2">' +
-      karte("Weswegen angerufen wird", autoAnteil + " % wären regelbasiert",
-        '<div class="karte-koerper">' + balken +
-        '<div class="feinzeile">Blau: läuft nach einer festen Regel und kann automatisch beantwortet ' +
-        'werden. Grau: gehört zu einem Menschen.</div></div>') +
-      karte("Was nie automatisch beantwortet wird", null,
-        '<div class="karte-koerper"><ul class="liste-schlicht">' + nie + '</ul>' +
-        '<div class="box" style="margin-top:12px"><b>Und es sagt immer, was es ist</b>' +
-        'Dass am anderen Ende kein Mensch sitzt, wird zu Beginn des Gesprächs genannt. ' +
-        'Das verlangt Art. 50 der KI-Verordnung — und es nimmt dem Gespräch die Unsicherheit.</div></div>') +
-    '</div>' +
-    karte("Beim richtigen Behandler terminieren", "Regeln der Praxis",
-      '<div class="karte-koerper">' + regeln +
-      '<div class="feinzeile">Diese Liste ist der eigentliche Wert. Heute steckt sie in den Köpfen ' +
-      'der Anmeldung — wer lange da ist, weiß, dass eine Ästhetik-Erstberatung dreißig Minuten ' +
-      'braucht und nicht in den Eingriffsraum gehört. Steht sie geschrieben, kann sie jede ' +
-      'Vertretung anwenden, und eine automatische Annahme auch.</div></div>',
-      "Ohne diese Regeln terminiert eine KI-Annahme falsch — und richtet mehr Schaden an als Nutzen. " +
-      "Sie werden mit der Praxis erhoben, bevor irgendetwas ans Telefon geht.");
 };
 
-/* ------------------------------------------------- Gespräch dokumentieren */
-ANSICHTEN.gespraech = function(){
+/* ------------------------------------------------------------ Abrechnung */
+ANSICHTEN.abrechnung = function(){
   var p = praxis();
-  var frei = p.module.transkript;
+  if(!p.module.abschluss){
+    return kopf("Abrechnung", "In dieser Praxis noch nicht eingeschaltet.") +
+      karte(null, null, '<div class="karte-koerper">' +
+        leer("Selbstabschluss ist abgeschaltet", "Einzuschalten unter Einstellungen › Module.") + '</div>');
+  }
+  var f = reiterWert("rech","alle");
+  var liste = p.rechnungen.filter(function(r){
+    return f === "alle" ? true : (f === "offen" ? r.status !== "bezahlt" : r.status === f);
+  });
+  var offen = p.rechnungen.filter(function(r){ return r.status !== "bezahlt"; });
+  var ueber = offen.filter(function(r){ return r.status === "ueberfaellig"; });
+  var terminal = p.rechnungen.filter(function(r){ return r.weg === "Terminal"; });
+  var sum = function(a){ return a.reduce(function(s,r){ return s + r.betrag; }, 0); };
 
-  var kette = [
-    {t:"Einwilligung", u:"beide stimmen zu, sonst kein Start"},
-    {t:"Mitschrift",   u:"Mikrofon im Zimmer, Ton bleibt im Haus"},
-    {t:"Entwurf",      u:"aus dem Gesagten wird ein Eintrag"},
-    {t:"Freigabe",     u:"der Arzt prüft und ändert"},
-    {t:"Karteikarte",  u:"als Text über die GDT-Brücke"},
-    {t:"Ton gelöscht", u:"nach der Freigabe, ohne Ausnahme"}
-  ].map(function(s,i){
-    return '<div class="glied an"><div class="nr">Schritt ' + (i+1) + '</div>' +
-           '<b>' + s.t + '</b><span>' + s.u + '</span></div>';
-  }).join("");
+  var zeilen = liste.length ? liste.map(function(r){
+    var art = r.status === "bezahlt" ? "gruen" : (r.status === "offen" ? "gelb" : "rot");
+    var txt = r.status === "bezahlt" ? "bezahlt" : (r.status === "offen" ? "offen" : "überfällig");
+    return '<tr><td class="haupt zahl-sp">' + r.nr + '</td><td>' + sicher(r.pat) + '</td>' +
+      '<td class="zahl-sp" style="color:var(--g500)">' + r.datum + '</td><td>' + r.weg + '</td>' +
+      '<td>' + pille(art, txt) + '</td>' +
+      '<td class="rechts zahl-sp haupt">' + euro(r.betrag) + '</td></tr>';
+  }).join("") : '<tr><td colspan="6">' + leer("Nichts in dieser Auswahl") + '</td></tr>';
 
-  var links = GESPRAECH.ausschnitt.map(function(z){
-    return '<p style="margin:0 0 7px"><span class="wer">' + z[0] + '</span> &nbsp;' + sicher(z[1]) + '</p>';
-  }).join("");
-
-  var rechts = GESPRAECH.entwurf.map(function(z){
-    return '<div class="feld"><b>' + z[0] + '</b><span>' + sicher(z[1]) + '</span></div>';
-  }).join("");
-
-  var offen = GESPRAECH_PRUEFUNG.filter(function(z){ return z.stand === "offen"; }).length;
-  var fertig = GESPRAECH_PRUEFUNG.length - offen;
-
-  var pruefung = GESPRAECH_PRUEFUNG.map(function(z){
-    return '<div class="pruefzeile"><div class="txt"><b>' + sicher(z.was) + '</b>' +
-      '<span>' + sicher(z.warum) + '</span></div>' +
-      '<div class="stand">' + pille(z.stand === "fertig" ? "gruen" : "gelb", z.hinweis) + '</div></div>';
-  }).join("");
-
-  return kopf("Das Gespräch dokumentieren",
-      "Der Wunsch, der den größten Unterschied macht und die längste Vorbereitung braucht. " +
-      "Technisch ist es der kürzeste Weg von allen — der Rückweg in die Karteikarte steht bereits.") +
-    (frei ? "" :
-      '<div class="box warn" style="margin-bottom:16px"><b>Noch nicht freigegeben — das hier ist die Vorschau.</b>' +
-      'In dieser Praxis wird nichts aufgezeichnet. Freigeschaltet wird erst, wenn die Punkte weiter unten ' +
-      'abgearbeitet sind. Ein Gespräch ohne Einwilligung aufzunehmen ist strafbar, nicht bloß heikel.</div>') +
-    '<div class="gitter g4" style="margin-bottom:16px">' +
-      kennzahl("Voraussetzungen erfüllt", fertig + " von " + GESPRAECH_PRUEFUNG.length, "",
-               offen + " noch offen") +
-      kennzahl("Weg in die Karteikarte", "steht", "", "<b>dieselbe GDT-Brücke wie sonst</b>") +
-      kennzahl("Entlastung je Gespräch", "4—6", " Min.", "geschätzt, noch nicht gemessen") +
-      kennzahl("Ohne Arztfreigabe", "0", "", "nichts geht ungeprüft in die Akte") +
-    '</div>' +
-    karte("So läuft es ab", null,
-      '<div class="karte-koerper"><div class="kette">' + kette + '</div>' +
-      '<div class="feinzeile">Der Ton verlässt die Praxis nicht dauerhaft und wird nach der Freigabe gelöscht. ' +
-      'In die Karteikarte geht Text, keine Aufnahme. Wer nicht einwilligt, wird dokumentiert wie bisher — ' +
-      'ohne Nachteil und ohne Nachfrage.</div></div>') +
-    karte("Was dabei herauskommt", "erfundenes Beispiel",
-      '<div class="karte-koerper"><div class="gegenueber">' +
-        '<div><div class="titel">Ausschnitt aus dem Gespräch</div>' +
-          '<div class="gespraech-text">' + links + '</div></div>' +
-        '<div><div class="titel">Entwurf für die Karteikarte</div>' +
-          '<div class="eintrag">' + rechts + '</div></div>' +
-      '</div>' +
-      '<div style="margin-top:14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">' +
-        '<button class="knopf haupt" disabled>Freigeben und übernehmen</button>' +
-        '<button class="knopf" disabled>Ändern</button>' +
-        '<button class="knopf" disabled>Verwerfen</button>' +
-        '<span class="feinzeile" style="margin:0 0 0 6px">In der Vorschau ohne Funktion.</span>' +
-      '</div></div>',
-      "Der Arzt sieht den Entwurf, nicht das Wortprotokoll. Was er ändert, merkt sich das System — " +
-      "der nächste Entwurf sieht mehr nach seiner eigenen Handschrift aus.") +
-    karte("Was vorher erfüllt sein muss", offen + " von " + GESPRAECH_PRUEFUNG.length + " offen",
-      '<div class="karte-koerper">' + pruefung + '</div>',
-      "Zwei Punkte sind bereits erledigt, weil sie von den anderen Modulen mitkommen. " +
-      "Die offenen liegen nicht an der Technik, sondern an Einwilligung, Datenschutz und Anbieterwahl.");
+  return kopf("Abrechnung", "Was am Terminal bezahlt wird, wird nie zum offenen Posten.") +
+    lage([
+      {wert:euro(sum(terminal)), et:"am Terminal bezahlt"},
+      {wert:euro(sum(offen)), et:offen.length + " Rechnungen offen"},
+      {wert:euro(sum(ueber)), et:ueber.length + " überfällig", warn:ueber.length > 0}
+    ]) +
+    reiter("rech", [{id:"alle",titel:"Alle"},{id:"offen",titel:"Offen"},
+                    {id:"ueberfaellig",titel:"Überfällig"},{id:"bezahlt",titel:"Bezahlt"}]) +
+    karte("Rechnungen", liste.length + " von " + p.rechnungen.length,
+      '<table><thead><tr><th>Nummer</th><th>Patient</th><th>Datum</th><th>Zustellung</th>' +
+      '<th>Status</th><th class="rechts">Betrag</th></tr></thead><tbody>' + zeilen + '</tbody></table>');
 };
 
-/* -------------------------------------------------------- Das ganze Vorhaben */
+/* ------------------------------------------------------------- Nachsorge */
+ANSICHTEN.nachsorge = function(){
+  var p = praxis();
+  if(!p.module.wiedervorlage){
+    return kopf("Nachsorge", "In dieser Praxis noch nicht eingeschaltet.") +
+      karte(null, null, '<div class="karte-koerper">' +
+        leer("Wiedervorlage ist abgeschaltet", "Einzuschalten unter Einstellungen › Module.") + '</div>');
+  }
+  var erl = zustand.erledigt[zustand.mandant] || {};
+  var offen = p.wiedervorlage.filter(function(w){ return !erl[w.nr]; });
+  var zeilen = offen.length ? offen.map(function(w){
+    var art = w.faellig > 365 ? "rot" : (w.faellig > 180 ? "gelb" : "grau");
+    return '<tr><td><div class="haupt">' + sicher(w.name) + '</div>' +
+      '<div class="neben">' + w.alter + ' Jahre</div></td>' +
+      '<td>' + sicher(w.grund) + '</td>' +
+      '<td class="zahl-sp" style="color:var(--g500)">' + w.letzte + '</td>' +
+      '<td>' + pille(art, w.faellig + " Tage überfällig") + '</td>' +
+      '<td class="rechts"><button class="knopf" data-erinnern="' + w.nr + '">Erinnern</button> ' +
+      '<button class="knopf still" data-erledigt-wv="' + w.nr + '">Erledigt</button></td></tr>';
+  }).join("") : '<tr><td colspan="5">' +
+      leer("Liste abgearbeitet", "Morgen früh steht die nächste bereit.") + '</td></tr>';
+
+  return kopf("Nachsorge", "Vorsorgen, die fällig sind — und die noch niemand gebucht hat.") +
+    lage([
+      {wert:offen.length, et:"heute vorzulegen"},
+      {wert:p.kennzahlen.faellig, et:"fällig im Bestand"},
+      {wert:offen.filter(function(w){ return w.faellig > 365; }).length, et:"länger als ein Jahr",
+       warn:offen.some(function(w){ return w.faellig > 365; })}
+    ]) +
+    karte("Vorschläge für heute", null,
+      '<table><thead><tr><th>Patient</th><th>Anlass</th><th>Zuletzt</th><th>Fällig</th>' +
+      '<th class="rechts">Aktion</th></tr></thead><tbody>' + zeilen + '</tbody></table>');
+};
+
+/* ===================================================== Patientenseite */
+
+function punkteLeiste(n, von){
+  var s = "";
+  for(var i = 1; i <= von; i++) s += '<i' + (i === n ? ' class="an"' : '') + '></i>';
+  return '<div class="punkte">' + s + '</div>';
+}
+
+ANSICHTEN.pterminal = function(){
+  return kopf("Anmeldung am Terminal",
+      "Was der Patient beim Ankommen sieht. Unter zwei Minuten, keine Erklärung nötig.") +
+    '<div class="geraet"><div class="patient-schirm">' +
+      '<div class="schritt">Schritt 2 von 4</div>' +
+      '<h2>Stimmen Ihre Daten noch?</h2>' +
+      '<p>Bitte prüfen Sie kurz. Wenn sich nichts geändert hat, tippen Sie unten auf „Alles richtig".</p>' +
+      '<button class="pknopf"><span class="feld"><small>Anschrift</small>' +
+        'Kurfürstenstraße 12, 47829 Krefeld</span><span class="pfeil">›</span></button>' +
+      '<button class="pknopf"><span class="feld"><small>Telefon</small>' +
+        '0151 2345678</span><span class="pfeil">›</span></button>' +
+      '<button class="pknopf"><span class="feld"><small>Versicherung</small>' +
+        'Privat — Debeka</span><span class="pfeil">›</span></button>' +
+      '<div style="height:14px"></div>' +
+      '<button class="pknopf haupt">Alles richtig</button>' +
+      punkteLeiste(2, 4) +
+    '</div></div>' +
+    karte("Die vier Schritte", null, '<div class="karte-koerper"><ul class="zeile-liste">' +
+      '<li><span class="haken">1</span><span><b>Ankommen</b>' +
+        '<span class="nebensatz">Der Termin wird gefunden, der Patient ist angemeldet.</span></span></li>' +
+      '<li><span class="haken">2</span><span><b>Daten bestätigen</b>' +
+        '<span class="nebensatz">Prüfen statt diktieren. Änderungen gehen als Vorschlag an die Anmeldung.</span></span></li>' +
+      '<li><span class="haken">3</span><span><b>Einwilligungen</b>' +
+        '<span class="nebensatz">Datenschutz und Fotodokumentation, getrennt und widerrufbar.</span></span></li>' +
+      '<li><span class="haken">4</span><span><b>Platz nehmen</b>' +
+        '<span class="nebensatz">Die Anmeldung sieht sofort, wer da ist.</span></span></li>' +
+      '</ul><div style="margin-top:18px">' +
+      '<a class="knopf haupt" href="../terminal/" target="_blank" rel="noopener">Terminal in voller Größe öffnen ↗</a>' +
+      '</div><div class="fein">Wer sich nicht selbst anmelden möchte, geht wie bisher an den Tresen. ' +
+      'Papier bleibt für jeden Schritt möglich.</div></div>');
+};
+
+ANSICHTEN.pboegen = function(){
+  var p = praxis();
+  var liste = BOEGEN.slice(0,5).map(function(b){
+    return '<li><span class="haken">✓</span><span><b>' + sicher(b.name) + '</b>' +
+      '<span class="nebensatz">' + sicher(b.anlass) + ' · ' + b.felder + ' Felder</span></span></li>';
+  }).join("");
+
+  return kopf("Bögen auf dem iPad",
+      "Vorab auf dem eigenen Handy oder im Wartezimmer. Das Ergebnis steht in der Karteikarte, " +
+      "bevor der Behandler das Zimmer betritt.") +
+    (p.module.aufklaerung ? "" :
+      '<div class="hinweisbox"><b>Aufklärung ist in dieser Praxis noch abgeschaltet.</b>' +
+      'Aufklärungsbögen laufen vorerst auf Papier.</div>') +
+    '<div class="geraet"><div class="patient-schirm">' +
+      '<div class="schritt">Anamnese · Frage 4 von 11</div>' +
+      '<h2>Hat sich die Stelle verändert?</h2>' +
+      '<p>Größe, Farbe oder Form — seit wann ungefähr?</p>' +
+      '<button class="pknopf">Ja, in den letzten Wochen<span class="pfeil">›</span></button>' +
+      '<button class="pknopf">Ja, seit einigen Monaten<span class="pfeil">›</span></button>' +
+      '<button class="pknopf">Nein, unverändert<span class="pfeil">›</span></button>' +
+      '<button class="pknopf">Weiß ich nicht<span class="pfeil">›</span></button>' +
+      punkteLeiste(4, 11) +
+    '</div></div>' +
+    karte("Was auf dem iPad läuft", BOEGEN.length + " Bögen hinterlegt",
+      '<div class="karte-koerper"><ul class="zeile-liste">' + liste + '</ul>' +
+      '<div class="fein">Unterschrieben wird mit dem Finger. Der fertige Bogen landet ohne Druck ' +
+      'und ohne Scan in der Karteikarte. Das Aufklärungsgespräch bleibt beim Arzt.</div></div>');
+};
+
+ANSICHTEN.pabschluss = function(){
+  var p = praxis();
+  if(!p.module.abschluss){
+    return kopf("Abschluss und Rechnung", "In dieser Praxis noch nicht eingeschaltet.") +
+      karte(null, null, '<div class="karte-koerper">' +
+        leer("Selbstabschluss ist abgeschaltet", "Einzuschalten unter Einstellungen › Module.") + '</div>');
+  }
+  var zeilen = ZIMMER_LEISTUNGEN.filter(function(l){ return l.vor; }).map(function(l){
+    return '<div style="display:flex;padding:11px 0;border-bottom:1px solid var(--g100);text-align:left">' +
+      '<span style="flex:1;font-size:15.5px;color:var(--tinte)">' + sicher(l.text) + '</span>' +
+      '<span style="font-weight:700;font-variant-numeric:tabular-nums">' +
+      (l.betrag ? euro(l.betrag) : "—") + '</span></div>';
+  }).join("");
+  var summe = ZIMMER_LEISTUNGEN.reduce(function(s,l){ return s + (l.vor ? l.betrag : 0); }, 0);
+
+  return kopf("Abschluss und Rechnung",
+      "Beim Gehen, nicht Wochen später. Der Betrag liegt bereit, bevor der Patient ankommt.") +
+    '<div class="geraet"><div class="patient-schirm">' +
+      '<div class="schritt">Ihr Besuch heute</div>' +
+      '<h2>Ihre Leistungen</h2>' +
+      '<div style="max-width:440px;margin:0 auto 6px">' + zeilen +
+        '<div style="display:flex;padding:15px 0 22px;align-items:baseline">' +
+        '<span style="flex:1;font-size:15.5px;color:var(--g500);text-align:left">Zu zahlen</span>' +
+        '<span style="font-size:26px;font-weight:700;color:var(--tinte);font-variant-numeric:tabular-nums">' +
+        euro(summe) + '</span></div></div>' +
+      '<button class="pknopf haupt">Mit Karte bezahlen</button>' +
+      '<button class="pknopf">Rechnung mitnehmen und später zahlen<span class="pfeil">›</span></button>' +
+      punkteLeiste(3, 4) +
+    '</div></div>' +
+    karte("Was danach passiert", null, '<div class="karte-koerper"><ul class="zeile-liste">' +
+      '<li><span class="haken">✓</span><span><b>Beleg nach Wunsch</b>' +
+        '<span class="nebensatz">Ausdruck, E-Mail oder Post — der Patient entscheidet am Gerät.</span></span></li>' +
+      '<li><span class="haken">✓</span><span><b>Folgetermin gleich mitnehmen</b>' +
+        '<span class="nebensatz">Vorgeschlagen nach dem Anlass, nicht nach freiem Platz im Kalender.</span></span></li>' +
+      '<li><span class="haken">✓</span><span><b>Kein offener Posten</b>' +
+        '<span class="nebensatz">Was hier bezahlt wird, muss niemand verfolgen oder anmahnen.</span></span></li>' +
+      '</ul><div class="fein">Kartenzahlung setzt ein Terminal mit zertifizierter Kassensicherung ' +
+      'voraus — das klären wir mit dem Systemhaus.</div></div>');
+};
+
+/* ===================================================== Einstellungen */
+
+ANSICHTEN.einstellungen = function(){
+  var p = praxis();
+  var welcher = reiterWert("ein", "module");
+  var leiste = reiter("ein", [
+    {id:"module",    titel:"Module"},
+    {id:"formulare", titel:"Formulare"},
+    {id:"telefon",   titel:"Telefon"},
+    {id:"bruecke",   titel:"Duria-Brücke"},
+    {id:"gespraech", titel:"Gespräch"},
+    {id:"praxis",    titel:"Praxisdaten"}
+  ]);
+  var k = kopf("Einstellungen", "Alles, was einmal eingerichtet und danach selten angefasst wird.");
+
+  /* ---- Module ---- */
+  if(welcher === "module"){
+    var zeilen = [
+      {m:"anmeldung",   b:"Selbstanmeldung",        t:"Terminal im Eingangsbereich"},
+      {m:"anamnese",    b:"Digitale Anamnese",      t:"Handy vorab oder iPad im Wartezimmer"},
+      {m:"aufklaerung", b:"Aufklärung mit Unterschrift", t:"Bogen auf dem iPad, fertig in die Akte"},
+      {m:"raeume",      b:"Räume und Wartebereich", t:"Zuteilung der Wartenden, „Erledigt“ gibt den Raum frei"},
+      {m:"diktat",      b:"Diktat im Zimmer",       t:"Gesprochenes wird zum Entwurf für die Karteikarte"},
+      {m:"rezept",      b:"Rezept aus dem Zimmer",  t:"Auswahl im Zimmer, Ausstellung in Duria²"},
+      {m:"abschluss",   b:"Selbstabschluss",        t:"Leistungen im Zimmer, Rechnung beim Gehen"},
+      {m:"wiedervorlage",b:"Nachsorge",             t:"Tägliche Liste fälliger Vorsorgen"},
+      {m:"telefon",     b:"Telefonannahme",         t:"Braucht eine digitale Telefonanlage"},
+      {m:"transkript",  b:"Vollständige Gesprächsdokumentation",
+       t:"Erst nach Einwilligung und Folgenabschätzung", sperre:true}
+    ].map(function(z){
+      var an = p.module[z.m];
+      return '<div class="schalter-zeile"><div class="txt"><b>' + z.b + '</b><span>' + z.t + '</span></div>' +
+        '<button class="schalter' + (an ? " an" : "") + '" data-modul="' + z.m + '"' +
+        (z.sperre ? " disabled" : "") + ' aria-pressed="' + an + '"></button></div>';
+    }).join("");
+    return k + leiste + karte(null, null, '<div class="karte-koerper">' + zeilen +
+      '<div class="fein">Dieselbe Software, andere Praxis. Was eine Praxis nutzt, entscheidet sie hier — ' +
+      'es gibt keine zweite Fassung des Programms.</div></div>');
+  }
+
+  /* ---- Formulare ---- */
+  if(welcher === "formulare"){
+    var b = BOEGEN.map(function(x){
+      var art = x.quelle === "Anbieter" ? "blau" : (x.quelle === "Praxis" ? "grau" : "gruen");
+      return '<tr><td><div class="haupt">' + sicher(x.name) + '</div>' +
+        '<div class="neben">' + x.felder + ' Felder · Stand ' + x.stand + '</div></td>' +
+        '<td>' + sicher(x.anlass) + '</td><td>' + pille(art, x.quelle) + '</td>' +
+        '<td class="rechts">' + pille("gruen","geht nach Duria²") + '</td></tr>';
+    }).join("");
+    return k + leiste + karte("Bögen im Umlauf", BOEGEN.length + " Bögen",
+      '<table><thead><tr><th>Bogen</th><th>Anlass</th><th>Gepflegt von</th>' +
+      '<th class="rechts">Rückweg</th></tr></thead><tbody>' + b + '</tbody></table>');
+  }
+
+  /* ---- Telefon ---- */
+  if(welcher === "telefon"){
+    var t = TELEFON[zustand.mandant];
+    var digital = t.anlage === "digital";
+    var quote = t.anrufe ? Math.round(t.automatisch / t.anrufe * 100) : 0;
+    var regeln = TERMINREGELN.map(function(r){
+      return '<div class="regel"><span class="anlass">' + sicher(r.anlass) + '</span>' +
+        '<span class="pfeil">→</span><span class="wohin">' + sicher(r.wohin) + '</span></div>';
+    }).join("");
+    var nie = TELEFON_NIE.map(function(x){
+      return '<li><span class="haken" style="color:var(--rot)">✕</span><span>' + sicher(x) + '</span></li>';
+    }).join("");
+    return k + leiste +
+      (digital ? "" : '<div class="hinweisbox"><b>Voraussetzung fehlt: eine digitale Telefonanlage.</b>' +
+        'An einer analogen Anlage lässt sich keine Annahme dazwischenschalten. Das ist eine Beauftragung ' +
+        'beim Systemhaus — und sie sollte früh laufen, weil die Rufnummernübernahme Wochen dauert.</div>') +
+      lage([
+        {wert:t.anrufe, et:"Anrufe je Woche"},
+        {wert:quote, einheit:" %", et:"automatisch erledigt"},
+        {wert:t.verpasst, et:"nicht angenommen", warn:!digital}
+      ]) +
+      karte("Beim richtigen Behandler terminieren", "Regeln der Praxis",
+        '<div class="karte-koerper">' + regeln +
+        '<div class="fein">Diese Liste ist der eigentliche Wert. Heute steckt sie in den Köpfen der ' +
+        'Anmeldung. Geschrieben kann sie jede Vertretung anwenden — und eine automatische Annahme auch.</div></div>') +
+      karte("Was nie automatisch beantwortet wird", null,
+        '<div class="karte-koerper"><ul class="zeile-liste">' + nie + '</ul></div>');
+  }
+
+  /* ---- Duria-Brücke ---- */
+  if(welcher === "bruecke"){
+    var br = p.bruecke;
+    var felder = br.felder.map(function(f){
+      var art = f.quelle === "erkannt" ? "blau" : (f.quelle === "Norm" ? "gruen" : "grau");
+      return '<tr><td class="haupt zahl-sp">' + f.id + '</td><td>' + sicher(f.was) + '</td>' +
+        '<td style="color:var(--g500)">' + sicher(f.wert) + '</td>' +
+        '<td class="rechts">' + pille(art, f.quelle) + '</td></tr>';
+    }).join("");
+    var prot = br.protokoll.map(function(e){
+      var txt = {ok:"ÜBERGEBEN", warn:"HINWEIS", fehl:"ANGEHALTEN", info:"BETRIEB"}[e.a];
+      return '<div class="zeile"><span class="zeit">' + e.z + '</span>' +
+        '<span class="art a-' + e.a + '">' + txt + '</span>' +
+        '<span class="text">' + sicher(e.t) + '</span></div>';
+    }).join("");
+    return k + leiste +
+      lage([
+        {wert:br.zustand === "gut" ? "in Ordnung" : "gestört", et:"zuletzt " + br.letzte,
+         warn:br.zustand !== "gut"},
+        {wert:br.heute, et:"heute übergeben"},
+        {wert:br.wartend, et:"in der Warteschlange"},
+        {wert:br.modus, et:"Satzart " + br.satzart}
+      ]) +
+      karte("Feldzuordnung", sicher(br.verzeichnis),
+        '<table><thead><tr><th>Feld</th><th>Bedeutung</th><th>Belegt mit</th>' +
+        '<th class="rechts">Herkunft</th></tr></thead><tbody>' + felder + '</tbody></table>') +
+      karte("Protokoll", "ohne Namen, nur Vorgangskennungen",
+        '<div class="karte-koerper"><div class="protokoll">' + prot + '</div></div>');
+  }
+
+  /* ---- Gespräch ---- */
+  if(welcher === "gespraech"){
+    var links = GESPRAECH.ausschnitt.slice(0,4).map(function(z){
+      return '<p style="margin:0 0 9px;font-size:14.5px;line-height:1.65"><b style="color:var(--g400)">' +
+        z[0] + '</b> &nbsp;' + sicher(z[1]) + '</p>';
+    }).join("");
+    var rechts = GESPRAECH.entwurf.map(function(z){
+      return '<div style="margin-bottom:13px"><b style="display:block;font-size:11px;letter-spacing:.05em;' +
+        'text-transform:uppercase;color:var(--akzent)">' + z[0] + '</b>' +
+        '<span style="font-size:14.5px;color:var(--tinte)">' + sicher(z[1]) + '</span></div>';
+    }).join("");
+    var pr = GESPRAECH_PRUEFUNG.map(function(z){
+      var fertig = z.stand === "fertig";
+      return '<div class="schalter-zeile"><div class="txt"><b>' + sicher(z.was) + '</b>' +
+        '<span>' + sicher(z.warum) + '</span></div>' +
+        '<div style="padding-top:2px">' + pille(fertig ? "gruen" : "gelb", z.hinweis) + '</div></div>';
+    }).join("");
+    var offen = GESPRAECH_PRUEFUNG.filter(function(z){ return z.stand === "offen"; }).length;
+    return k + leiste +
+      '<div class="hinweisbox"><b>Noch nicht freigegeben — das hier ist die Vorschau.</b>' +
+      'In keiner Praxis wird aufgezeichnet. Ein Gespräch ohne Einwilligung aufzunehmen ist strafbar, ' +
+      'nicht bloß heikel.</div>' +
+      karte("Was dabei herauskommt", "erfundenes Beispiel",
+        '<div class="karte-koerper gitter2">' +
+        '<div><div style="font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--g500);' +
+          'font-weight:700;margin-bottom:9px">Gesprochen</div>' + links + '</div>' +
+        '<div><div style="font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--g500);' +
+          'font-weight:700;margin-bottom:9px">Entwurf für die Karteikarte</div>' + rechts + '</div>' +
+        '</div>') +
+      karte("Was vorher erfüllt sein muss", offen + " von " + GESPRAECH_PRUEFUNG.length + " offen",
+        '<div class="karte-koerper">' + pr + '</div>');
+  }
+
+  /* ---- Praxisdaten ---- */
+  var daten = [
+    ["Praxis", p.name], ["Ort", p.ort], ["Fachrichtung", p.fach],
+    ["Behandler", p.behandler.join(", ")], ["Praxissoftware", p.pvs],
+    ["Terminals", String(p.terminal)], ["iPads", String(p.ipads)]
+  ].map(function(z){
+    return '<li><span style="flex:0 0 150px;color:var(--g500)">' + z[0] + '</span>' +
+           '<span style="color:var(--tinte);font-weight:600">' + sicher(z[1]) + '</span></li>';
+  }).join("");
+  return k + leiste + karte(null, null,
+    '<div class="karte-koerper"><ul class="zeile-liste">' + daten + '</ul></div>');
+};
+
+/* ===================================================== Das Vorhaben */
+
 ANSICHTEN.vorhaben = function(){
   var zeilen = VORHABEN.map(function(v){
     var s = STAND_ART[v.stand];
-    var wo = v.ziel
-      ? '<a href="#" data-seite="' + v.ziel + '">' + sicher(v.wo) + '</a>'
-      : '<span style="color:var(--g500)">' + sicher(v.wo) + '</span>';
-    return '<tr><td style="width:27%"><div class="haupt">' + sicher(v.wunsch) + '</div>' +
-      '<div class="neben">' + wo + '</div></td>' +
+    return '<tr><td style="width:26%"><div class="haupt">' + sicher(v.wunsch) + '</div></td>' +
       '<td>' + sicher(v.text) + '</td>' +
-      '<td style="width:12%">' + pille(s.art, s.text) + '</td>' +
-      '<td style="width:13%;color:var(--g500)">' + sicher(v.wer) + '</td></tr>';
+      '<td style="width:13%">' + pille(s.art, s.text) + '</td>' +
+      '<td style="width:14%;color:var(--g500)">' + sicher(v.wer) + '</td></tr>';
   }).join("");
-
   var zaehl = {};
   VORHABEN.forEach(function(v){ zaehl[v.stand] = (zaehl[v.stand]||0) + 1; });
-  var vonUns = VORHABEN.filter(function(v){ return v.wer.indexOf("wir") === 0; }).length;
   var laeuft = (zaehl.bereit||0) + (zaehl.laeuft||0);
 
-  return kopf("Das ganze Vorhaben",
-      "Der Auftrag, wie er zu Beginn formuliert wurde — Punkt für Punkt, mit dem heutigen Stand " +
-      "und der ehrlichen Angabe, wer ihn erledigt. Nichts davon ist weggefallen.") +
-    '<div class="gitter g4" style="margin-bottom:16px">' +
-      kennzahl("Punkte im Auftrag", VORHABEN.length, "", "keiner gestrichen") +
-      kennzahl("Steht oder läuft", laeuft, "", "<b>vorführbar, nicht versprochen</b>") +
-      kennzahl("Liegt bei uns", vonUns, "", "der Rest bei Systemhaus und Anbietern") +
-      kennzahl("Blockiert", zaehl.gesperrt || 0, "", "wartet auf die Telefonanlage") +
-    '</div>' +
-    karte("Auftrag und Stand", "Zeilen mit Verweis lassen sich anklicken",
+  return kopf("Das Vorhaben",
+      "Der Auftrag, wie er zu Beginn formuliert wurde — mit Stand und Zuständigkeit. " +
+      "Nichts davon ist weggefallen.") +
+    lage([
+      {wert:VORHABEN.length, et:"Punkte im Auftrag"},
+      {wert:laeuft, et:"steht oder läuft"},
+      {wert:zaehl.gesperrt || 0, et:"blockiert", warn:(zaehl.gesperrt||0) > 0}
+    ]) +
+    karte("Auftrag und Stand", null,
       '<table><thead><tr><th>Wunsch</th><th>Wie wir ihn einlösen</th><th>Stand</th>' +
       '<th>Wer</th></tr></thead><tbody>' + zeilen + '</tbody></table>') +
-    '<div class="gitter g2" style="margin-top:16px">' +
-      karte("Warum das eine Schnittstelle ist und nicht fünf", null,
-        '<div class="karte-koerper"><ul class="liste-schlicht">' +
-        '<li><b>Duria² hat keine offene Programmierschnittstelle.</b> Kein REST, kein FHIR, keine App. ' +
-        'Der dokumentierte Weg hinein ist GDT — für uns wie für jeden anderen Anbieter.</li>' +
-        '<li><b>Deshalb gibt es genau eine Brücke.</b> Anmeldung, Anamnese, Aufklärung, Rechnung und ' +
-        'später das Gespräch gehen alle durch dieselbe. Ein Modul mehr heißt nicht eine Schnittstelle mehr.</li>' +
-        '<li><b>Und genau ein Programm auf dem Praxisrechner.</b> Es wacht über ein Verzeichnis und ' +
-        'schreibt nach Duria². Mehr läuft dort nicht.</li>' +
-        '<li><b>Das Cockpit ist nur die Sicht darauf.</b> Es liegt im Browser und hält keine Patientenakte. ' +
-        'Fällt es aus, arbeitet die Praxis weiter.</li>' +
-        '</ul></div>',
-        "Der Aufwand steigt also nicht mit jedem Wunsch. Die schwere Arbeit war die erste Brücke.") +
-      karte("Was noch offen ist", null,
-        '<div class="karte-koerper"><ul class="liste-schlicht">' +
-        '<li><b>Kommen Doctolib-Termine nach Duria²?</b> Solange das nicht nachgewiesen ist, ' +
-        'bleibt der Kalender, wie er ist.</li>' +
-        '<li><b>Wann wird die Telefonanlage digital?</b> Ohne sie kein Telefonassistent. ' +
-        'Das ist eine Beauftragung, keine Entwicklung.</li>' +
-        '<li><b>Wer stellt die Spracherkennung?</b> Verarbeitung in Deutschland ist Bedingung, ' +
-        'der Anbieter ist noch nicht gewählt.</li>' +
-        '<li><b>Ist die Rücksicherung des Backups getestet?</b> Keine Digitalisierung auf einem ' +
-        'ungeprüften Backup — das ist das größte stille Risiko jeder Praxis-IT.</li>' +
-        '</ul></div>',
-        "Diese vier Fragen entscheiden über den Zeitplan. Drei davon beantwortet nicht die Praxis, " +
-        "sondern ihr Systemhaus und ihre Anbieter.") +
-    '</div>';
+    karte("Eine Schnittstelle, nicht fünf", null,
+      '<div class="karte-koerper"><ul class="zeile-liste">' +
+      '<li><span class="haken">·</span><span><b>Duria² hat keine offene Programmierschnittstelle.</b>' +
+        '<span class="nebensatz">Kein REST, kein FHIR, keine App. Der dokumentierte Weg hinein ist GDT — ' +
+        'für uns wie für jeden anderen Anbieter.</span></span></li>' +
+      '<li><span class="haken">·</span><span><b>Deshalb gibt es genau eine Brücke.</b>' +
+        '<span class="nebensatz">Anmeldung, Anamnese, Aufklärung, Rechnung und später das Gespräch gehen ' +
+        'alle durch dieselbe. Ein Modul mehr heißt nicht eine Schnittstelle mehr.</span></span></li>' +
+      '<li><span class="haken">·</span><span><b>Die Praxis hängt nicht von uns ab.</b>' +
+        '<span class="nebensatz">Fällt die Verbindung nach außen weg, arbeitet sie weiter. ' +
+        'Patientendaten verlassen das Haus nicht.</span></span></li>' +
+      '</ul></div>');
 };
 
-/* ------------------------------------------------- Räume verändern */
-
-function raumHolen(id){
-  var k = null;
-  raeume().some(function(x){ if(x.id === id){ k = x; return true; } return false; });
-  return k;
-}
-function raumSetzen(id, status){
-  var k = raumHolen(id);
-  if(k){ k.status = status; k.seit = 0; }
-}
-
-/* Sobald ein Raum frei wird, rückt der nächste Wartende nach — das ist der
-   Kern: der Behandler kümmert sich nicht darum, dass jemand geholt wird. */
-function nachruecken(id){
-  var k = raumHolen(id);
-  if(!k) return;
-  var t = naechsteZuteilung(k.beh);
-  if(t && zuteilen(t)){
-    zustand.meldung = t.patient.name + " wurde automatisch in " + t.raum.name + " gebeten" +
-      (t.patient.notfall ? " — außer der Reihe, weil akut." : ".");
-  } else {
-    zustand.meldung = k.name + " ist frei. Derzeit wartet niemand Passendes.";
-  }
-}
-
-/* „Erledigt": Raum räumen, zum Herrichten melden, nächsten Patienten holen. */
-function raumFreigeben(id, abschluss){
-  var k = raumHolen(id);
-  if(!k) return;
-  var name = k.pat || "Der Patient";
-  k.status = "richten"; k.pat = null; k.nr = null; k.seit = 0;
-
-  var t = naechsteZuteilung(k.beh), satz;
-  if(t && zuteilen(t)){
-    satz = t.patient.name + " wurde sofort in " + t.raum.name + " gebeten" +
-           (t.patient.notfall ? " — außer der Reihe, weil akut." : ".");
-  } else {
-    satz = "Derzeit wartet niemand Passendes; " + k.name + " bleibt nach dem Herrichten frei.";
-  }
-  zustand.meldung = name + " ist fertig. " + satz;
-
-  if(abschluss){
-    zustand.zimmer = {
-      leistungen:{}, rezepte:{}, diktat:false,
-      abschluss:{ name:name, raum:k.name, naechster:satz,
-                  summe:abschluss.summe, rezepte:abschluss.rezepte }
-    };
-  }
-}
-
-/* =============================================================== Schublade */
-
-function schubladeOeffnen(nr){
-  var p = praxis();
-  var x = null;
-  p.patienten.forEach(function(k){ if(k.nr === nr) x = k; });
-  if(!x) return;
-  var s = STATUS[x.status];
-
-  var zeilen = [
-    ["Patientennummer", x.nr],
-    ["Termin", x.zeit + " Uhr"],
-    ["Behandler", x.behandler],
-    ["Anlass", x.anlass],
-    ["Abrechnung", x.art],
-    ["Anamnesebogen", x.formular === "fertig" ? "liegt vor, in der Karteikarte" : "noch nicht ausgefüllt"],
-    ["Heute fällig", x.betrag ? euro(x.betrag) : "keine Selbstzahlerleistung"]
-  ].map(function(z){
-    return '<div class="paar"><div class="k">' + z[0] + '</div><div class="v">' + sicher(z[1]) + '</div></div>';
-  }).join("");
-
-  var naechstes =
-    x.status === "erwartet" ? "Noch nicht eingetroffen. Der Bogen kann vorab aufs Handy geschickt werden." :
-    x.status === "wartet"   ? "Angemeldet und wartend. Die Anmeldung muss nichts tun." :
-    x.status === "zimmer"   ? "Im Behandlungszimmer. Leistungen werden dort erfasst, die Rechnung entsteht beim Abschluss." :
-                              "Abgeschlossen. Rechnung quittiert, Dokumente sind in der Karteikarte.";
-
-  document.getElementById("schublade").innerHTML =
-    '<div class="schublade-kopf"><div>' +
-      '<h3>' + sicher(x.name) + '</h3>' +
-      '<div class="neben">' + pille(s.art, s.text) + '</div>' +
-    '</div><button class="zu" id="schubladeZu" aria-label="Schließen">×</button></div>' +
-    '<div class="schublade-koerper">' + zeilen +
-      '<div class="box" style="margin-top:16px"><b>Nächster Schritt</b>' + naechstes + '</div>' +
-      '<div class="feinzeile">Erfundene Daten. Das Cockpit hält keine Patientenakte — ' +
-      'es zeigt den Stand des heutigen Tages und schreibt alles Dokumentarische nach Duria².</div>' +
-    '</div>';
-
-  document.getElementById("schublade").classList.add("offen");
-  document.getElementById("schleier").classList.add("offen");
-}
-function schubladeSchliessen(){
-  document.getElementById("schublade").classList.remove("offen");
-  document.getElementById("schleier").classList.remove("offen");
-}
-
-/* =================================================================== Aufbau */
+/* ===================================================== Aufbau */
 
 function navZeichnen(){
   var p = praxis();
-  var erledigt = zustand.erledigt[zustand.mandant] || {};
+  var erl = zustand.erledigt[zustand.mandant] || {};
   var zahlen = {
-    heute: p.patienten.filter(function(x){ return x.status !== "fertig"; }).length,
-    raeume: p.module.raeume ? warteliste().length : 0,
-    telefon: (TELEFON[zustand.mandant] || {}).rueckstand || 0,
-    abschluss: p.module.abschluss
+    tag: p.module.raeume ? warteliste().length : 0,
+    abrechnung: p.module.abschluss
       ? p.rechnungen.filter(function(r){ return r.status !== "bezahlt"; }).length : 0,
-    wiedervorlage: p.module.wiedervorlage
-      ? p.wiedervorlage.filter(function(w){ return !erledigt[w.nr]; }).length : 0,
-    bruecke: p.bruecke.wartend + p.bruecke.fehler
+    nachsorge: p.module.wiedervorlage
+      ? p.wiedervorlage.filter(function(w){ return !erl[w.nr]; }).length : 0
   };
-
-  document.getElementById("navigation").innerHTML = SEITEN.map(function(s){
-    if(s.gruppe) return '<div class="gruppe">' + s.gruppe + '</div>';
+  document.getElementById("navigation").innerHTML = SEITEN[zustand.welt].map(function(s){
     var z = zahlen[s.id];
     return '<button data-seite="' + s.id + '"' + (zustand.seite === s.id ? ' class="aktiv"' : '') + '>' +
       '<span class="sym">' + s.sym + '</span>' + s.titel +
       (z ? '<span class="zahl">' + z + '</span>' : '') + '</button>';
   }).join("");
+  var wahl = document.getElementById("weltwahl");
+  Array.prototype.forEach.call(wahl.querySelectorAll("button"), function(b){
+    b.className = b.getAttribute("data-welt") === zustand.welt ? "aktiv" : "";
+  });
 }
 
 function kopfZeichnen(){
@@ -1842,12 +1552,10 @@ function kopfZeichnen(){
     return '<option value="' + k + '"' + (k === zustand.mandant ? " selected" : "") + '>' +
       sicher(PRAXEN[k].name) + ' — ' + sicher(PRAXEN[k].ort) + '</option>';
   }).join("");
-
   var d = new Date();
   var tage = ["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"];
   document.getElementById("datumfeld").textContent =
     tage[d.getDay()] + ", " + d.toLocaleDateString("de-DE",{day:"2-digit",month:"long",year:"numeric"});
-
   var b = p.bruecke, pil = document.getElementById("bruecke-pille");
   pil.className = "pille " + (b.zustand === "gut" ? "p-gruen" : "p-gelb");
   pil.innerHTML = '<span class="punkt"></span>' +
@@ -1857,164 +1565,150 @@ function kopfZeichnen(){
 function zeichnen(){
   navZeichnen();
   kopfZeichnen();
-  var f = ANSICHTEN[zustand.seite] || ANSICHTEN.heute;
+  var f = ANSICHTEN[zustand.seite] || ANSICHTEN.tag;
   document.getElementById("inhalt").innerHTML = f();
   window.scrollTo(0,0);
 }
 
-/* --------------------------------------------------------------- Ereignisse */
-
-document.addEventListener("click", function(e){
-  var t = e.target;
-
-  var navKnopf = t.closest ? t.closest("[data-seite]") : null;
-  if(navKnopf){
-    if(navKnopf.tagName === "A") e.preventDefault();
-    zustand.seite = navKnopf.getAttribute("data-seite");
-    document.getElementById("seitenleiste").classList.remove("offen");
-    adresseSetzen();
-    zeichnen(); return;
-  }
-
-  var r = t.closest ? t.closest("[data-reiter]") : null;
-  if(r){
-    zustand.reiter[r.getAttribute("data-reiter")] = r.getAttribute("data-wert");
-    zeichnen(); return;
-  }
-
-  var m = t.closest ? t.closest("[data-modul]") : null;
-  if(m && !m.disabled){
-    var schl = m.getAttribute("data-modul");
-    praxis().module[schl] = !praxis().module[schl];
-    schalterSichern();
-    zeichnen(); return;
-  }
-
-  var zt = t.closest ? t.closest("[data-zuteilen]") : null;
-  if(zt){
-    var nr = zt.getAttribute("data-zuteilen");
-    var kand = null;
-    warteliste().forEach(function(w){ if(w.nr === nr) kand = w; });
-    var treffer = kand ? naechsteZuteilung(kand.beh) : null;
-    if(treffer && treffer.patient.nr === nr && zuteilen(treffer)){
-      zustand.meldung = treffer.patient.name + " wartet jetzt in " + treffer.raum.name + ".";
-    }
-    zeichnen(); return;
-  }
-
-  var fr = t.closest ? t.closest("[data-fertigraum]") : null;
-  if(fr){
-    raumSetzen(fr.getAttribute("data-fertigraum"), "frei");
-    nachruecken(fr.getAttribute("data-fertigraum"));
-    zeichnen(); return;
-  }
-
-  var bt = t.closest ? t.closest("[data-betreten]") : null;
-  if(bt){
-    raumSetzen(bt.getAttribute("data-betreten"), "arzt");
-    zustand.zimmer = { leistungen:{}, rezepte:{}, diktat:false, abschluss:null };
-    zustand.meldung = null;
-    zustand.seite = "zimmer"; adresseSetzen();
-    zeichnen(); return;
-  }
-
-  var fg = t.closest ? t.closest("[data-freigeben]") : null;
-  if(fg){ raumFreigeben(fg.getAttribute("data-freigeben"), null); zeichnen(); return; }
-
-  var fe = t.closest ? t.closest("[data-erledigt]") : null;
-  if(fe){
-    var z = zustand.zimmer;
-    var s = ZIMMER_LEISTUNGEN.reduce(function(a,l){
-      var an = (l.id in z.leistungen) ? z.leistungen[l.id] : l.vor;
-      return a + (an ? l.betrag : 0);
-    }, 0);
-    var anz = Object.keys(z.rezepte).filter(function(k){ return z.rezepte[k]; }).length;
-    raumFreigeben(fe.getAttribute("data-erledigt"), {summe:s, rezepte:anz});
-    zeichnen(); return;
-  }
-
-  var ls = t.closest ? t.closest("[data-leistung]") : null;
-  if(ls){
-    var li = ls.getAttribute("data-leistung"), vor = false;
-    ZIMMER_LEISTUNGEN.forEach(function(l){ if(l.id === li) vor = l.vor; });
-    var jetzt = (li in zustand.zimmer.leistungen) ? zustand.zimmer.leistungen[li] : vor;
-    zustand.zimmer.leistungen[li] = !jetzt;
-    zeichnen(); return;
-  }
-
-  var rz = t.closest ? t.closest("[data-rezept]") : null;
-  if(rz){
-    var ri = rz.getAttribute("data-rezept");
-    zustand.zimmer.rezepte[ri] = !zustand.zimmer.rezepte[ri];
-    zeichnen(); return;
-  }
-
-  var dk = t.closest ? t.closest("[data-diktat]") : null;
-  if(dk){ zustand.zimmer.diktat = true; zeichnen(); return; }
-
-  var zr = t.closest ? t.closest("[data-zuruecksetzen]") : null;
-  if(zr){
-    delete zustand.raumStand[zustand.mandant];
-    delete zustand.warteStand[zustand.mandant];
-    zustand.zimmer = { leistungen:{}, rezepte:{}, diktat:false, abschluss:null };
-    zustand.meldung = null;
-    zeichnen(); return;
-  }
-
-  var erl = t.closest ? t.closest("[data-erledigt-wv]") : null;
-  if(erl){
-    var nr = erl.getAttribute("data-erledigt-wv");
-    if(!zustand.erledigt[zustand.mandant]) zustand.erledigt[zustand.mandant] = {};
-    zustand.erledigt[zustand.mandant][nr] = true;
-    zeichnen(); return;
-  }
-
-  var ern = t.closest ? t.closest("[data-erinnern]") : null;
-  if(ern){
-    ern.textContent = "Vorgemerkt";
-    ern.disabled = true;
-    return;
-  }
-
-  var zeile = t.closest ? t.closest("[data-patient]") : null;
-  if(zeile){ schubladeOeffnen(zeile.getAttribute("data-patient")); return; }
-
-  if(t.id === "schubladeZu" || t.id === "schleier"){ schubladeSchliessen(); return; }
-
-  if(t.id === "menuknopf"){
-    document.getElementById("seitenleiste").classList.toggle("offen");
-    return;
-  }
-});
-
-document.getElementById("mandantwahl").addEventListener("change", function(e){
-  zustand.mandant = e.target.value;
-  zustand.reiter = {};
-  schubladeSchliessen();
-  adresseSetzen();
-  zeichnen();
-});
-
-/* Ansicht und Praxis stehen in der Adresse — so lässt sich eine Ansicht verlinken. */
 function adresseSetzen(){
   try{
     var neu = "#" + zustand.mandant + "/" + zustand.seite;
     if(window.location.hash !== neu) window.history.replaceState(null, "", neu);
-  }catch(e){ /* egal */ }
+  }catch(e){ /* belanglos */ }
 }
 function adresseLesen(){
   var roh = (window.location.hash || "").replace(/^#/, "");
   if(!roh) return;
   var teile = roh.split("/");
   if(teile[0] && PRAXEN[teile[0]]) zustand.mandant = teile[0];
-  if(teile[1] && ANSICHTEN[teile[1]]) zustand.seite = teile[1];
+  if(teile[1] && ANSICHTEN[teile[1]]){
+    zustand.seite = teile[1];
+    zustand.welt = weltVon(teile[1]) || zustand.welt;
+  }
 }
 
-document.addEventListener("keydown", function(e){
-  if(e.key === "Escape") schubladeSchliessen();
+/* ===================================================== Ereignisse */
+
+document.addEventListener("click", function(e){
+  var t = e.target, z;
+
+  z = t.closest && t.closest("[data-welt]");
+  if(z){
+    zustand.welt = z.getAttribute("data-welt");
+    zustand.seite = SEITEN[zustand.welt][0].id;
+    adresseSetzen(); zeichnen(); return;
+  }
+
+  z = t.closest && t.closest("[data-seite]");
+  if(z){
+    if(z.tagName === "A") e.preventDefault();
+    zustand.seite = z.getAttribute("data-seite");
+    zustand.welt = weltVon(zustand.seite) || zustand.welt;
+    document.getElementById("seitenleiste").classList.remove("offen");
+    adresseSetzen(); zeichnen(); return;
+  }
+
+  z = t.closest && t.closest("[data-reiter]");
+  if(z){ zustand.reiter[z.getAttribute("data-reiter")] = z.getAttribute("data-wert"); zeichnen(); return; }
+
+  z = t.closest && t.closest("[data-modul]");
+  if(z && !z.disabled){
+    var m = z.getAttribute("data-modul");
+    praxis().module[m] = !praxis().module[m];
+    schalterSichern(); zeichnen(); return;
+  }
+
+  z = t.closest && t.closest("[data-zuteilen]");
+  if(z){
+    var nr = z.getAttribute("data-zuteilen"), kand = null;
+    warteliste().forEach(function(w){ if(w.nr === nr) kand = w; });
+    var tr = kand ? naechsteZuteilung(kand.beh) : null;
+    if(tr && tr.patient.nr === nr && zuteilen(tr)){
+      zustand.meldung = tr.patient.name + " wartet jetzt in " + tr.raum.name + ".";
+    }
+    zeichnen(); return;
+  }
+
+  z = t.closest && t.closest("[data-fertigraum]");
+  if(z){
+    var id = z.getAttribute("data-fertigraum"), k = raumHolen(id);
+    if(k){ k.status = "frei"; k.seit = 0; }
+    nachruecken(id); zeichnen(); return;
+  }
+
+  z = t.closest && t.closest("[data-betreten]");
+  if(z){
+    var kb = raumHolen(z.getAttribute("data-betreten"));
+    if(kb){ kb.status = "arzt"; kb.seit = 0; }
+    zustand.zimmer = { leistungen:{}, rezepte:{}, diktat:false, abschluss:null };
+    zustand.meldung = null;
+    zustand.seite = "zimmer"; zustand.welt = "praxis";
+    adresseSetzen(); zeichnen(); return;
+  }
+
+  z = t.closest && t.closest("[data-freigeben]");
+  if(z){ raumFreigeben(z.getAttribute("data-freigeben"), null); zeichnen(); return; }
+
+  z = t.closest && t.closest("[data-erledigt]");
+  if(z){
+    var zi = zustand.zimmer;
+    var s = ZIMMER_LEISTUNGEN.reduce(function(a,l){
+      var an = (l.id in zi.leistungen) ? zi.leistungen[l.id] : l.vor;
+      return a + (an ? l.betrag : 0);
+    }, 0);
+    var anz = Object.keys(zi.rezepte).filter(function(x){ return zi.rezepte[x]; }).length;
+    raumFreigeben(z.getAttribute("data-erledigt"), {summe:s, rezepte:anz});
+    zeichnen(); return;
+  }
+
+  z = t.closest && t.closest("[data-leistung]");
+  if(z){
+    var li = z.getAttribute("data-leistung"), vor = false;
+    ZIMMER_LEISTUNGEN.forEach(function(l){ if(l.id === li) vor = l.vor; });
+    var jetzt = (li in zustand.zimmer.leistungen) ? zustand.zimmer.leistungen[li] : vor;
+    zustand.zimmer.leistungen[li] = !jetzt; zeichnen(); return;
+  }
+
+  z = t.closest && t.closest("[data-rezept]");
+  if(z){
+    var ri = z.getAttribute("data-rezept");
+    zustand.zimmer.rezepte[ri] = !zustand.zimmer.rezepte[ri]; zeichnen(); return;
+  }
+
+  z = t.closest && t.closest("[data-diktat]");
+  if(z){ zustand.zimmer.diktat = true; zeichnen(); return; }
+
+  z = t.closest && t.closest("[data-zuruecksetzen]");
+  if(z){
+    delete zustand.raumStand[zustand.mandant];
+    delete zustand.warteStand[zustand.mandant];
+    zustand.zimmer = { leistungen:{}, rezepte:{}, diktat:false, abschluss:null };
+    zustand.meldung = null; zeichnen(); return;
+  }
+
+  z = t.closest && t.closest("[data-erledigt-wv]");
+  if(z){
+    var wv = z.getAttribute("data-erledigt-wv");
+    if(!zustand.erledigt[zustand.mandant]) zustand.erledigt[zustand.mandant] = {};
+    zustand.erledigt[zustand.mandant][wv] = true; zeichnen(); return;
+  }
+
+  z = t.closest && t.closest("[data-erinnern]");
+  if(z){ z.textContent = "Vorgemerkt"; z.disabled = true; return; }
+
+  if(t.id === "menuknopf"){
+    document.getElementById("seitenleiste").classList.toggle("offen"); return;
+  }
 });
 
-/* ------------------------------------------------------------------ Start */
+document.getElementById("mandantwahl").addEventListener("change", function(e){
+  zustand.mandant = e.target.value;
+  zustand.reiter = {}; zustand.meldung = null;
+  zustand.zimmer = { leistungen:{}, rezepte:{}, diktat:false, abschluss:null };
+  adresseSetzen(); zeichnen();
+});
+
+/* ===================================================== Start */
 schalterLaden();
 adresseLesen();
 adresseSetzen();
