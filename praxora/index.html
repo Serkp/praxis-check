@@ -193,6 +193,67 @@ td .neben{font-size:12px;color:var(--g500)}
   border-radius:50%;background:var(--akzent)}
 .liste-schlicht li b{color:var(--tinte)}
 
+/* Raumtafel */
+.raumgitter{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(212px,1fr))}
+.raum{border:1px solid var(--rand);border-top:3px solid var(--g300);border-radius:8px;
+  background:#fff;padding:12px 14px;box-shadow:var(--schatten);display:flex;flex-direction:column}
+.raum.frei{border-top-color:var(--gruen)}
+.raum.wartet{border-top-color:var(--akzent)}
+.raum.arzt{border-top-color:var(--gelb)}
+.raum.richten{border-top-color:var(--g300);background:var(--g50)}
+.raum .rname{font-size:13.5px;font-weight:700;color:var(--tinte)}
+.raum .rbeh{font-size:11.5px;color:var(--g500);margin-bottom:9px}
+.raum .rkoerper{flex:1;min-height:46px}
+.raum .rpat{font-size:13px;color:var(--tinte);font-weight:600;line-height:1.35}
+.raum .rzeit{font-size:11.5px;color:var(--g500);margin-top:2px}
+.raum .rleer{font-size:12.5px;color:var(--g400);padding-top:4px}
+.raum .rakt{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
+.raum .rgeraet{display:block;font-size:10px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--akzent);font-weight:700;margin-top:3px}
+
+tr.notfall td{background:var(--rot-hell)}
+tr.notfall td:first-child{box-shadow:inset 3px 0 0 var(--rot)}
+
+/* Gerät (iPad im Zimmer) */
+.geraet{border:9px solid #1b2738;border-radius:16px;background:#fff;overflow:hidden;
+  box-shadow:0 8px 26px rgba(15,23,42,.15);max-width:880px}
+.geraet-kopf{background:var(--tinte);color:#fff;padding:11px 16px;display:flex;align-items:center;gap:12px}
+.geraet-kopf .wer{font-size:14.5px;font-weight:700}
+.geraet-kopf .was{font-size:12px;color:#9fb3c8}
+.geraet-kopf .rechts{margin-left:auto;font-size:11.5px;color:#9fb3c8;text-align:right}
+.geraet-koerper{padding:16px 18px}
+.block{border-bottom:1px solid var(--g100);padding:13px 0}
+.block:first-child{padding-top:0}
+.block:last-child{border-bottom:0;padding-bottom:0}
+.block .btitel{font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--g500);
+  font-weight:700;margin-bottom:7px;display:flex;align-items:center;gap:8px}
+.block .btitel .mehr{margin-left:auto;font-weight:600;letter-spacing:0;text-transform:none;font-size:12px}
+
+.wahl{display:flex;align-items:center;gap:11px;padding:7px 0;border-bottom:1px solid var(--g100);cursor:pointer}
+.wahl:last-child{border-bottom:0}
+.wahl .kasten{flex:0 0 17px;height:17px;border:1.5px solid var(--g300);border-radius:4px;
+  display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;background:#fff}
+.wahl.an .kasten{background:var(--akzent);border-color:var(--akzent)}
+.wahl .txt{flex:1;min-width:0;font-size:13.5px;color:var(--tinte)}
+.wahl .txt span{display:block;font-size:12px;color:var(--g500)}
+.wahl .betrag{font-size:13.5px;font-weight:700;color:var(--tinte);font-variant-numeric:tabular-nums}
+.wahl.an .betrag{color:var(--akzent)}
+
+.summe{display:flex;align-items:baseline;gap:10px;padding-top:11px;margin-top:4px;border-top:1px solid var(--g200)}
+.summe .et{font-size:12.5px;color:var(--g500)}
+.summe .wt{margin-left:auto;font-size:19px;font-weight:700;color:var(--tinte);font-variant-numeric:tabular-nums}
+
+.fertigleiste{background:var(--g50);border-top:1px solid var(--rand);padding:13px 18px;
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.fertigleiste .hinweis{font-size:12.5px;color:var(--g500);flex:1;min-width:180px}
+
+/* Telefonregeln */
+.regel{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--g100);font-size:13.5px}
+.regel:last-child{border-bottom:0}
+.regel .anlass{flex:0 0 40%;color:var(--tinte);font-weight:600}
+.regel .pfeil{color:var(--g300);flex:0 0 auto}
+.regel .wohin{flex:1;color:var(--g600)}
+
 /* Gegenüberstellung Gespräch / Karteikarteneintrag */
 .gegenueber{display:flex;border:1px solid var(--rand);border-radius:7px;overflow:hidden}
 .gegenueber > div{flex:1;padding:15px 17px;min-width:0}
@@ -304,7 +365,8 @@ var PRAXEN = {
     behandler: ["Dr. Lodin"],
     pvs: "Duria² — GDT 3.0", terminal: 1, ipads: 4,
     module: { anmeldung:true, anamnese:true, aufklaerung:true, abschluss:true,
-              wiedervorlage:true, transkript:false },
+              wiedervorlage:true, raeume:true, diktat:true, rezept:true,
+              telefon:false, transkript:false },
     kennzahlen: { erwartet:38, angemeldet:23, schnitt:"1:47", quote:71,
                   offenAnzahl:14, offenBetrag:4380.50, faellig:57 },
     patienten: [
@@ -373,7 +435,8 @@ var PRAXEN = {
     behandler: ["Dr. Arnoldt","Dr. Ivanović","Fr. Dr. Schepp"],
     pvs: "Duria² — GDT 2.10", terminal: 2, ipads: 9,
     module: { anmeldung:true, anamnese:true, aufklaerung:false, abschluss:true,
-              wiedervorlage:true, transkript:false },
+              wiedervorlage:true, raeume:true, diktat:true, rezept:true,
+              telefon:true, transkript:false },
     kennzahlen: { erwartet:94, angemeldet:61, schnitt:"2:06", quote:65,
                   offenAnzahl:31, offenBetrag:11240.00, faellig:183 },
     patienten: [
@@ -430,7 +493,8 @@ var PRAXEN = {
     behandler: ["Dr. Vogel"],
     pvs: "Duria² — GDT 3.0", terminal: 1, ipads: 2,
     module: { anmeldung:true, anamnese:true, aufklaerung:false, abschluss:false,
-              wiedervorlage:false, transkript:false },
+              wiedervorlage:false, raeume:false, diktat:false, rezept:true,
+              telefon:false, transkript:false },
     kennzahlen: { erwartet:52, angemeldet:34, schnitt:"1:29", quote:78,
                   offenAnzahl:2, offenBetrag:186.00, faellig:0 },
     patienten: [
@@ -491,6 +555,123 @@ var BOEGEN = [
   {name:"Aufklärung Exzision in Lokalanästhesie", anlass:"Eingriff",              felder:9,  stand:"06/2026", quelle:"Anbieter"},
   {name:"Aufklärung Lasertherapie",          anlass:"Laser",                      felder:8,  stand:"06/2026", quelle:"Anbieter"},
   {name:"Aufklärung Botulinumtoxin",         anlass:"Ästhetik",                   felder:10, stand:"06/2026", quelle:"Anbieter"}
+];
+
+/* --------------------------------------------------------------- Räume
+   Zustände: frei · richten (wird hergerichtet) · wartet (Patient im Raum)
+   · arzt (Behandler im Raum). Der Behandler gibt frei, nicht das System. */
+var RAEUME = {
+  rheinderma: [
+    {id:"r1", name:"Raum 1", beh:"Dr. Lodin", geraet:null,
+     status:"arzt",    pat:"J. M.-Lüdenscheidt", nr:"10234", seit:6},
+    {id:"r2", name:"Raum 2", beh:"Dr. Lodin", geraet:null,
+     status:"frei",    pat:null, nr:null, seit:0},
+    {id:"r3", name:"Laserraum", beh:"Dr. Lodin", geraet:"Laser",
+     status:"richten", pat:null, nr:null, seit:2},
+    {id:"r4", name:"Eingriffsraum", beh:"Dr. Lodin", geraet:"Eingriff",
+     status:"frei",    pat:null, nr:null, seit:0}
+  ],
+  hautzentrum: [
+    {id:"h1", name:"Raum 1", beh:"Dr. Arnoldt",    geraet:null, status:"arzt",    pat:"E. Nowak", nr:"22013", seit:9},
+    {id:"h2", name:"Raum 2", beh:"Dr. Arnoldt",    geraet:null, status:"frei",    pat:null, nr:null, seit:0},
+    {id:"h3", name:"Raum 3", beh:"Dr. Ivanović",   geraet:null, status:"wartet",  pat:"U. Bergmann", nr:"22190", seit:5},
+    {id:"h4", name:"Raum 4", beh:"Dr. Ivanović",   geraet:null, status:"richten", pat:null, nr:null, seit:1},
+    {id:"h5", name:"Raum 5", beh:"Fr. Dr. Schepp", geraet:null, status:"arzt",    pat:"C. Thiele", nr:"22455", seit:4},
+    {id:"h6", name:"Raum 6", beh:"Fr. Dr. Schepp", geraet:null, status:"frei",    pat:null, nr:null, seit:0},
+    {id:"h7", name:"Laserraum", beh:"geteilt",     geraet:"Laser", status:"frei", pat:null, nr:null, seit:0}
+  ],
+  vogel: [
+    {id:"v1", name:"Raum 1", beh:"Dr. Vogel", geraet:null, status:"arzt", pat:"H. Görlitz", nr:"3021", seit:7},
+    {id:"v2", name:"Raum 2", beh:"Dr. Vogel", geraet:null, status:"frei", pat:null, nr:null, seit:0}
+  ]
+};
+
+var WARTELISTE = {
+  rheinderma: [
+    {nr:"10087", name:"K. Brenner",    beh:"Dr. Lodin", anlass:"Laser, Folgetermin", seit:11, notfall:false, braucht:"Laser"},
+    {nr:"10592", name:"T. Weißenberg", beh:"Dr. Lodin", anlass:"Ästhetik-Beratung",  seit:7,  notfall:false, braucht:null},
+    {nr:"10771", name:"B. Ritter",     beh:"Dr. Lodin", anlass:"Urtikaria, akut",    seit:4,  notfall:true,  braucht:null},
+    {nr:"10411", name:"A. Şahin",      beh:"Dr. Lodin", anlass:"Kontrolle Nävus",    seit:9,  notfall:false, braucht:null},
+    {nr:"10120", name:"R. Özdemir",    beh:"Dr. Lodin", anlass:"Ekzem",              seit:2,  notfall:false, braucht:null}
+  ],
+  hautzentrum: [
+    {nr:"22077", name:"O. Kraft",     beh:"Dr. Arnoldt",    anlass:"Laser",                   seit:9, notfall:false, braucht:"Laser"},
+    {nr:"22640", name:"S. Pohlmann",  beh:"Dr. Ivanović",   anlass:"Neurodermitis-Schub",     seit:6, notfall:true,  braucht:null},
+    {nr:"22418", name:"M. Deckert",   beh:"Fr. Dr. Schepp", anlass:"Kontrolle",               seit:3, notfall:false, braucht:null}
+  ],
+  vogel: [
+    {nr:"3180", name:"M. Elsner",  beh:"Dr. Vogel", anlass:"Check-up 35",  seit:8, notfall:false, braucht:null},
+    {nr:"3044", name:"A. Türkmen", beh:"Dr. Vogel", anlass:"DMP Diabetes", seit:4, notfall:false, braucht:null}
+  ]
+};
+
+/* --------------------------------------------------- Telefon und Termine */
+var TELEFON = {
+  rheinderma: {
+    anlage:"analog", anrufe:112, automatisch:0, durchgestellt:112, verpasst:31, rueckstand:9,
+    anliegen:[
+      {was:"Termin vereinbaren oder verschieben", anteil:41, auto:true},
+      {was:"Rezept oder Überweisung anfordern",   anteil:19, auto:true},
+      {was:"Befund erfragen",                     anteil:13, auto:false},
+      {was:"Akutes Anliegen",                     anteil:11, auto:false},
+      {was:"Rückfrage zur Rechnung",              anteil:9,  auto:true},
+      {was:"Sonstiges",                           anteil:7,  auto:false}
+    ]
+  },
+  hautzentrum: {
+    anlage:"digital", anrufe:284, automatisch:171, durchgestellt:113, verpasst:12, rueckstand:2,
+    anliegen:[
+      {was:"Termin vereinbaren oder verschieben", anteil:46, auto:true},
+      {was:"Rezept oder Überweisung anfordern",   anteil:21, auto:true},
+      {was:"Befund erfragen",                     anteil:12, auto:false},
+      {was:"Akutes Anliegen",                     anteil:9,  auto:false},
+      {was:"Rückfrage zur Rechnung",              anteil:7,  auto:true},
+      {was:"Sonstiges",                           anteil:5,  auto:false}
+    ]
+  },
+  vogel: {
+    anlage:"analog", anrufe:96, automatisch:0, durchgestellt:96, verpasst:22, rueckstand:5,
+    anliegen:[
+      {was:"Termin vereinbaren oder verschieben", anteil:52, auto:true},
+      {was:"Rezept anfordern",                    anteil:24, auto:true},
+      {was:"Befund erfragen",                     anteil:10, auto:false},
+      {was:"Akutes Anliegen",                     anteil:8,  auto:false},
+      {was:"Sonstiges",                           anteil:6,  auto:false}
+    ]
+  }
+};
+
+/* Welcher Anlass gehört zu welchem Behandler und welcher Terminspalte.
+   Das ist die Regel, nach der die Telefonannahme terminiert — nicht Erfahrung
+   einer einzelnen Mitarbeiterin, sondern eine hinterlegte, prüfbare Liste. */
+var TERMINREGELN = [
+  {anlass:"Hautkrebsvorsorge",            wohin:"jede Spalte · 20 Min. · Raum 1 oder 2"},
+  {anlass:"Lasertherapie",                wohin:"nur Behandler mit Laserberechtigung · Laserraum · 30 Min."},
+  {anlass:"Ästhetik, Erstberatung",       wohin:"feste Beratungsspalte · 30 Min. · kein Eingriffsraum"},
+  {anlass:"Exzision, Eingriff",           wohin:"Eingriffsraum · 45 Min. · nicht am Freitagnachmittag"},
+  {anlass:"Nachkontrolle nach Eingriff",  wohin:"derselbe Behandler wie beim Eingriff · 10 Min."},
+  {anlass:"Akutes Anliegen",              wohin:"wird nicht terminiert — sofort an die Anmeldung"}
+];
+
+var TELEFON_NIE = [
+  "Befunde am Telefon mitteilen — auch nicht sinngemäß.",
+  "Medizinisch beraten oder einschätzen, wie dringend etwas ist.",
+  "Ein akutes Anliegen in einen Termin umwandeln. Es wird durchgestellt, immer.",
+  "Rezepte für Medikamente ausstellen, die nicht in der Dauermedikation stehen."
+];
+
+/* ------------------------------------------------------ Behandlungszimmer */
+var ZIMMER_LEISTUNGEN = [
+  {id:"l1", text:"Erweiterte Hautkrebsvorsorge", unter:"Auflichtmikroskopie, Ganzkörperinspektion", betrag:79.00, vor:true},
+  {id:"l2", text:"Entfernung von zwei Fibromen", unter:"einschließlich Material und Verband",       betrag:96.00, vor:true},
+  {id:"l3", text:"Fotodokumentation",            unter:"zwei Aufnahmen, Verlaufskontrolle",         betrag:24.00, vor:false},
+  {id:"l4", text:"Beratung zur Nachsorge",       unter:"",                                          betrag:0.00,  vor:true}
+];
+
+var ZIMMER_REZEPTE = [
+  {id:"p1", text:"Mometasonfuroat 0,1 % Creme", unter:"30 g · 1× täglich dünn auftragen, max. 14 Tage", art:"Privat"},
+  {id:"p2", text:"Harnstoffsalbe 10 %",          unter:"100 g · zur Basispflege, 2× täglich",           art:"Grün"},
+  {id:"p3", text:"Cetirizin 10 mg",              unter:"20 Stück · abends bei Juckreiz",                art:"Grün"}
 ];
 
 /* Beispiel für die Gesprächsdokumentation. Erfunden, aber im Aufbau echt:
@@ -559,6 +740,18 @@ var VORHABEN = [
    wo:"Abschluss und PKV", ziel:"abschluss",
    stand:"bereit", wer:"wir",
    text:"Die Rechnung entsteht im Zimmer statt abends. Wir ersetzen keine Abrechnungssoftware, wir füttern sie und behalten den Stand im Blick."},
+  {wunsch:"Alles im Behandlungszimmer digital",
+   wo:"Behandlungszimmer", ziel:"zimmer",
+   stand:"bereit", wer:"wir",
+   text:"Anamnese, Diktat, Leistungen und Rezept auf einer Fläche. Ein Druck auf „Erledigt“ gibt den Raum frei und schickt alles weiter."},
+  {wunsch:"Wartebereich und Raumzuteilung",
+   wo:"Wartebereich und Räume", ziel:"raeume",
+   stand:"bereit", wer:"wir",
+   text:"Zwei Räume je Behandler im Wechsel, Notfälle parallel. Der nächste Raum füllt sich von selbst — niemand muss geholt werden."},
+  {wunsch:"Digitale Rezepte",
+   wo:"Behandlungszimmer", ziel:"zimmer",
+   stand:"teils", wer:"wir + DSC",
+   text:"Auswahl im Zimmer, Ausstellung in Duria². Das eRezept selbst läuft über die Telematikinfrastruktur — dort hängt es am Konnektor, nicht an uns."},
   {wunsch:"Beratungsgespräch dokumentieren",
    wo:"Gespräch", ziel:"gespraech",
    stand:"vorbereitung", wer:"wir + Datenschutz",
@@ -571,10 +764,10 @@ var VORHABEN = [
    wo:"Termine nach Duria²", ziel:null,
    stand:"offen", wer:"Doctolib + DSC",
    text:"Ob Termine automatisch nach Duria² kommen, ist die wichtigste offene Frage. Bis das nachgewiesen ist, ändern wir am Kalender nichts."},
-  {wunsch:"Telefon entlasten",
-   wo:"Telefonassistent", ziel:null,
+  {wunsch:"Telefon entlasten, beim richtigen Arzt terminieren",
+   wo:"Telefon und Termine", ziel:"telefon",
    stand:"gesperrt", wer:"Praxis + Systemhaus",
-   text:"Setzt eine digitale Telefonanlage voraus, die die Praxis heute nicht hat. Ohne sie kein Assistent — das ist zuerst zu beauftragen."},
+   text:"Die Terminregeln erheben wir sofort — sie nützen auch jeder Vertretung. Die Annahme selbst braucht eine digitale Telefonanlage, die die Praxis heute nicht hat."},
   {wunsch:"Serverstruktur, Hosting, Backup",
    wo:"außerhalb unseres Teils", ziel:null,
    stand:"fremd", wer:"Systemhaus / DSC",
@@ -596,11 +789,15 @@ var STAND_ART = {
 };
 
 var SEITEN = [
-  {gruppe:"Betrieb"},
+  {gruppe:"Der Tag"},
   {id:"heute",        sym:"◧", titel:"Heute"},
   {id:"anmeldung",    sym:"▤", titel:"Selbstanmeldung"},
+  {id:"raeume",       sym:"⊞", titel:"Wartebereich und Räume"},
+  {id:"zimmer",       sym:"▣", titel:"Behandlungszimmer"},
+  {gruppe:"Inhalte"},
   {id:"formulare",    sym:"▦", titel:"Formulare"},
-  {id:"gespraech",    sym:"◐", titel:"Gespräch"},
+  {id:"gespraech",    sym:"◐", titel:"Gespräch dokumentieren"},
+  {id:"telefon",      sym:"☏", titel:"Telefon und Termine"},
   {gruppe:"Geld und Nachsorge"},
   {id:"abschluss",    sym:"▧", titel:"Abschluss und PKV"},
   {id:"wiedervorlage",sym:"◇", titel:"Wiedervorlage"},
@@ -618,8 +815,63 @@ var zustand = {
   seite: "heute",
   reiter: {},
   erledigt: {},          /* Wiedervorlage: abgehakte Nummern je Mandant */
-  filter: "alle"
+  filter: "alle",
+  raumStand: {},         /* veränderbare Kopie der Raumtafel je Mandant */
+  warteStand: {},
+  meldung: null,         /* was das System zuletzt selbst getan hat */
+  zimmer: { leistungen:{}, rezepte:{}, diktat:false, abschluss:null }
 };
+
+/* Räume und Warteliste werden im Betrieb verändert. Damit die Vorführung
+   nicht die Stammdaten überschreibt, arbeitet sie auf einer Kopie. */
+function raeume(){
+  if(!zustand.raumStand[zustand.mandant]){
+    zustand.raumStand[zustand.mandant] = JSON.parse(JSON.stringify(RAEUME[zustand.mandant] || []));
+  }
+  return zustand.raumStand[zustand.mandant];
+}
+function warteliste(){
+  if(!zustand.warteStand[zustand.mandant]){
+    zustand.warteStand[zustand.mandant] = JSON.parse(JSON.stringify(WARTELISTE[zustand.mandant] || []));
+  }
+  return zustand.warteStand[zustand.mandant];
+}
+
+/* Wer kommt als Nächstes in welchen Raum?
+   Notfall vor Wartezeit. Ein gerätegebundener Raum wird nicht für einen
+   Patienten belegt, der das Gerät nicht braucht. */
+function naechsteZuteilung(beh){
+  var liste = warteliste().filter(function(w){ return !beh || w.beh === beh; });
+  liste.sort(function(x,y){
+    if(x.notfall !== y.notfall) return x.notfall ? -1 : 1;
+    return y.seit - x.seit;
+  });
+  var r = raeume(), treffer = null;
+  liste.some(function(w){
+    var raum = null;
+    r.some(function(k){
+      if(k.status !== "frei") return false;
+      if(k.beh !== w.beh && k.beh !== "geteilt") return false;
+      if(w.braucht ? k.geraet !== w.braucht : k.geraet !== null) return false;
+      raum = k; return true;
+    });
+    if(raum){ treffer = {raum:raum, patient:w}; return true; }
+    return false;
+  });
+  return treffer;
+}
+
+function zuteilen(treffer){
+  if(!treffer) return false;
+  treffer.raum.status = "wartet";
+  treffer.raum.pat = treffer.patient.name;
+  treffer.raum.nr  = treffer.patient.nr;
+  treffer.raum.seit = 0;
+  var w = warteliste();
+  var i = w.map(function(x){ return x.nr; }).indexOf(treffer.patient.nr);
+  if(i >= 0) w.splice(i,1);
+  return true;
+}
 
 function praxis(){ return PRAXEN[zustand.mandant]; }
 
@@ -894,7 +1146,7 @@ ANSICHTEN.wiedervorlage = function(){
       '<td>' + pille(art, w.faellig + " Tage überfällig") + '</td>' +
       '<td class="rechts">' +
         '<button class="knopf klein" data-erinnern="' + w.nr + '">Erinnern</button> ' +
-        '<button class="knopf klein still" data-erledigt="' + w.nr + '">Erledigt</button>' +
+        '<button class="knopf klein still" data-erledigt-wv="' + w.nr + '">Erledigt</button>' +
       '</td></tr>';
   }).join("") : '<tr><td colspan="5">' +
       leer("Liste für heute abgearbeitet", "Morgen früh steht die nächste bereit.") + '</td></tr>';
@@ -981,9 +1233,13 @@ ANSICHTEN.praxis = function(){
     {m:"anmeldung",   b:"Selbstanmeldung",            t:"Terminal im Eingangsbereich"},
     {m:"anamnese",    b:"Digitale Anamnese",          t:"Handy vorab oder iPad im Wartezimmer"},
     {m:"aufklaerung", b:"Aufklärung mit Unterschrift",t:"Bogen auf dem iPad, fertig in die Akte"},
+    {m:"raeume",      b:"Wartebereich und Räume",     t:"Zuteilung der Wartenden, „Erledigt“ gibt den Raum frei"},
+    {m:"diktat",      b:"Diktat im Zimmer",           t:"Gesprochenes wird zum Entwurf für die Karteikarte"},
+    {m:"rezept",      b:"Rezept aus dem Zimmer",      t:"Auswahl im Zimmer, Ausstellung in Duria²"},
     {m:"abschluss",   b:"Selbstabschluss",            t:"Leistungen im Zimmer, Rechnung beim Gehen"},
     {m:"wiedervorlage",b:"Wiedervorlage",             t:"Tägliche Liste fälliger Vorsorgen"},
-    {m:"transkript",  b:"Dokumentation des Gesprächs",t:"Nur mit Einwilligung und Folgenabschätzung — noch nicht freigegeben", sperre:true}
+    {m:"telefon",     b:"Telefonannahme",             t:"Terminiert nach den Regeln der Praxis — braucht eine digitale Anlage"},
+    {m:"transkript",  b:"Vollständige Gesprächsdokumentation", t:"Nur mit Einwilligung und Folgenabschätzung — noch nicht freigegeben", sperre:true}
   ].map(function(z){
     var an = p.module[z.m];
     return '<div class="schalter-zeile"><div class="txt"><b>' + z.b + '</b><span>' + z.t + '</span></div>' +
@@ -1007,6 +1263,321 @@ ANSICHTEN.praxis = function(){
       '<li><b>Keine Abhängigkeit von uns im Betrieb.</b> Fällt die Verbindung nach außen weg, arbeitet die Praxis weiter.</li>' +
       '<li><b>Keine Patientendaten außer Haus.</b> Nach außen gehen Betriebszahlen — verarbeitete Dokumente, Laufzeiten, Fehler.</li>' +
       '</ul></div>');
+};
+
+/* ------------------------------------------- Wartebereich und Räume */
+var RAUM_ART = {
+  frei:    {art:"gruen", text:"frei"},
+  richten: {art:"grau",  text:"wird hergerichtet"},
+  wartet:  {art:"blau",  text:"Patient wartet"},
+  arzt:    {art:"gelb",  text:"Behandler im Raum"}
+};
+
+ANSICHTEN.raeume = function(){
+  var p = praxis();
+
+  if(!p.module.raeume){
+    return kopf("Vom Wartebereich ins Zimmer", "In dieser Praxis noch nicht eingeschaltet.") +
+      karte(null, null, '<div class="karte-koerper">' + leer("Raumzuteilung ist abgeschaltet",
+        "Bei nur einem Behandler und zwei Räumen lohnt sie sich nicht. Einschalten unter „Praxis und Module“.") + '</div>');
+  }
+
+  var r = raeume(), w = warteliste();
+  var frei = r.filter(function(k){ return k.status === "frei"; }).length;
+  var notfaelle = w.filter(function(k){ return k.notfall; }).length;
+  var laengste = w.reduce(function(m,k){ return Math.max(m, k.seit); }, 0);
+
+  var tafel = r.map(function(k){
+    var s = RAUM_ART[k.status];
+    var koerper, aktion = "";
+
+    if(k.status === "frei"){
+      var t = naechsteZuteilung(k.beh);
+      koerper = '<div class="rleer">Niemand im Raum.</div>';
+      aktion = t && (t.raum.id === k.id)
+        ? '<button class="knopf klein haupt" data-zuteilen="' + t.patient.nr + '">' +
+          sicher(t.patient.name) + ' hereinbitten</button>'
+        : '<span class="rleer">Wartet niemand Passendes.</span>';
+    } else if(k.status === "richten"){
+      koerper = '<div class="rleer">Wird hergerichtet, seit ' + k.seit + ' Min.</div>';
+      aktion = '<button class="knopf klein" data-fertigraum="' + k.id + '">Raum ist fertig</button>';
+    } else if(k.status === "wartet"){
+      koerper = '<div class="rpat">' + sicher(k.pat) + '</div>' +
+                '<div class="rzeit">Nr. ' + k.nr + ' · wartet seit ' + k.seit + ' Min.</div>';
+      aktion = '<button class="knopf klein" data-betreten="' + k.id + '">Raum betreten</button>';
+    } else {
+      koerper = '<div class="rpat">' + sicher(k.pat) + '</div>' +
+                '<div class="rzeit">Nr. ' + k.nr + ' · im Gespräch seit ' + k.seit + ' Min.</div>';
+      aktion = '<button class="knopf klein haupt" data-freigeben="' + k.id + '">Erledigt</button>' +
+               '<button class="knopf klein still" data-seite="zimmer">Zimmer öffnen</button>';
+    }
+
+    return '<div class="raum ' + k.status + '">' +
+      '<div class="rname">' + sicher(k.name) + '</div>' +
+      '<div class="rbeh">' + sicher(k.beh) +
+        (k.geraet ? '<span class="rgeraet">' + sicher(k.geraet) + '</span>' : '') + '</div>' +
+      '<div style="margin-bottom:7px">' + pille(s.art, s.text) + '</div>' +
+      '<div class="rkoerper">' + koerper + '</div>' +
+      '<div class="rakt">' + aktion + '</div>' +
+    '</div>';
+  }).join("");
+
+  var warten = w.length ? w.slice().sort(function(x,y){
+      if(x.notfall !== y.notfall) return x.notfall ? -1 : 1;
+      return y.seit - x.seit;
+    }).map(function(k){
+    var t = naechsteZuteilung(k.beh);
+    var dran = t && t.patient.nr === k.nr;
+    return '<tr' + (k.notfall ? ' class="notfall"' : '') + '>' +
+      '<td><div class="haupt">' + sicher(k.name) + '</div>' +
+          '<div class="neben">Nr. ' + k.nr + ' · ' + sicher(k.beh) + '</div></td>' +
+      '<td>' + sicher(k.anlass) +
+          (k.braucht ? '<div class="neben">braucht ' + sicher(k.braucht) + '</div>' : '') + '</td>' +
+      '<td>' + (k.notfall ? pille("rot","außer der Reihe") : pille("grau", k.seit + " Min.")) + '</td>' +
+      '<td class="rechts">' + (dran
+          ? '<button class="knopf klein haupt" data-zuteilen="' + k.nr + '">In ' + sicher(t.raum.name) + '</button>'
+          : '<span style="color:var(--g400);font-size:12.5px">kein Raum frei</span>') + '</td>' +
+    '</tr>';
+  }).join("") : '<tr><td colspan="4">' + leer("Niemand wartet") + '</td></tr>';
+
+  return kopf("Vom Wartebereich ins Zimmer",
+      "Der Behandler drückt nach dem Patienten auf „Erledigt“ — mehr nicht. Den Rest macht das " +
+      "System: Raum freigeben, den nächsten Wartenden hereinbitten, den Stand für alle sichtbar halten.") +
+    (zustand.meldung ?
+      '<div class="box" style="margin-bottom:16px"><b>Das System hat gerade selbst gehandelt</b>' +
+      sicher(zustand.meldung) + '</div>' : '') +
+    '<div class="gitter g4" style="margin-bottom:16px">' +
+      kennzahl("Räume frei", frei + " von " + r.length, "",
+               frei ? "sofort belegbar" : "<b>alles belegt</b>") +
+      kennzahl("Im Wartebereich", w.length, "", w.length ? "warten auf einen Raum" : "<b>niemand wartet</b>") +
+      kennzahl("Längste Wartezeit", laengste, " Min.", "ab Anmeldung gerechnet") +
+      kennzahl("Außer der Reihe", notfaelle, "",
+               notfaelle ? "laufen parallel mit" : "derzeit keine") +
+    '</div>' +
+    karte("Raumtafel", "dieselbe Ansicht an Anmeldung und in jedem Zimmer",
+      '<div class="karte-koerper"><div class="raumgitter">' + tafel + '</div></div>',
+      "Ein Raum mit Gerät wird nie für jemanden belegt, der das Gerät nicht braucht. " +
+      "Der Laserraum bleibt dem Laser vorbehalten, auch wenn er gerade leer steht.") +
+    karte("Wer wartet", w.length + " Wartende",
+      '<table><thead><tr><th>Patient</th><th>Anlass</th><th>Wartet</th>' +
+      '<th class="rechts">Nächster Raum</th></tr></thead><tbody>' + warten + '</tbody></table>') +
+    karte("Nach welcher Regel zugeteilt wird", null,
+      '<div class="karte-koerper"><ul class="liste-schlicht">' +
+      '<li><b>Außer der Reihe geht vor Wartezeit.</b> Wer akut kommt, wird eingeschoben — ' +
+      'etwa eine Urtikaria oder ein Neurodermitis-Schub. Etwa jeder fünfte Patient.</li>' +
+      '<li><b>Jeder Behandler bekommt nur eigene Patienten.</b> Zwei Räume im Wechsel: ' +
+      'während im einen behandelt wird, sitzt im anderen schon der Nächste.</li>' +
+      '<li><b>Gerätegebundene Räume sind reserviert.</b> Laser und Eingriffsraum werden nur ' +
+      'belegt, wenn das Gerät gebraucht wird.</li>' +
+      '<li><b>Das System entscheidet nie, ob etwas ein Notfall ist.</b> Das bleibt beim Team. ' +
+      'Es sortiert nur, was ihm gesagt wurde.</li>' +
+      '</ul></div>',
+      "Die Regeln stehen in den Praxiseinstellungen und lassen sich ändern, ohne dass jemand " +
+      "am Programm arbeitet.");
+};
+
+/* -------------------------------------------------------- Behandlungszimmer */
+ANSICHTEN.zimmer = function(){
+  var p = praxis();
+  var r = raeume();
+  var aktiv = null;
+  r.some(function(k){ if(k.status === "arzt"){ aktiv = k; return true; } return false; });
+
+  var ab = zustand.zimmer.abschluss;
+  if(ab){
+    return kopf("Erledigt",
+        "Ein Druck auf einen Knopf — und das hier ist in derselben Sekunde passiert.") +
+      karte("Was ausgelöst wurde", sicher(ab.name),
+        '<div class="karte-koerper"><ul class="liste-schlicht">' +
+        '<li><b>' + sicher(ab.raum) + ' freigegeben</b> und zum Herrichten gemeldet.</li>' +
+        '<li><b>' + sicher(ab.naechster) + '</b></li>' +
+        '<li><b>Dokumentation unterwegs nach Duria²</b> — als Text über die GDT-Brücke, ' +
+        'in die Karteikarte von ' + sicher(ab.name) + '.</li>' +
+        '<li><b>' + ab.rezepte + ' Rezept' + (ab.rezepte === 1 ? "" : "e") + ' angestoßen</b>, ' +
+        'Ausstellung und Signatur in Duria².</li>' +
+        '<li><b>Selbstabschluss vorbereitet:</b> ' + euro(ab.summe) + ' liegen dort bereit, ' +
+        'bevor der Patient ankommt.</li>' +
+        '</ul></div>',
+        "Niemand musste gerufen, geholt, abgehakt oder abends nachgetragen werden.") +
+      karte(null, null, '<div class="karte-koerper" style="display:flex;gap:8px;flex-wrap:wrap">' +
+        '<button class="knopf haupt" data-seite="raeume">Raumtafel ansehen</button>' +
+        '<button class="knopf" data-seite="abschluss">Zum Abschluss und PKV</button>' +
+        '<button class="knopf still" data-zuruecksetzen="1">Vorführung zurücksetzen</button>' +
+      '</div>');
+  }
+
+  if(!aktiv){
+    return kopf("Im Behandlungszimmer",
+        "Was der Behandler auf dem iPad sieht, während der Patient vor ihm sitzt.") +
+      karte(null, null, '<div class="karte-koerper">' +
+        leer("Gerade niemand im Gespräch",
+             "Unter „Wartebereich und Räume“ einen wartenden Patienten hereinbitten und den Raum betreten.") +
+        '<div style="text-align:center"><button class="knopf haupt" data-seite="raeume">Zur Raumtafel</button></div>' +
+      '</div>');
+  }
+
+  var z = zustand.zimmer;
+
+  var leistungen = ZIMMER_LEISTUNGEN.map(function(l){
+    var an = (l.id in z.leistungen) ? z.leistungen[l.id] : l.vor;
+    return '<div class="wahl' + (an ? " an" : "") + '" data-leistung="' + l.id + '">' +
+      '<div class="kasten">' + (an ? "✓" : "") + '</div>' +
+      '<div class="txt">' + sicher(l.text) + (l.unter ? '<span>' + sicher(l.unter) + '</span>' : '') + '</div>' +
+      '<div class="betrag">' + (l.betrag ? euro(l.betrag) : "—") + '</div>' +
+    '</div>';
+  }).join("");
+
+  var summe = ZIMMER_LEISTUNGEN.reduce(function(s,l){
+    var an = (l.id in z.leistungen) ? z.leistungen[l.id] : l.vor;
+    return s + (an ? l.betrag : 0);
+  }, 0);
+
+  var rezepte = ZIMMER_REZEPTE.map(function(x){
+    var an = !!z.rezepte[x.id];
+    return '<div class="wahl' + (an ? " an" : "") + '" data-rezept="' + x.id + '">' +
+      '<div class="kasten">' + (an ? "✓" : "") + '</div>' +
+      '<div class="txt">' + sicher(x.text) + '<span>' + sicher(x.unter) + '</span></div>' +
+      '<div class="betrag" style="font-size:11.5px;font-weight:700;color:var(--g500)">' + x.art + '</div>' +
+    '</div>';
+  }).join("");
+
+  var anzahlRezepte = Object.keys(z.rezepte).filter(function(k){ return z.rezepte[k]; }).length;
+
+  var diktatBlock = z.diktat
+    ? '<div class="gegenueber" style="margin-top:4px">' +
+      '<div><div class="titel">Mitgeschrieben</div><div class="gespraech-text">' +
+        GESPRAECH.ausschnitt.slice(0,3).map(function(x){
+          return '<p style="margin:0 0 7px"><span class="wer">' + x[0] + '</span> &nbsp;' + sicher(x[1]) + '</p>';
+        }).join("") + '</div></div>' +
+      '<div><div class="titel">Entwurf für die Karteikarte</div><div class="eintrag">' +
+        GESPRAECH.entwurf.map(function(x){
+          return '<div class="feld"><b>' + x[0] + '</b><span>' + sicher(x[1]) + '</span></div>';
+        }).join("") + '</div></div></div>' +
+      '<div class="feinzeile">Geht erst mit „Erledigt“ in die Karteikarte — und nur so, wie es hier steht.</div>'
+    : '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">' +
+      '<button class="knopf haupt" data-diktat="1">Diktat starten</button>' +
+      '<span class="feinzeile" style="margin:0">' +
+      (p.module.diktat ? 'Aufnahme nur nach Zustimmung beider Seiten.'
+                       : 'In dieser Praxis noch nicht eingeschaltet — hier nur zur Vorführung.') +
+      '</span></div>';
+
+  var fertigBlock =
+    '<button class="knopf haupt" data-erledigt="' + aktiv.id + '">Erledigt — Raum freigeben</button>' +
+    '<span class="hinweis">Ein Druck. Alles Weitere läuft von allein: Raum, nächster Patient, ' +
+    'Karteikarte, Rechnung.</span>';
+
+  return kopf("Im Behandlungszimmer",
+      "Was der Behandler auf dem iPad sieht, während der Patient vor ihm sitzt. Alles auf einer " +
+      "Fläche — kein Wechsel zwischen Programmen, kein Zettel, kein Nachtragen am Abend.") +
+    '<div class="geraet">' +
+      '<div class="geraet-kopf">' +
+        '<div><div class="wer">' + sicher(aktiv.pat) + '</div>' +
+        '<div class="was">Nr. ' + aktiv.nr + ' · ' + sicher(aktiv.name) + ' · ' + sicher(aktiv.beh) + '</div></div>' +
+        '<div class="rechts">Privat — Debeka<br>Hautkrebsvorsorge · 10:40 Uhr</div>' +
+      '</div>' +
+      '<div class="geraet-koerper">' +
+
+        '<div class="block"><div class="btitel">Vor dem Termin ausgefüllt' +
+          '<span class="mehr" style="color:var(--gruen)">liegt vor</span></div>' +
+          '<div style="font-size:13.5px;line-height:1.6">Keine Dauermedikation. Keine bekannten ' +
+          'Allergien. Hautkrebs in der Familie: Vater, Melanom 2019. Letzte Vorsorge 08.2024. ' +
+          '<span style="color:var(--g500)">Als Sorge angegeben: veränderte Stelle am Rücken.</span></div></div>' +
+
+        '<div class="block"><div class="btitel">Dokumentation</div>' + diktatBlock + '</div>' +
+
+        '<div class="block"><div class="btitel">Leistungen' +
+          '<span class="mehr" style="color:var(--g500)">antippen zum Ändern</span></div>' +
+          leistungen +
+          '<div class="summe"><span class="et">Heute fällig, zahlbar beim Abschluss</span>' +
+          '<span class="wt">' + euro(summe) + '</span></div></div>' +
+
+        '<div class="block"><div class="btitel">Rezept' +
+          '<span class="mehr" style="color:var(--g500)">' +
+          (anzahlRezepte ? anzahlRezepte + " ausgewählt" : "nichts ausgewählt") + '</span></div>' +
+          rezepte +
+          '<div class="feinzeile">Ausgestellt wird in Duria² — bei Kassenrezepten als eRezept über ' +
+          'die Telematikinfrastruktur, bei Privatrezepten als Druck oder Datei. Wir wählen aus, ' +
+          'unterschrieben wird dort.</div></div>' +
+
+      '</div>' +
+      '<div class="fertigleiste">' + fertigBlock + '</div>' +
+    '</div>' +
+    karte("Warum das ein Knopf ist und nicht sieben", null,
+      '<div class="karte-koerper"><ul class="liste-schlicht">' +
+      '<li><b>Der Behandler soll nicht verwalten.</b> Raum freigeben, Patient weiterschicken, ' +
+      'Leistungen weitergeben, Rezept anstoßen — das ist alles derselbe Moment.</li>' +
+      '<li><b>Die Rechnung entsteht hier, nicht abends.</b> Was angetippt wurde, liegt am ' +
+      'Selbstabschluss bereit, bevor der Patient dort ankommt.</li>' +
+      '<li><b>Der nächste Raum füllt sich von selbst.</b> Niemand muss gerufen, niemand ' +
+      'muss geholt werden.</li>' +
+      '</ul></div>',
+      "Das iPad ersetzt nicht die Karteikarte. Es füllt sie.");
+};
+
+/* ------------------------------------------------------ Telefon und Termine */
+ANSICHTEN.telefon = function(){
+  var p = praxis();
+  var t = TELEFON[zustand.mandant];
+  var digital = t.anlage === "digital";
+  var quote = t.anrufe ? Math.round(t.automatisch / t.anrufe * 100) : 0;
+
+  var balken = t.anliegen.map(function(a){
+    return '<div style="margin-bottom:9px">' +
+      '<div style="display:flex;font-size:13px;margin-bottom:3px">' +
+        '<span style="color:var(--tinte)">' + sicher(a.was) + '</span>' +
+        '<span style="margin-left:auto;color:var(--g500);font-variant-numeric:tabular-nums">' + a.anteil + ' %</span>' +
+      '</div>' +
+      '<div style="height:7px;background:var(--g100);border-radius:4px;overflow:hidden">' +
+        '<div style="height:100%;width:' + a.anteil * 2 + '%;max-width:100%;background:' +
+        (a.auto ? "var(--akzent)" : "var(--g300)") + '"></div>' +
+      '</div></div>';
+  }).join("");
+
+  var autoAnteil = t.anliegen.reduce(function(s,a){ return s + (a.auto ? a.anteil : 0); }, 0);
+
+  var regeln = TERMINREGELN.map(function(r){
+    return '<div class="regel"><span class="anlass">' + sicher(r.anlass) + '</span>' +
+      '<span class="pfeil">→</span><span class="wohin">' + sicher(r.wohin) + '</span></div>';
+  }).join("");
+
+  var nie = TELEFON_NIE.map(function(x){ return '<li>' + sicher(x) + '</li>'; }).join("");
+
+  return kopf("Telefon und Termine",
+      "Die Anmeldung verliert den meisten Tag ans Telefon — und trotzdem kommt niemand durch. " +
+      "Eine Annahme, die rund um die Uhr erreichbar ist, nimmt genau die Anliegen ab, die nach " +
+      "einer festen Regel laufen.") +
+    (digital ? "" :
+      '<div class="box warn" style="margin-bottom:16px"><b>Voraussetzung fehlt noch: eine digitale Telefonanlage.</b>' +
+      'An einer analogen Anlage lässt sich keine Annahme dazwischenschalten. Das ist eine ' +
+      'Beauftragung beim Systemhaus, keine Entwicklung — und sie sollte früh laufen, weil die ' +
+      'Rufnummernübernahme Wochen dauern kann. Die Zahlen unten sind der heutige Zustand.</div>') +
+    '<div class="gitter g4" style="margin-bottom:16px">' +
+      kennzahl("Anrufe je Woche", t.anrufe, "", "geschätzt, noch nicht gemessen") +
+      kennzahl("Automatisch erledigt", quote, " %",
+               digital ? "<b>ohne Zutun der Anmeldung</b>" : "heute keiner") +
+      kennzahl("Nicht angenommen", t.verpasst, "",
+               digital ? "deutlich weniger als vorher" : '<span style="color:var(--rot)">jeder davon ruft wieder an</span>') +
+      kennzahl("Offene Rückrufe", t.rueckstand, "", t.rueckstand ? "stehen auf der Liste" : "<b>nichts offen</b>") +
+    '</div>' +
+    '<div class="gitter g2">' +
+      karte("Weswegen angerufen wird", autoAnteil + " % wären regelbasiert",
+        '<div class="karte-koerper">' + balken +
+        '<div class="feinzeile">Blau: läuft nach einer festen Regel und kann automatisch beantwortet ' +
+        'werden. Grau: gehört zu einem Menschen.</div></div>') +
+      karte("Was nie automatisch beantwortet wird", null,
+        '<div class="karte-koerper"><ul class="liste-schlicht">' + nie + '</ul>' +
+        '<div class="box" style="margin-top:12px"><b>Und es sagt immer, was es ist</b>' +
+        'Dass am anderen Ende kein Mensch sitzt, wird zu Beginn des Gesprächs genannt. ' +
+        'Das verlangt Art. 50 der KI-Verordnung — und es nimmt dem Gespräch die Unsicherheit.</div></div>') +
+    '</div>' +
+    karte("Beim richtigen Behandler terminieren", "Regeln der Praxis",
+      '<div class="karte-koerper">' + regeln +
+      '<div class="feinzeile">Diese Liste ist der eigentliche Wert. Heute steckt sie in den Köpfen ' +
+      'der Anmeldung — wer lange da ist, weiß, dass eine Ästhetik-Erstberatung dreißig Minuten ' +
+      'braucht und nicht in den Eingriffsraum gehört. Steht sie geschrieben, kann sie jede ' +
+      'Vertretung anwenden, und eine automatische Annahme auch.</div></div>',
+      "Ohne diese Regeln terminiert eine KI-Annahme falsch — und richtet mehr Schaden an als Nutzen. " +
+      "Sie werden mit der Praxis erhoben, bevor irgendetwas ans Telefon geht.");
 };
 
 /* ------------------------------------------------- Gespräch dokumentieren */
@@ -1143,6 +1714,57 @@ ANSICHTEN.vorhaben = function(){
     '</div>';
 };
 
+/* ------------------------------------------------- Räume verändern */
+
+function raumHolen(id){
+  var k = null;
+  raeume().some(function(x){ if(x.id === id){ k = x; return true; } return false; });
+  return k;
+}
+function raumSetzen(id, status){
+  var k = raumHolen(id);
+  if(k){ k.status = status; k.seit = 0; }
+}
+
+/* Sobald ein Raum frei wird, rückt der nächste Wartende nach — das ist der
+   Kern: der Behandler kümmert sich nicht darum, dass jemand geholt wird. */
+function nachruecken(id){
+  var k = raumHolen(id);
+  if(!k) return;
+  var t = naechsteZuteilung(k.beh);
+  if(t && zuteilen(t)){
+    zustand.meldung = t.patient.name + " wurde automatisch in " + t.raum.name + " gebeten" +
+      (t.patient.notfall ? " — außer der Reihe, weil akut." : ".");
+  } else {
+    zustand.meldung = k.name + " ist frei. Derzeit wartet niemand Passendes.";
+  }
+}
+
+/* „Erledigt": Raum räumen, zum Herrichten melden, nächsten Patienten holen. */
+function raumFreigeben(id, abschluss){
+  var k = raumHolen(id);
+  if(!k) return;
+  var name = k.pat || "Der Patient";
+  k.status = "richten"; k.pat = null; k.nr = null; k.seit = 0;
+
+  var t = naechsteZuteilung(k.beh), satz;
+  if(t && zuteilen(t)){
+    satz = t.patient.name + " wurde sofort in " + t.raum.name + " gebeten" +
+           (t.patient.notfall ? " — außer der Reihe, weil akut." : ".");
+  } else {
+    satz = "Derzeit wartet niemand Passendes; " + k.name + " bleibt nach dem Herrichten frei.";
+  }
+  zustand.meldung = name + " ist fertig. " + satz;
+
+  if(abschluss){
+    zustand.zimmer = {
+      leistungen:{}, rezepte:{}, diktat:false,
+      abschluss:{ name:name, raum:k.name, naechster:satz,
+                  summe:abschluss.summe, rezepte:abschluss.rezepte }
+    };
+  }
+}
+
 /* =============================================================== Schublade */
 
 function schubladeOeffnen(nr){
@@ -1196,6 +1818,8 @@ function navZeichnen(){
   var erledigt = zustand.erledigt[zustand.mandant] || {};
   var zahlen = {
     heute: p.patienten.filter(function(x){ return x.status !== "fertig"; }).length,
+    raeume: p.module.raeume ? warteliste().length : 0,
+    telefon: (TELEFON[zustand.mandant] || {}).rueckstand || 0,
     abschluss: p.module.abschluss
       ? p.rechnungen.filter(function(r){ return r.status !== "bezahlt"; }).length : 0,
     wiedervorlage: p.module.wiedervorlage
@@ -1266,9 +1890,80 @@ document.addEventListener("click", function(e){
     zeichnen(); return;
   }
 
-  var erl = t.closest ? t.closest("[data-erledigt]") : null;
+  var zt = t.closest ? t.closest("[data-zuteilen]") : null;
+  if(zt){
+    var nr = zt.getAttribute("data-zuteilen");
+    var kand = null;
+    warteliste().forEach(function(w){ if(w.nr === nr) kand = w; });
+    var treffer = kand ? naechsteZuteilung(kand.beh) : null;
+    if(treffer && treffer.patient.nr === nr && zuteilen(treffer)){
+      zustand.meldung = treffer.patient.name + " wartet jetzt in " + treffer.raum.name + ".";
+    }
+    zeichnen(); return;
+  }
+
+  var fr = t.closest ? t.closest("[data-fertigraum]") : null;
+  if(fr){
+    raumSetzen(fr.getAttribute("data-fertigraum"), "frei");
+    nachruecken(fr.getAttribute("data-fertigraum"));
+    zeichnen(); return;
+  }
+
+  var bt = t.closest ? t.closest("[data-betreten]") : null;
+  if(bt){
+    raumSetzen(bt.getAttribute("data-betreten"), "arzt");
+    zustand.zimmer = { leistungen:{}, rezepte:{}, diktat:false, abschluss:null };
+    zustand.meldung = null;
+    zustand.seite = "zimmer"; adresseSetzen();
+    zeichnen(); return;
+  }
+
+  var fg = t.closest ? t.closest("[data-freigeben]") : null;
+  if(fg){ raumFreigeben(fg.getAttribute("data-freigeben"), null); zeichnen(); return; }
+
+  var fe = t.closest ? t.closest("[data-erledigt]") : null;
+  if(fe){
+    var z = zustand.zimmer;
+    var s = ZIMMER_LEISTUNGEN.reduce(function(a,l){
+      var an = (l.id in z.leistungen) ? z.leistungen[l.id] : l.vor;
+      return a + (an ? l.betrag : 0);
+    }, 0);
+    var anz = Object.keys(z.rezepte).filter(function(k){ return z.rezepte[k]; }).length;
+    raumFreigeben(fe.getAttribute("data-erledigt"), {summe:s, rezepte:anz});
+    zeichnen(); return;
+  }
+
+  var ls = t.closest ? t.closest("[data-leistung]") : null;
+  if(ls){
+    var li = ls.getAttribute("data-leistung"), vor = false;
+    ZIMMER_LEISTUNGEN.forEach(function(l){ if(l.id === li) vor = l.vor; });
+    var jetzt = (li in zustand.zimmer.leistungen) ? zustand.zimmer.leistungen[li] : vor;
+    zustand.zimmer.leistungen[li] = !jetzt;
+    zeichnen(); return;
+  }
+
+  var rz = t.closest ? t.closest("[data-rezept]") : null;
+  if(rz){
+    var ri = rz.getAttribute("data-rezept");
+    zustand.zimmer.rezepte[ri] = !zustand.zimmer.rezepte[ri];
+    zeichnen(); return;
+  }
+
+  var dk = t.closest ? t.closest("[data-diktat]") : null;
+  if(dk){ zustand.zimmer.diktat = true; zeichnen(); return; }
+
+  var zr = t.closest ? t.closest("[data-zuruecksetzen]") : null;
+  if(zr){
+    delete zustand.raumStand[zustand.mandant];
+    delete zustand.warteStand[zustand.mandant];
+    zustand.zimmer = { leistungen:{}, rezepte:{}, diktat:false, abschluss:null };
+    zustand.meldung = null;
+    zeichnen(); return;
+  }
+
+  var erl = t.closest ? t.closest("[data-erledigt-wv]") : null;
   if(erl){
-    var nr = erl.getAttribute("data-erledigt");
+    var nr = erl.getAttribute("data-erledigt-wv");
     if(!zustand.erledigt[zustand.mandant]) zustand.erledigt[zustand.mandant] = {};
     zustand.erledigt[zustand.mandant][nr] = true;
     zeichnen(); return;
