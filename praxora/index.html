@@ -309,14 +309,15 @@ tr.notfall td:first-child{box-shadow:inset 3px 0 0 var(--rot)}
 var PRAXEN = {
 
   rheinderma: {
-    name: "RHEINDERMA", ort: "Krefeld", fach: "Dermatologie",
-    behandler: ["Dr. Lodin"],
-    pvs: "Duria² — GDT 3.0", terminal: 1, ipads: 4,
+    name: "RHEINDERMA", ort: "Krefeld", fach: "Dermatologie · 6 Behandler",
+    behandler: ["Dr. Lodin", "Behandler 2", "Behandler 3", "Behandler 4",
+                "Behandler 5", "Behandler 6"],
+    pvs: "Duria² — GDT 3.0", terminal: 1, ipads: 8,
     module: { anmeldung:true, anamnese:true, aufklaerung:true, abschluss:true,
               wiedervorlage:true, raeume:true, diktat:true, rezept:true,
               telefon:false, transkript:false },
-    kennzahlen: { erwartet:38, angemeldet:23, schnitt:"1:47", quote:71,
-                  offenAnzahl:14, offenBetrag:4380.50, faellig:57 },
+    kennzahlen: { erwartet:174, angemeldet:118, schnitt:"1:47", quote:71,
+                  offenAnzahl:14, offenBetrag:4380.50, faellig:210 },
     patienten: [
       {nr:"10234", name:"J. M.-Lüdenscheidt", zeit:"10:40", art:"Privat", anlass:"Hautkrebsvorsorge",
        status:"zimmer", formular:"fertig", betrag:175.00, behandler:"Dr. Lodin"},
@@ -510,13 +511,21 @@ var BOEGEN = [
    · arzt (Behandler im Raum). Der Behandler gibt frei, nicht das System. */
 var RAEUME = {
   rheinderma: [
-    {id:"r1", name:"Raum 1", beh:"Dr. Lodin", geraet:null,
+    {id:"r1", name:"Raum 1", beh:"Dr. Lodin",   geraet:null,
      status:"arzt",    pat:"J. M.-Lüdenscheidt", nr:"10234", seit:6},
-    {id:"r2", name:"Raum 2", beh:"Dr. Lodin", geraet:null,
+    {id:"r2", name:"Raum 2", beh:"Dr. Lodin",   geraet:null,
      status:"frei",    pat:null, nr:null, seit:0},
-    {id:"r3", name:"Laserraum", beh:"Dr. Lodin", geraet:"Laser",
+    {id:"r3", name:"Raum 3", beh:"Behandler 2", geraet:null,
+     status:"arzt",    pat:"S. Kowalczyk", nr:"10333", seit:11},
+    {id:"r4", name:"Raum 4", beh:"Behandler 2", geraet:null,
+     status:"frei",    pat:null, nr:null, seit:0},
+    {id:"r5", name:"Raum 5", beh:"Behandler 3", geraet:null,
+     status:"wartet",  pat:"M. Hoffmann", nr:"10278", seit:3},
+    {id:"r6", name:"Raum 6", beh:"Behandler 3", geraet:null,
+     status:"richten", pat:null, nr:null, seit:1},
+    {id:"r7", name:"Laserraum", beh:"geteilt", geraet:"Laser",
      status:"richten", pat:null, nr:null, seit:2},
-    {id:"r4", name:"Eingriffsraum", beh:"Dr. Lodin", geraet:"Eingriff",
+    {id:"r8", name:"Eingriffsraum", beh:"geteilt", geraet:"Eingriff",
      status:"frei",    pat:null, nr:null, seit:0}
   ],
   hautzentrum: [
@@ -536,11 +545,13 @@ var RAEUME = {
 
 var WARTELISTE = {
   rheinderma: [
-    {nr:"10087", name:"K. Brenner",    beh:"Dr. Lodin", anlass:"Laser, Folgetermin", seit:11, notfall:false, braucht:"Laser"},
-    {nr:"10592", name:"T. Weißenberg", beh:"Dr. Lodin", anlass:"Ästhetik-Beratung",  seit:7,  notfall:false, braucht:null},
-    {nr:"10771", name:"B. Ritter",     beh:"Dr. Lodin", anlass:"Urtikaria, akut",    seit:4,  notfall:true,  braucht:null},
-    {nr:"10411", name:"A. Şahin",      beh:"Dr. Lodin", anlass:"Kontrolle Nävus",    seit:9,  notfall:false, braucht:null},
-    {nr:"10120", name:"R. Özdemir",    beh:"Dr. Lodin", anlass:"Ekzem",              seit:2,  notfall:false, braucht:null}
+    {nr:"10771", name:"B. Ritter",     beh:"Dr. Lodin",   anlass:"Urtikaria, akut",      seit:4,  notfall:true,  braucht:null},
+    {nr:"10087", name:"K. Brenner",    beh:"Dr. Lodin",   anlass:"Laser, Folgetermin",   seit:14, notfall:false, braucht:"Laser"},
+    {nr:"10411", name:"A. Şahin",      beh:"Dr. Lodin",   anlass:"Kontrolle Nävus",      seit:9,  notfall:false, braucht:null},
+    {nr:"10604", name:"M. Yildiz",     beh:"Behandler 2", anlass:"Hautkrebsvorsorge",    seit:13, notfall:false, braucht:null},
+    {nr:"10592", name:"T. Weißenberg", beh:"Behandler 2", anlass:"Ästhetik-Beratung",    seit:7,  notfall:false, braucht:null},
+    {nr:"10120", name:"R. Özdemir",    beh:"Behandler 3", anlass:"Ekzem",                seit:2,  notfall:false, braucht:null},
+    {nr:"10833", name:"C. Petersen",   beh:"Behandler 3", anlass:"Exzision, vereinbart", seit:6,  notfall:false, braucht:"Eingriff"}
   ],
   hautzentrum: [
     {nr:"22077", name:"O. Kraft",     beh:"Dr. Arnoldt",    anlass:"Laser",                   seit:9, notfall:false, braucht:"Laser"},
@@ -862,26 +873,29 @@ function warteliste(){
 }
 
 /* Notfall vor Wartezeit. Ein Raum mit Gerät wird nicht an jemanden vergeben,
-   der das Gerät nicht braucht. */
-function naechsteZuteilung(beh){
-  var liste = warteliste().filter(function(w){ return !beh || w.beh === beh; });
-  liste.sort(function(x,y){
-    if(x.notfall !== y.notfall) return x.notfall ? -1 : 1;
-    return y.seit - x.seit;
+   der das Gerät nicht braucht; ein geteilter Raum steht allen Behandlern offen. */
+function vorrang(x,y){
+  if(x.notfall !== y.notfall) return x.notfall ? -1 : 1;
+  return y.seit - x.seit;
+}
+function fuerRaum(k){
+  if(k.status !== "frei") return null;
+  var liste = warteliste().filter(function(w){
+    if(k.beh !== "geteilt" && w.beh !== k.beh) return false;
+    return w.braucht ? k.geraet === w.braucht : k.geraet === null;
   });
-  var r = raeume(), treffer = null;
-  liste.some(function(w){
-    var raum = null;
-    r.some(function(k){
-      if(k.status !== "frei") return false;
-      if(k.beh !== w.beh && k.beh !== "geteilt") return false;
-      if(w.braucht ? k.geraet !== w.braucht : k.geraet !== null) return false;
-      raum = k; return true;
-    });
-    if(raum){ treffer = {raum:raum, patient:w}; return true; }
-    return false;
+  liste.sort(vorrang);
+  return liste[0] || null;
+}
+/* Wer von allen Wartenden kommt als Nächstes dran, und in welchen Raum? */
+function besteZuteilung(){
+  var raum = null, pat = null;
+  raeume().forEach(function(k){
+    var w = fuerRaum(k);
+    if(!w) return;
+    if(!pat || vorrang(w, pat) < 0){ raum = k; pat = w; }
   });
-  return treffer;
+  return pat ? {raum:raum, patient:pat} : null;
 }
 function zuteilen(t){
   if(!t) return false;
@@ -899,7 +913,7 @@ function raumHolen(id){
 function nachruecken(id){
   var k = raumHolen(id);
   if(!k) return;
-  var t = naechsteZuteilung(k.beh);
+  var t = besteZuteilung();
   zustand.meldung = (t && zuteilen(t))
     ? t.patient.name + " wurde automatisch in " + t.raum.name + " gebeten" +
       (t.patient.notfall ? " — außer der Reihe, weil akut." : ".")
@@ -910,7 +924,7 @@ function raumFreigeben(id, abschluss){
   if(!k) return;
   var name = k.pat || "Der Patient";
   k.status = "richten"; k.pat = null; k.nr = null; k.seit = 0;
-  var t = naechsteZuteilung(k.beh), satz;
+  var t = besteZuteilung(), satz;
   if(t && zuteilen(t)){
     satz = t.patient.name + " wurde sofort in " + t.raum.name + " gebeten" +
            (t.patient.notfall ? " — außer der Reihe, weil akut." : ".");
@@ -996,11 +1010,11 @@ ANSICHTEN.tag = function(){
   var tafel = r.map(function(k){
     var s = RAUM_ART[k.status], koerper, aktion = "";
     if(k.status === "frei"){
-      var t = naechsteZuteilung(k.beh);
+      var t = fuerRaum(k);
       koerper = '<div class="rleer">Niemand im Raum.</div>';
-      aktion = (t && t.raum.id === k.id)
-        ? '<button class="knopf haupt" data-zuteilen="' + t.patient.nr + '">' +
-          sicher(t.patient.name) + ' hereinbitten</button>'
+      aktion = t
+        ? '<button class="knopf haupt" data-zuteilen="' + t.nr + '" data-raum="' + k.id + '">' +
+          sicher(t.name) + ' hereinbitten</button>'
         : '<span class="rleer" style="font-size:13px">Niemand Passendes wartet.</span>';
     } else if(k.status === "richten"){
       koerper = '<div class="rleer">Wird hergerichtet.</div>';
@@ -1027,7 +1041,7 @@ ANSICHTEN.tag = function(){
       if(x.notfall !== y.notfall) return x.notfall ? -1 : 1;
       return y.seit - x.seit;
     }).map(function(k){
-    var t = naechsteZuteilung(k.beh);
+    var t = besteZuteilung();
     var dran = t && t.patient.nr === k.nr;
     return '<tr' + (k.notfall ? ' class="notfall"' : '') + '>' +
       '<td><div class="haupt">' + sicher(k.name) + '</div>' +
@@ -1048,7 +1062,9 @@ ANSICHTEN.tag = function(){
   if(notfaelle) punkte.push({wert:notfaelle, et:"außer der Reihe", warn:true});
 
   return kopfzeile + reiterzeile + lage(punkte) + meldungsbalken() +
-    karte("Räume", null, '<div class="karte-koerper"><div class="raumgitter">' + tafel + '</div></div>') +
+    karte("Räume", null, '<div class="karte-koerper"><div class="raumgitter">' + tafel + '</div>' +
+      '<div class="fein">Namen der Behandler und die tatsächliche Raumaufteilung tragen wir ein, ' +
+      'sobald sie von der Praxis vorliegen.</div></div>') +
     karte("Wartebereich", w.length + " Wartende",
       '<table><thead><tr><th>Patient</th><th>Anlass</th><th>Wartet</th>' +
       '<th class="rechts">Nächster Schritt</th></tr></thead><tbody>' + warten + '</tbody></table>');
@@ -1621,9 +1637,11 @@ document.addEventListener("click", function(e){
 
   z = t.closest && t.closest("[data-zuteilen]");
   if(z){
-    var nr = z.getAttribute("data-zuteilen"), kand = null;
+    var nr = z.getAttribute("data-zuteilen"), rid = z.getAttribute("data-raum");
+    var kand = null;
     warteliste().forEach(function(w){ if(w.nr === nr) kand = w; });
-    var tr = kand ? naechsteZuteilung(kand.beh) : null;
+    var raum = rid ? raumHolen(rid) : null;
+    var tr = (raum && kand) ? {raum:raum, patient:kand} : besteZuteilung();
     if(tr && tr.patient.nr === nr && zuteilen(tr)){
       zustand.meldung = tr.patient.name + " wartet jetzt in " + tr.raum.name + ".";
     }
